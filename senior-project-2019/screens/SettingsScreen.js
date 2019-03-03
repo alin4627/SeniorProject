@@ -1,14 +1,36 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import {
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {
+  Header,
+  Left,
+  Icon
+} from 'native-base';
 
-export default class SettingsScreen extends React.Component {
-  static navigationOptions = {
-    title: 'app.json',
-  };
-
+class SettingsScreen extends React.Component {
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return (
+      <View style={styles.container}>
+        <Header>
+          <Left>
+            <Icon name="menu" style={{padding:10}} onPress={() => this.props.navigation.openDrawer()}/>
+          </Left>
+        </Header>
+        <View style={{flex: 1,alignItems: 'center', justifyContent:'center'}}>
+          <Text>Settings</Text>
+        </View>
+      </View>
+    );
   }
 }
+
+export default SettingsScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  }
+});
