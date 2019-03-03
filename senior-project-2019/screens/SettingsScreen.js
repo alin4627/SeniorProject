@@ -18,16 +18,16 @@ class SettingsScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header>
+        <Header style={{backgroundColor: '#fff'}}>
         <Left>
-            <Button transparent>
+            <Button transparent dark>
               <Icon name='menu' style={{padding:8}} onPress={() => this.props.navigation.openDrawer()}/>
               <Title>Settings</Title>
             </Button>
           </Left>
           <Body />
           <Right>
-            <Button transparent>
+            <Button transparent dark>
               <Icon name='more' />
             </Button>
           </Right>
