@@ -1,16 +1,17 @@
 import React from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text, ImageBackground } from 'react-native';
 import { createDrawerNavigator, DrawerItems, createAppContainer, SafeAreaView  } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ClassesScreen from '../screens/ClassesScreen';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const CustomDrawerComponent = (props) => (
     <SafeAreaView style={{ flex: 1}}>
         <View style={{height:100, backgroundColor: 'white', flexDirection: 'row',}}>
-            <Image source={require('../assets/images/math.jpg')} style={{margin:20, height:65, width:65, borderRadius: 30}} />
-            <Text style={{margin:30, fontSize:35}}>Math</Text>
+            {/* <Image source={require('../assets/images/math.jpg')} style={{margin:20, height:65, width:65, borderRadius: 30}} /> */}
+            <Text style={{margin:30, fontSize:30}}>CSCI 335</Text>
         </View>
         <ScrollView>
             <DrawerItems {...props}/>
@@ -20,6 +21,7 @@ const CustomDrawerComponent = (props) => (
 
 const AppDrawer = createDrawerNavigator({
     Home: HomeScreen,
+    Classes: ClassesScreen,
     Settings: SettingsScreen,
 }, {
     contentComponent: CustomDrawerComponent
