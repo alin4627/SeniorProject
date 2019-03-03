@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "eslint": "^5.15.0",
     "expo": "^32.0.0",
     "native-base": "^2.12.0",
     "react": "16.5.0",
