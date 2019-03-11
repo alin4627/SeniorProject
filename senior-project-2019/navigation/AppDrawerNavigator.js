@@ -14,6 +14,7 @@ import UpcomingScreen from "../screens/UpcomingScreen";
 import { ScrollView } from "react-native-gesture-handler";
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
+import GroupScreen from "../screens/GroupsScreen";
 
 const CustomDrawerComponent = props => (
   <SafeAreaView style={{ flex: 1 }}>
@@ -32,6 +33,7 @@ const CustomDrawerComponent = props => (
 const AppDrawer = createDrawerNavigator(
   {
     Home: HomeScreen,
+    Groups: GroupScreen,
     Classes: ClassesScreen,
     Upcoming: UpcomingScreen,
     Settings: SettingsScreen,
