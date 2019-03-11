@@ -1,11 +1,11 @@
-Requirements
-Node JS
-Yarn
-Expo CLI
+Requirements <br />
+Node JS <br />
+Yarn <br />
+Expo CLI <br />
+<br />
+To get started, once you have git cloned the repository run the following commands <br />
 
-To get started, once you have git cloned the repository run the following commands
-
-cd senior-project-2019
-yarn
-expo login (login with your Expo account)
-expo start
+cd senior-project-2019 <br />
+yarn <br />
+expo login (login with your Expo account) <br />
+expo start <br />
