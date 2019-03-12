@@ -18,12 +18,17 @@ import {
   FooterTab,
   Icon
 } from "native-base";
+import * as firebase from "firebase";
 class HomeScreen extends React.Component {
   state = {
     text: ""
   };
 
   render() {
+    var user = firebase.auth().currentUser;
+    var s = "";
+    if (user){ s = user.email }
+    else { s = "Not logged In"}
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <Header style={{ backgroundColor: "#fff" }}>
@@ -47,7 +52,7 @@ class HomeScreen extends React.Component {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Text>HELLO</Text>
+          <Text>HELLO {s}</Text>
         </View>
         <Footer style={{ backgroundColor: "#fff" }}>
           <FooterTab>

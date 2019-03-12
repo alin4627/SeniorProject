@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Alert
 } from 'react-native';
 import {
   Header,
@@ -13,8 +14,16 @@ import {
   Button,
   Icon
 } from 'native-base';
-
+import * as firebase from "firebase";
 class SettingsScreen extends React.Component {
+
+  signOutUser = async () => {
+    await firebase.auth().signOut() 
+    .then(() => { Alert.alert("you succesfully logged out"); 
+    this.props.navigation.navigate('Login');  }, 
+    (error) => { Alert.alert(error.message); });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -34,6 +43,9 @@ class SettingsScreen extends React.Component {
         </Header>
         <View style={{flex: 1,alignItems: 'center', justifyContent:'center'}}>
           <Text>Settings</Text>
+          <Button light onPress={this.signOutUser}>
+                  <Text> Sign Out </Text>
+          </Button>
         </View>
       </View>
     );
