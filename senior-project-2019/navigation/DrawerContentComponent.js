@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
 import { Text, View, StyleSheet, ImageBackground } from "react-native";
+import { Icon } from "native-base";
 
 export default class drawerContentComponents extends Component {
   navigateToScreen = route => () => {
@@ -24,6 +25,7 @@ export default class drawerContentComponents extends Component {
         <View style={styles.screenContainer}>
           <Text>Pages</Text>
           <View style={styles.screenStyle}>
+            <Icon name="home" style={{ fontSize: 25 }} />
             <Text
               style={styles.screenTextStyle}
               onPress={this.navigateToScreen("Home")}
@@ -32,6 +34,7 @@ export default class drawerContentComponents extends Component {
             </Text>
           </View>
           <View style={styles.screenStyle}>
+            <Icon name="people" style={{ fontSize: 25 }} />
             <Text
               style={styles.screenTextStyle}
               onPress={this.navigateToScreen("Groups")}
@@ -40,6 +43,7 @@ export default class drawerContentComponents extends Component {
             </Text>
           </View>
           <View style={styles.screenStyle}>
+            <Icon name="calendar" style={{ fontSize: 25 }} />
             <Text
               style={styles.screenTextStyle}
               onPress={this.navigateToScreen("Upcoming")}
@@ -48,6 +52,7 @@ export default class drawerContentComponents extends Component {
             </Text>
           </View>
           <View style={styles.screenStyle}>
+            <Icon name="settings" style={{ fontSize: 25 }} />
             <Text
               style={styles.screenTextStyle}
               onPress={this.navigateToScreen("Settings")}
@@ -77,9 +82,12 @@ const styles = StyleSheet.create({
   },
   screenStyle: {
     height: 30,
+    flexDirection: "row",
     marginTop: 15
   },
   screenTextStyle: {
-    fontSize: 20
+    fontSize: 20,
+    paddingTop: 2,
+    marginLeft: 10
   }
 });
