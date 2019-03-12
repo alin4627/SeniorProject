@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import { Text, View, StyleSheet, ImageBackground } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon } from "native-base";
 
 export default class drawerContentComponents extends Component {
@@ -24,42 +24,34 @@ export default class drawerContentComponents extends Component {
         </View>
         <View style={styles.screenContainer}>
           <Text>Pages</Text>
-          <View style={styles.screenStyle}>
+          <TouchableOpacity
+            style={styles.screenStyle}
+            onPress={this.navigateToScreen("Home")}
+          >
             <Icon name="home" style={{ fontSize: 25 }} />
-            <Text
-              style={styles.screenTextStyle}
-              onPress={this.navigateToScreen("Home")}
-            >
-              Home
-            </Text>
-          </View>
-          <View style={styles.screenStyle}>
+            <Text style={styles.screenTextStyle}>Home</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.screenStyle}
+            onPress={this.navigateToScreen("Groups")}
+          >
             <Icon name="people" style={{ fontSize: 25 }} />
-            <Text
-              style={styles.screenTextStyle}
-              onPress={this.navigateToScreen("Groups")}
-            >
-              Groups
-            </Text>
-          </View>
-          <View style={styles.screenStyle}>
+            <Text style={styles.screenTextStyle}>Groups</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.screenStyle}
+            onPress={this.navigateToScreen("Upcoming")}
+          >
             <Icon name="calendar" style={{ fontSize: 25 }} />
-            <Text
-              style={styles.screenTextStyle}
-              onPress={this.navigateToScreen("Upcoming")}
-            >
-              Upcoming
-            </Text>
-          </View>
-          <View style={styles.screenStyle}>
+            <Text style={styles.screenTextStyle}>Upcoming</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.screenStyle}
+            onPress={this.navigateToScreen("Settings")}
+          >
             <Icon name="settings" style={{ fontSize: 25 }} />
-            <Text
-              style={styles.screenTextStyle}
-              onPress={this.navigateToScreen("Settings")}
-            >
-              Settings
-            </Text>
-          </View>
+            <Text style={styles.screenTextStyle}>Settings</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
