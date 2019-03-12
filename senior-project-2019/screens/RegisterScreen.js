@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   ScrollView,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from "react-native";
 import {
   Header,
@@ -21,11 +22,29 @@ import {
   Icon,
   Content
 } from "native-base";
-class RegisterScreen extends React.Component {
-  state = {
-    text: ""
-  };
+import * as firebase from 'firebase';
 
+class RegisterScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+        email: "",
+        password: "",
+        passwordConfirm: "",
+    };
+}
+
+onSignupPress = () => {
+  if (this.state.password !== this.state.passwordConfirm) {
+      Alert.alert("Password:" + this.state.password +
+      " does not match password confirmation: " +  this.state.passwordConfirm);
+      return;
+  }
+
+  firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => { }, (error) => { Alert.alert(error.message); });
+      this.props.navigation.navigate('Login'); 
+}
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -44,13 +63,29 @@ class RegisterScreen extends React.Component {
             </Item>
             <Item floatingLabel>
               <Label>Email</Label>
-              <Input />
+              <Input value={this.state.email}
+                    onChangeText={(text) => { this.setState({email: text}) }}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}/>
+            </Item>
+            <Item floatingLabel>
+              <Label >Password</Label>
+              <Input value={this.state.password}
+                    onChangeText={(text) => { this.setState({password: text}) }}
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                    autoCorrect={false}/>
             </Item>
             <Item floatingLabel last>
-              <Label>Password</Label>
-              <Input />
+              <Label>Password Confirmation</Label>
+              <Input value={this.state.passwordConfirm}
+                    onChangeText={(text) => { this.setState({passwordConfirm: text}) }}
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                    autoCorrect={false}/>
             </Item>
-            <Button light>
+            <Button light onPress={this.onSignupPress}>
               <Text> Register </Text>
             </Button>
           </Form>
