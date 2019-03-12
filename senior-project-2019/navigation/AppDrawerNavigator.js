@@ -12,8 +12,6 @@ import SettingsScreen from "../screens/SettingsScreen";
 import ClassesScreen from "../screens/ClassesScreen";
 import UpcomingScreen from "../screens/UpcomingScreen";
 import { ScrollView } from "react-native-gesture-handler";
-import LoginScreen from "../screens/LoginScreen";
-import RegisterScreen from "../screens/RegisterScreen";
 import GroupScreen from "../screens/GroupsScreen";
 
 const CustomDrawerComponent = props => (
@@ -37,8 +35,6 @@ const AppDrawer = createDrawerNavigator(
     Classes: ClassesScreen,
     Upcoming: UpcomingScreen,
     Settings: SettingsScreen,
-    Login: LoginScreen,
-    Register: RegisterScreen
   },
   {
     contentComponent: CustomDrawerComponent
