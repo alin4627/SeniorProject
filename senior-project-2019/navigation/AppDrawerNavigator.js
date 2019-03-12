@@ -13,7 +13,6 @@ import ClassesScreen from "../screens/ClassesScreen";
 import UpcomingScreen from "../screens/UpcomingScreen";
 import { ScrollView } from "react-native-gesture-handler";
 import GroupScreen from "../screens/GroupsScreen";
-import LoginScreen from "../screens/LoginScreen";
 
 const CustomDrawerComponent = props => (
   <SafeAreaView style={{ flex: 1 }}>
@@ -36,7 +35,6 @@ const AppDrawer = createDrawerNavigator(
     Classes: ClassesScreen,
     Upcoming: UpcomingScreen,
     Settings: SettingsScreen,
-    Login: LoginScreen
   },
   {
     contentComponent: CustomDrawerComponent
