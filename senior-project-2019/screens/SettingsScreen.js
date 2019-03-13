@@ -19,7 +19,7 @@ class SettingsScreen extends React.Component {
 
   signOutUser = async () => {
     await firebase.auth().signOut() 
-    .then(() => { Alert.alert("you succesfully logged out"); 
+    .then(() => { Alert.alert("You succesfully logged out"); 
     this.props.navigation.navigate('Login');  }, 
     (error) => { Alert.alert(error.message); });
   }

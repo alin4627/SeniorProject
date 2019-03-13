@@ -39,7 +39,7 @@ class LoginScreen extends React.Component {
 
 onLoginPress = () => {
   firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => { Alert.alert("you succesfully logged in");
+      .then(() => { Alert.alert("You succesfully logged in.");
         this.props.navigation.navigate('Home');  }, 
         (error) => { Alert.alert(error.message); });
       
