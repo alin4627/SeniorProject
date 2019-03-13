@@ -71,12 +71,16 @@ onCreateAccountPress = () => {
               value = {this.state.password}
               />
             </Item>
-            <Button light onPress={this.onLoginPress}>
+            <View style={{marginTop:15}}>
+            <Button light onPress={this.onLoginPress} style = {{padding: '10%', alignSelf: 'center'}}>
               <Text> Login </Text>
             </Button>
-            <Button light onPress={this.onCreateAccountPress}>
+            </View>
+            <View style={{marginTop:10}}>
+            <Button transparent light onPress={this.onCreateAccountPress} style = {{padding: '10%', alignSelf: 'center'}}>
               <Text> Sign Up </Text>
             </Button>
+            </View>
           </Form>
         </View>
       </KeyboardAvoidingView>

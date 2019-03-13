@@ -85,9 +85,11 @@ onSignupPress = () => {
                     autoCapitalize="none"
                     autoCorrect={false}/>
             </Item>
-            <Button light onPress={this.onSignupPress}>
+            <View style={{marginTop:15}}>
+            <Button light style = {{padding: '10%', alignSelf: 'center'}} onPress={this.onSignupPress}>
               <Text> Register </Text>
             </Button>
+            </View>
           </Form>
         </View>
       </KeyboardAvoidingView>
