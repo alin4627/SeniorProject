@@ -24,7 +24,8 @@ const AppDrawer = createDrawerNavigator(
     Settings: SettingsScreen
   },
   {
-    contentComponent: DrawerContentComponent
+    contentComponent: DrawerContentComponent,
+    drawerType: "slide"
   }
 );
 

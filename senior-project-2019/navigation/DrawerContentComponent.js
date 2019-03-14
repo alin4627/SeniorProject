@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon } from "native-base";
+import * as firebase from "firebase";
 
 export default class drawerContentComponents extends Component {
   navigateToScreen = route => () => {
@@ -12,15 +13,17 @@ export default class drawerContentComponents extends Component {
   };
 
   render() {
+    var user = firebase.auth().currentUser;
+    var s = "";
+    if (user) {
+      s = user.email;
+    } else {
+      s = "Not logged In";
+    }
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text
-            onPress={this.navigateToScreen("Classes")}
-            style={styles.headerText}
-          >
-            CSCI 335
-          </Text>
+          <Text style={styles.headerText}>{s}</Text>
         </View>
         <View style={styles.screenContainer}>
           <Text>Pages</Text>
@@ -33,17 +36,10 @@ export default class drawerContentComponents extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.screenStyle}
-            onPress={this.navigateToScreen("Groups")}
-          >
-            <Icon name="people" style={{ fontSize: 25 }} />
-            <Text style={styles.screenTextStyle}>Groups</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.screenStyle}
-            onPress={this.navigateToScreen("Upcoming")}
+            onPress={this.navigateToScreen("Classes")}
           >
             <Icon name="calendar" style={{ fontSize: 25 }} />
-            <Text style={styles.screenTextStyle}>Upcoming</Text>
+            <Text style={styles.screenTextStyle}>Classes</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.screenStyle}
@@ -67,7 +63,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     paddingTop: 65,
-    fontSize: 30
+    fontSize: 20
   },
   screenContainer: {
     paddingTop: 20
