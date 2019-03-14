@@ -9,19 +9,17 @@ import {
 
 import HomeScreen from "../screens/HomeScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import ClassesScreen from "../screens/ClassesScreen";
 import UpcomingScreen from "../screens/UpcomingScreen";
 import { ScrollView } from "react-native-gesture-handler";
-import GroupScreen from "../screens/GroupsScreen";
+import CourseNavigator from "./CourseNavigator";
 import DrawerContentComponent from "./DrawerContentComponent";
 
 const AppDrawer = createDrawerNavigator(
   {
     Home: HomeScreen,
-    Groups: GroupScreen,
-    Classes: ClassesScreen,
     Upcoming: UpcomingScreen,
-    Settings: SettingsScreen
+    Settings: SettingsScreen,
+    Courses: CourseNavigator
   },
   {
     contentComponent: DrawerContentComponent,

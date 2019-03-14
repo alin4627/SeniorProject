@@ -36,10 +36,10 @@ export default class drawerContentComponents extends Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.screenStyle}
-            onPress={this.navigateToScreen("Classes")}
+            onPress={this.navigateToScreen("Courses")}
           >
-            <Icon name="calendar" style={{ fontSize: 25 }} />
-            <Text style={styles.screenTextStyle}>Classes</Text>
+            <Icon name="settings" style={{ fontSize: 25 }} />
+            <Text style={styles.screenTextStyle}>Courses</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.screenStyle}

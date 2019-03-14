@@ -22,6 +22,9 @@ import {
   Content
 } from "native-base";
 class GroupsScreen extends React.Component {
+  static navigationOptions = {
+    header: null
+  };
   state = {
     text: ""
   };
@@ -33,9 +36,9 @@ class GroupsScreen extends React.Component {
           <Left>
             <Button transparent dark>
               <Icon
-                name="menu"
+                name="arrow-back"
                 style={{ padding: 10 }}
-                onPress={() => this.props.navigation.openDrawer()}
+                onPress={() => this.props.navigation.goBack()}
               />
               <Title>Groups</Title>
             </Button>
