@@ -39,10 +39,9 @@ class HomeScreen extends React.Component {
                 style={{ padding: 10 }}
                 onPress={() => this.props.navigation.openDrawer()}
               />
-              <Title>Home</Title>
             </Button>
           </Left>
-          <Body />
+          <Body><Title>Home</Title></Body>
           <Right>
             <Button transparent dark>
               <Icon name="more" />

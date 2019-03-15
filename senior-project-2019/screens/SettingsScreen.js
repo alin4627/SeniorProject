@@ -29,15 +29,10 @@ class SettingsScreen extends React.Component {
                 style={{ padding: 8 }}
                 onPress={() => this.props.navigation.openDrawer()}
               />
-              <Title>Settings</Title>
             </Button>
           </Left>
-          <Body />
-          <Right>
-            <Button transparent dark>
-              <Icon name="more" />
-            </Button>
-          </Right>
+          <Body><Title>Settings</Title></Body>
+          <Right />
         </Header>
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}

@@ -41,10 +41,10 @@ class ClassesSelectionScreen extends React.Component {
                 style={{ padding: 10 }}
                 onPress={() => this.props.navigation.goBack()}
               />
-              <Title>All Courses</Title>
             </Button>
           </Left>
-          <Body />
+          <Body><Title>All Courses</Title></Body>
+          <Right />
         </Header>
         <Content>
           <List>

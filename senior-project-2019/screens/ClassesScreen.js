@@ -42,10 +42,9 @@ class ClassesScreen extends React.Component {
                 style={{ padding: 10 }}
                 onPress={() => this.props.navigation.openDrawer()}
               />
-              <Title>My Courses</Title>
             </Button>
           </Left>
-          <Body />
+          <Body><Title>My Courses</Title></Body>
           <Right>
             <Button transparent dark>
               <Icon name="add" onPress={() => this.props.navigation.navigate("ClassesSelection")} />
