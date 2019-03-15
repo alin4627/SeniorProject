@@ -22,10 +22,6 @@ import {
 import { NavigationActions } from "react-navigation";
 
 class ClassesSelectionScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   state = {
     text: ""
   };

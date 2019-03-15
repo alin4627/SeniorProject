@@ -20,15 +20,14 @@ import {
   FooterTab,
   Icon,
   Content
-} from "native-base";
-class GroupsScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-  state = {
-    text: ""
-  };
+} from "native-base";import {
+  createBottomTabNavigator,
+  createStackNavigator,
+  createAppContainer,
+} from 'react-navigation';
+import ChatroomScreen from './ChatroomScreen';
 
+class OwnGroupScreen extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -40,7 +39,46 @@ class GroupsScreen extends React.Component {
                 style={{ padding: 10 }}
                 onPress={() => this.props.navigation.goBack()}
               />
-              <Title>Groups</Title>
+              <Title>My Groups</Title>
+            </Button>
+          </Left>
+          <Body />
+          <Right>
+            <Button transparent dark>
+              <Icon name="add" />
+            </Button>
+          </Right>
+        </Header>
+        <Content padder>
+          <Card>
+            <CardItem header bordered>
+              <Text>Group 1</Text>
+            </CardItem>
+            <CardItem button bordered onPress={() => this.props.navigation.navigate("Chat")}>
+              <Body>
+                <Text># of members: 15</Text>
+              </Body>
+            </CardItem>
+          </Card>
+        </Content>
+      </KeyboardAvoidingView>
+    );
+  }
+}
+
+class OtherGroupsScreen extends React.Component {
+  render() {
+    return (
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <Header style={{ backgroundColor: "#fff" }}>
+          <Left>
+            <Button transparent dark>
+              <Icon
+                name="arrow-back"
+                style={{ padding: 10 }}
+                onPress={() => this.props.navigation.goBack()}
+              />
+              <Title>Open Groups</Title>
             </Button>
           </Left>
           <Body />
@@ -72,22 +110,56 @@ class GroupsScreen extends React.Component {
             </CardItem>
           </Card>
         </Content>
-        <Footer style={{ backgroundColor: "#fff" }}>
-          <FooterTab>
-            <Button>
-              <Text>Your groups</Text>
-            </Button>
-            <Button>
-              <Text>Open groups</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
       </KeyboardAvoidingView>
     );
   }
 }
 
-export default GroupsScreen;
+const OwnGroupStack = createStackNavigator({
+  OwnGroups: OwnGroupScreen,
+  Chat: ChatroomScreen
+}, {
+  defaultNavigationOptions: {
+    header: null
+  }
+});
+
+const OtherGroupStack = createStackNavigator({
+  OtherGroups: OtherGroupsScreen,
+  Chat: ChatroomScreen
+}, {
+  defaultNavigationOptions: {
+    header: null
+  }
+});
+
+OwnGroupStack.navigationOptions = ({ navigation }) => {
+
+  let tabBarVisible = true;
+
+  let routeName = navigation.state.routes[navigation.state.index].routeName
+
+  if ( routeName == 'Chat' ) {
+      tabBarVisible = false
+  }
+
+  return {
+      tabBarVisible,
+  }
+}
+
+
+export default createAppContainer(createBottomTabNavigator(
+  {
+    Personal: OwnGroupStack,
+    Open: OtherGroupStack,
+  },
+  {
+    navigationOptions: {
+      header: null
+    }
+  }
+));
 
 const styles = StyleSheet.create({
   container: {

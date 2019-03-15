@@ -19,14 +19,8 @@ import {
   ListItem,
   Icon
 } from "native-base";
-import { NavigationActions } from "react-navigation";
-import GroupScreen from "../screens/GroupsScreen";
 
 class ClassesScreen extends React.Component {
-  static navigationOptions = {
-    header: null
-  };
-
   state = {
     text: ""
   };

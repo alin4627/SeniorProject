@@ -9,6 +9,10 @@ const CourseNavigator = createStackNavigator({
   Classes: ClassesScreen,
   Groups: GroupsScreen,
   ClassesSelection: ClassesSelectionScreen
+}, {
+  defaultNavigationOptions: {
+    header: null
+  }
 });
 
 export default createAppContainer(CourseNavigator);
