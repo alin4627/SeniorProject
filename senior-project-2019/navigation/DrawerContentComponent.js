@@ -38,7 +38,7 @@ export default class drawerContentComponents extends Component {
             style={styles.screenStyle}
             onPress={this.navigateToScreen("Courses")}
           >
-            <Icon name="settings" style={{ fontSize: 25 }} />
+            <Icon name="school" style={{ fontSize: 25 }} />
             <Text style={styles.screenTextStyle}>Courses</Text>
           </TouchableOpacity>
           <TouchableOpacity
