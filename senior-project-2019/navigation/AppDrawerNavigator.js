@@ -13,10 +13,11 @@ import UpcomingScreen from "../screens/UpcomingScreen";
 import { ScrollView } from "react-native-gesture-handler";
 import CourseNavigator from "./CourseNavigator";
 import DrawerContentComponent from "./DrawerContentComponent";
+import HomeStackNavigator from "./HomeStackNavigator";
 
 const AppDrawer = createDrawerNavigator(
   {
-    Home: HomeScreen,
+    Home: HomeStackNavigator,
     Upcoming: UpcomingScreen,
     Settings: SettingsScreen,
     Courses: CourseNavigator
