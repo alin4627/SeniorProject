@@ -20,8 +20,7 @@ import {
   Item,
   Input,
   Label,
-  Footer,
-  FooterTab,
+  Toast,
   Icon,
   Content
 } from "native-base";
@@ -39,7 +38,10 @@ class LoginScreen extends React.Component {
 
 onLoginPress = () => {
   firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => { Alert.alert("You succesfully logged in.");
+      .then(() => { 
+        Toast.show({
+          text: 'You succesfully logged in',
+        });
         this.props.navigation.navigate('Home');  }, 
         (error) => { Alert.alert(error.message); });
       

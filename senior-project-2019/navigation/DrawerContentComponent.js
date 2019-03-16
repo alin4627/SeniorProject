@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
-import { Icon } from "native-base";
+import { Icon, Toast  } from "native-base";
 import * as firebase from "firebase";
 
 export default class drawerContentComponents extends Component {
@@ -11,7 +11,9 @@ export default class drawerContentComponents extends Component {
       .signOut()
       .then(
         () => {
-          Alert.alert("You succesfully logged out");
+          Toast.show({
+            text: 'You succesfully logged out',
+          });
           this.props.navigation.navigate("Login");
         },
         error => {
