@@ -1,10 +1,25 @@
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { Icon } from "native-base";
 import * as firebase from "firebase";
 
 export default class drawerContentComponents extends Component {
+  signOutUser = async () => {
+    await firebase
+      .auth()
+      .signOut()
+      .then(
+        () => {
+          Alert.alert("You succesfully logged out");
+          this.props.navigation.navigate("Login");
+        },
+        error => {
+          Alert.alert(error.message);
+        }
+      );
+  };
+
   navigateToScreen = route => () => {
     const navigateAction = NavigationActions.navigate({
       routeName: route
@@ -22,7 +37,8 @@ export default class drawerContentComponents extends Component {
     }
     return (
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
+      <ScrollView>
+      <View style={styles.headerContainer}>
           <Text style={styles.headerText}>{s}</Text>
         </View>
         <View style={styles.screenContainer}>
@@ -49,14 +65,21 @@ export default class drawerContentComponents extends Component {
             <Text style={styles.screenTextStyle}>Settings</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
+      <TouchableOpacity style={styles.footerContainer} onPress={this.signOutUser}>
+      <Icon name="exit" style={styles.iconStyle} />
+        <Text style={styles.screenTextStyle}>Sign Out</Text>
+      </TouchableOpacity>
+    </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 20
+    paddingTop: 20,
+    marginLeft:20,
+    flex: 1
   },
   headerContainer: {
     height: 100
@@ -81,5 +104,9 @@ const styles = StyleSheet.create({
   },
   iconStyle: {
     fontSize: 25, 
+  },
+  footerContainer: {
+    flexDirection: "row",
+    paddingBottom: 50
   }
 });
