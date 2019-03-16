@@ -17,8 +17,7 @@ import {
   Content,
   Icon
 } from "native-base";
-import * as firebase from "firebase";
-class HomeScreen extends React.Component {
+class ClassScreen extends React.Component {
   state = {
     text: ""
   };
@@ -28,15 +27,14 @@ class HomeScreen extends React.Component {
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
-            <Button transparent dark>
+            <Button transparent dark onPress={() => this.props.navigation.goBack()}>
               <Icon
-                name="menu"
+                name="arrow-back"
                 style={{ padding: 10, color: "white" }}
-                onPress={() => this.props.navigation.openDrawer()}
               />
             </Button>
           </Left>
-          <Body><Title style={{color: "white" }}>Home</Title></Body>
+          <Body><Title style={{color: "white" }}>Class</Title></Body>
           <Right>
             <Button transparent dark>
               <Icon ios='md-more' android="md-more" style={{ color: "white" }} />
@@ -50,7 +48,7 @@ class HomeScreen extends React.Component {
   }
 }
 
-export default HomeScreen;
+export default ClassScreen;
 
 const styles = StyleSheet.create({
   container: {

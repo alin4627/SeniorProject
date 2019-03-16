@@ -40,8 +40,8 @@ class ClassesScreen extends React.Component {
           </Left>
           <Body><Title style={{color: "white" }}>My Courses</Title></Body>
           <Right>
-            <Button transparent dark>
-              <Icon name="add" style={{color: "white" }} onPress={() => this.props.navigation.navigate("ClassesSelection")} />
+            <Button transparent dark onPress={() => this.props.navigation.navigate("ClassesSelection")}>
+              <Icon name="add" style={{color: "white" }} />
             </Button>
           </Right>
         </Header>

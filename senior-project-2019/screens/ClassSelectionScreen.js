@@ -31,11 +31,10 @@ class ClassesSelectionScreen extends React.Component {
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
-            <Button transparent dark>
+            <Button transparent dark onPress={() => this.props.navigation.goBack()}>
             <Icon
                 name="arrow-back"
                 style={{ padding: 10, color:"white" }}
-                onPress={() => this.props.navigation.goBack()}
               />
             </Button>
           </Left>
@@ -44,7 +43,7 @@ class ClassesSelectionScreen extends React.Component {
         </Header>
         <Content style={{backgroundColor:"#F8F8F8"}}>
           <List>
-            <ListItem onPress={() => this.props.navigation.navigate("")}>
+            <ListItem onPress={() => this.props.navigation.navigate("Class")}>
               <Left>
                 <Text>Theory Computation (CSCI 610)</Text>
               </Left>
