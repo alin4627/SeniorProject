@@ -16,8 +16,6 @@ import {
   Right,
   Card,
   CardItem,
-  Footer,
-  FooterTab,
   Icon,
   Content
 } from "native-base";import {
@@ -37,7 +35,7 @@ class OwnGroupScreen extends React.Component {
               <Icon
                 name="arrow-back"
                 style={{ padding: 10, color: "white"}}
-                onPress={() => this.props.navigation.goBack()}
+                onPress={() => this.props.navigation.navigate("Classes")}
               />
             </Button>
           </Left>
@@ -77,7 +75,7 @@ class OtherGroupsScreen extends React.Component {
               <Icon
                 name="arrow-back"
                 style={{ padding: 10, color: "white" }}
-                onPress={() => this.props.navigation.goBack()}
+                onPress={() => this.props.navigation.navigate("Classes")}
               />
             </Button>
           </Left>
