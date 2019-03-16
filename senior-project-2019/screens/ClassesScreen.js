@@ -28,20 +28,20 @@ class ClassesScreen extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header style={{ backgroundColor: "#fff" }}>
+        <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
             <Button transparent dark>
               <Icon
                 name="menu"
-                style={{ padding: 10 }}
+                style={{ padding: 10, color: "white" }}
                 onPress={() => this.props.navigation.openDrawer()}
               />
             </Button>
           </Left>
-          <Body><Title>My Courses</Title></Body>
+          <Body><Title style={{color: "white" }}>My Courses</Title></Body>
           <Right>
             <Button transparent dark>
-              <Icon name="add" onPress={() => this.props.navigation.navigate("ClassesSelection")} />
+              <Icon name="add" style={{color: "white" }} onPress={() => this.props.navigation.navigate("ClassesSelection")} />
             </Button>
           </Right>
         </Header>

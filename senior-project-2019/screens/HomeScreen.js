@@ -31,20 +31,20 @@ class HomeScreen extends React.Component {
     else { s = "Not logged In"}
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header style={{ backgroundColor: "#fff" }}>
+        <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
             <Button transparent dark>
               <Icon
                 name="menu"
-                style={{ padding: 10 }}
+                style={{ padding: 10, color: "white" }}
                 onPress={() => this.props.navigation.openDrawer()}
               />
             </Button>
           </Left>
-          <Body><Title>Home</Title></Body>
+          <Body><Title style={{color: "white" }}>Home</Title></Body>
           <Right>
             <Button transparent dark>
-              <Icon name="more" />
+              <Icon ios='md-more' android="md-more" style={{ color: "white" }} />
             </Button>
           </Right>
         </Header>

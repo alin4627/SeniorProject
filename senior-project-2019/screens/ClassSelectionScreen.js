@@ -29,7 +29,7 @@ class ClassesSelectionScreen extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header style={{ backgroundColor: "#fff" }}>
+        <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
             <Button transparent dark>
             <Icon

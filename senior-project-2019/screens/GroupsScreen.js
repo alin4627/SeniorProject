@@ -31,21 +31,20 @@ class OwnGroupScreen extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header style={{ backgroundColor: "#fff" }}>
+        <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
             <Button transparent dark>
               <Icon
                 name="arrow-back"
-                style={{ padding: 10 }}
+                style={{ padding: 10, color: "white"}}
                 onPress={() => this.props.navigation.goBack()}
               />
-              <Title>My Groups</Title>
             </Button>
           </Left>
-          <Body />
+          <Body><Title style={{color:"white"}}>My Groups</Title></Body>
           <Right>
             <Button transparent dark>
-              <Icon name="add" />
+              <Icon name="add" style={{color:"white"}}/>
             </Button>
           </Right>
         </Header>
@@ -70,21 +69,20 @@ class OtherGroupsScreen extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header style={{ backgroundColor: "#fff" }}>
+        <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
             <Button transparent dark>
               <Icon
                 name="arrow-back"
-                style={{ padding: 10 }}
+                style={{ padding: 10, color: "white" }}
                 onPress={() => this.props.navigation.goBack()}
               />
-              <Title>Open Groups</Title>
             </Button>
           </Left>
-          <Body />
+          <Body><Title style={{color: "white" }}>Open Groups</Title></Body>
           <Right>
             <Button transparent dark>
-              <Icon name="add" />
+              <Icon name="add" style={{color:"white"}}/>
             </Button>
           </Right>
         </Header>
