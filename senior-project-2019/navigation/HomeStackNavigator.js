@@ -14,10 +14,9 @@ import {
   Body,
   Title,
   Right,
-  Card,
-  CardItem,
-  Footer,
-  FooterTab,
+  List,
+  ListItem,
+  Thumbnail,
   Icon,
   Content
 } from "native-base";import {
@@ -50,26 +49,20 @@ class OtherGroupsScreen extends React.Component {
           </Right>
         </Header>
         <Content padder>
-          <Card>
-            <CardItem header bordered>
-              <Text>Student 1</Text>
-            </CardItem>
-            <CardItem bordered>
+        <List>
+            <ListItem avatar>
+              <Left>
+                <Thumbnail small source={{ uri: 'https://s.thestreet.com/files/tsc/v2008/photos/contrib/uploads/0-fs5ztag0_600x400.jpg' }} />
+              </Left>
               <Body>
-                <Text># of members: 15</Text>
+                <Text>Student 1</Text>
+                <Text note>Doing what you like will always keep you happy . .</Text>
               </Body>
-            </CardItem>
-          </Card>
-          <Card>
-            <CardItem header bordered>
-              <Text>Study Buddies</Text>
-            </CardItem>
-            <CardItem bordered>
-              <Body>
-                <Text># of members: 6</Text>
-              </Body>
-            </CardItem>
-          </Card>
+              <Right>
+                <Text note>3:43 pm</Text>
+              </Right>
+            </ListItem>
+          </List>
         </Content>
       </KeyboardAvoidingView>
     );
