@@ -141,9 +141,8 @@ export default createAppContainer(createBottomTabNavigator(
         showLabel: true,
         labelStyle: {
          fontSize: 12,
- 
         }
-       }
+    }
   }
 ));
 

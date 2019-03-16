@@ -151,13 +151,38 @@ OwnGroupStack.navigationOptions = ({ navigation }) => {
 
 export default createAppContainer(createBottomTabNavigator(
   {
-    Personal: OwnGroupStack,
-    Open: OtherGroupStack,
+    Personal: { 
+      screen: OwnGroupStack,
+      navigationOptions: {
+            tabBarLabel: 'Personal',
+            tabBarIcon: ({tintColor, activeTintColor}) => (
+               <Icon name="person" style={{padding:8, fontSize:25, color: tintColor}} />
+               )
+          },
+    },
+    Open: { 
+      screen: OtherGroupStack,
+      navigationOptions: {
+            tabBarLabel: 'Open',
+            tabBarIcon: ({tintColor, activeTintColor}) => (
+               <Icon name="people" style={{padding:8, fontSize:25, color: tintColor}} />
+               )
+          },
+    }
   },
   {
-    navigationOptions: {
+    defaultNavigationOptions: {
       header: null
-    }
+    },
+    tabBarOptions: {
+      activeTintColor: '#407CCA',
+      inactiveTintColor: '#7e7b7b',
+      showIcon: true,
+      showLabel: true,
+      labelStyle: {
+       fontSize: 12,
+      }
+  }
   }
 ));
 
