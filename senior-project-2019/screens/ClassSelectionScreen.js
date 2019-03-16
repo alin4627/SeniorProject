@@ -34,12 +34,12 @@ class ClassesSelectionScreen extends React.Component {
             <Button transparent dark>
             <Icon
                 name="arrow-back"
-                style={{ padding: 10 }}
+                style={{ padding: 10, color:"white" }}
                 onPress={() => this.props.navigation.goBack()}
               />
             </Button>
           </Left>
-          <Body><Title>All Courses</Title></Body>
+          <Body><Title style={{color:"white"}}>All Courses</Title></Body>
           <Right />
         </Header>
         <Content>
