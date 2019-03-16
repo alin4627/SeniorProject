@@ -53,19 +53,6 @@ class HomeScreen extends React.Component {
         >
           <Text>HELLO {s}</Text>
         </View>
-        <Footer style={{ backgroundColor: "#fff" }}>
-          <FooterTab>
-            <ScrollView scrollEnabled={false}>
-              <TextInput
-                placeholder="Message channel"
-                value={this.state.text}
-                style={styles.input}
-                onChangeText={text => this.setState({ text })}
-                autoCorrect={false}
-              />
-            </ScrollView>
-          </FooterTab>
-        </Footer>
       </KeyboardAvoidingView>
     );
   }
