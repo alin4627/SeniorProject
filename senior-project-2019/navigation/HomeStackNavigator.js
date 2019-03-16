@@ -35,10 +35,10 @@ class OtherGroupsScreen extends React.Component {
         <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
             <Button transparent dark>
-              <Icon
-                name="arrow-back"
+            <Icon
+                name="menu"
                 style={{ padding: 10, color: "white" }}
-                onPress={() => this.props.navigation.goBack()}
+                onPress={() => this.props.navigation.openDrawer()}
               />
             </Button>
           </Left>
