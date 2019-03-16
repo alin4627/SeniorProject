@@ -54,7 +54,7 @@ onCreateAccountPress = () => {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8F8F8" }}
         >
-          <Title>Login</Title>
+          <Title style={{color:"black"}}>Login</Title>
           <Form style={styles.form}>
             <Item floatingLabel>
               <Label>Email</Label>

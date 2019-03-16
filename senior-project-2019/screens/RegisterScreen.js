@@ -51,7 +51,7 @@ onSignupPress = () => {
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          <Title>Register</Title>
+          <Title style={{color:"black"}}>Register</Title>
           <Form style={styles.form}>
             <Item floatingLabel>
               <Label>First Name</Label>

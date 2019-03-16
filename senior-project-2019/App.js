@@ -56,6 +56,7 @@ export default class App extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight,
     flex: 1,
     backgroundColor: "#fff"
   }
