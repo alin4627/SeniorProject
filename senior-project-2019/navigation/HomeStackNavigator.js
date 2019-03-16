@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView
 } from "react-native";

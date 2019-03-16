@@ -14,8 +14,7 @@ import {
   Body,
   Title,
   Right,
-  Footer,
-  FooterTab,
+  Content,
   Icon
 } from "native-base";
 import * as firebase from "firebase";
@@ -48,11 +47,8 @@ class HomeScreen extends React.Component {
             </Button>
           </Right>
         </Header>
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text>HELLO {s}</Text>
-        </View>
+        <Content padder style={{backgroundColor:"#F8F8F8"}}>
+        </Content>
       </KeyboardAvoidingView>
     );
   }
