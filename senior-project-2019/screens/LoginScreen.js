@@ -52,7 +52,7 @@ onCreateAccountPress = () => {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#F8F8F8" }}
         >
           <Title>Login</Title>
           <Form style={styles.form}>

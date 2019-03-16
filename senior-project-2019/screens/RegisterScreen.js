@@ -90,6 +90,11 @@ onSignupPress = () => {
               <Text> Register </Text>
             </Button>
             </View>
+            <View style={{marginTop:10}}>
+            <Button transparent light onPress={() => this.props.navigation.goBack()} style = {{padding: '10%', alignSelf: 'center'}}>
+              <Text> Go back </Text>
+            </Button>
+            </View>
           </Form>
         </View>
       </KeyboardAvoidingView>
