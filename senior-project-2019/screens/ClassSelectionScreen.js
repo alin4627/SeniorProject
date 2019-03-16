@@ -42,7 +42,7 @@ class ClassesSelectionScreen extends React.Component {
           <Body><Title style={{color:"white"}}>All Courses</Title></Body>
           <Right />
         </Header>
-        <Content>
+        <Content style={{backgroundColor:"#F8F8F8"}}>
           <List>
             <ListItem onPress={() => this.props.navigation.navigate("")}>
               <Left>

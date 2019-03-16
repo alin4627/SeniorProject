@@ -48,7 +48,8 @@ class OwnGroupScreen extends React.Component {
             </Button>
           </Right>
         </Header>
-        <Content padder>
+        <Content padder style={{backgroundColor:"#F8F8F8"}}>
+        <View>
           <Card>
             <CardItem header bordered>
               <Text>Group 1</Text>
@@ -59,6 +60,7 @@ class OwnGroupScreen extends React.Component {
               </Body>
             </CardItem>
           </Card>
+          </View>
         </Content>
       </KeyboardAvoidingView>
     );
