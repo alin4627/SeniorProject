@@ -35,19 +35,55 @@ class ClassesSelectionScreen extends React.Component {
     ref.on("value", snapshot => {
       let items = snapshot.val();
       let newState = [];
-      console.log(items)
-      for (let item in items) {
-        console.log(items[item])
+      var objectKeys = Object.keys(items);
+      for (i = 0; i < objectKeys.length; i++) {
+        let data = {};
+        data.id = objectKeys[i]
+        for (let item in items[objectKeys[i]])
+        {
+          data[item] = {
+              id: items[objectKeys[i]][item].course_id,
+              title: items[objectKeys[i]][item].course_title
+          }
+        }
+        newState.push(data)
       }
-      // newState.push({
-      //   id: firebase.auth().currentUser.uid,
-      //   firstName: items.firstName,
-      //   lastName: items.lastName
-      // });
-      // this.setState({
-      //   items: newState
-      // });
+      this.setState({
+        items: newState
+      });
     });
+  }
+
+  createList = () => {
+    let list = []
+    for (let i = 0; i < this.state.items.length; i++) {
+      let children = []
+
+      for (let item in this.state.items[i])
+      {
+        if (item != 'id') {
+          children.push( 
+            <ListItem key={this.state.items[i][item].id}>
+              <Left>
+                <Text>{this.state.items[i][item].title}</Text>
+              </Left>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+          )
+        }
+      }
+      list.push(
+        <View key={this.state.items[i].id}>
+          <ListItem itemDivider>
+            <Text>{this.state.items[i].id}</Text>
+          </ListItem>
+          {children}
+        </View>
+      )
+    }
+    return list
   }
 
   render() {
@@ -66,7 +102,12 @@ class ClassesSelectionScreen extends React.Component {
           <Right />
         </Header>
         <Content style={{backgroundColor:"#F8F8F8"}}>
-          <List>
+        <List>
+          {
+            this.createList()
+          }
+        </List>
+          {/* <List>
             <ListItem onPress={() => this.props.navigation.navigate("Class")}>
               <Left>
                 <Text>Theory Computation (CSCI 610)</Text>
@@ -91,7 +132,7 @@ class ClassesSelectionScreen extends React.Component {
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
-          </List>
+          </List> */}
         </Content>
       </KeyboardAvoidingView>
     );
