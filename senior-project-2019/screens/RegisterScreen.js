@@ -27,10 +27,12 @@ import * as firebase from 'firebase';
 class RegisterScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-        email: "",
-        password: "",
-        passwordConfirm: "",
+    this.state = {
+      firstName: "",
+      lastName: "", 
+      email: "",
+      password: "",
+      passwordConfirm: "",
     };
 }
 
@@ -42,7 +44,12 @@ onSignupPress = () => {
   }
 
   firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => { }, (error) => { Alert.alert(error.message); });
+      .then((res) => {
+        firebase.database().ref('users/' + res.user.uid).set({
+          firstName: this.state.firstName,
+          lastName: this.state.lastName
+        })
+       }, (error) => { Alert.alert(error.message); });
       this.props.navigation.navigate('Login'); 
 }
   render() {
@@ -55,11 +62,15 @@ onSignupPress = () => {
           <Form style={styles.form}>
             <Item floatingLabel>
               <Label>First Name</Label>
-              <Input />
+              <Input value={this.state.firstName}
+                    onChangeText={(text) => { this.setState({firstName: text}) }}
+                    autoCorrect={false}/>
             </Item>
             <Item floatingLabel>
               <Label>Last Name</Label>
-              <Input />
+              <Input value={this.state.lastName}
+                    onChangeText={(text) => { this.setState({lastName: text}) }}
+                    autoCorrect={false} />
             </Item>
             <Item floatingLabel>
               <Label>Email</Label>
