@@ -20,11 +20,35 @@ import {
   Icon
 } from "native-base";
 import { NavigationActions } from "react-navigation";
+import * as firebase from 'firebase';
 
 class ClassesSelectionScreen extends React.Component {
-  state = {
-    text: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: []
+    };
+  }
+
+  componentDidMount() {
+    const ref = firebase.database().ref('Courses/');
+    ref.on("value", snapshot => {
+      let items = snapshot.val();
+      let newState = [];
+      console.log(items)
+      for (let item in items) {
+        console.log(items[item])
+      }
+      // newState.push({
+      //   id: firebase.auth().currentUser.uid,
+      //   firstName: items.firstName,
+      //   lastName: items.lastName
+      // });
+      // this.setState({
+      //   items: newState
+      // });
+    });
+  }
 
   render() {
     return (

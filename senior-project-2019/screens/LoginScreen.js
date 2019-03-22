@@ -74,8 +74,8 @@ onCreateAccountPress = () => {
               />
             </Item>
             <View style={{marginTop:15}}>
-            <Button light onPress={this.onLoginPress} style = {{padding: '10%', alignSelf: 'center'}}>
-              <Text> Login </Text>
+            <Button onPress={this.onLoginPress} style = {{padding: '10%', alignSelf: 'center', color: '#7e7b7b'}}>
+              <Text style={{color:'white'}}> Login </Text>
             </Button>
             </View>
             <View style={{marginTop:10}}>
