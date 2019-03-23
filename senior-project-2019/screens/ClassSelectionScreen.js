@@ -76,7 +76,7 @@ class ClassesSelectionScreen extends React.Component {
       }
       list.push(
         <View key={this.state.items[i].id}>
-          <ListItem itemDivider>
+          <ListItem itemDivider style={{backgroundColor:'#EEEEEE'}}>
             <Text>{this.state.items[i].id}</Text>
           </ListItem>
           {children}
