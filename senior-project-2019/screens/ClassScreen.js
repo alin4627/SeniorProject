@@ -15,6 +15,8 @@ import {
   Text,
   Icon
 } from "native-base";
+import * as firebase from 'firebase';
+
 class ClassScreen extends React.Component {
   render() {
     const { navigation } = this.props;
@@ -45,7 +47,7 @@ class ClassScreen extends React.Component {
                 <H2 style={styles.textHeaders}>Professor: Professor's Name</H2>
                 <Text style={styles.textHeaders}>View past students</Text>
                 <View style={styles.textHeaders}>
-                    <Button style={{alignSelf: "center" }} onPress={() => console.log(title)}>
+                    <Button style={{alignSelf: "center" }} onPress={() => this.addClass(title, course_id)}>
                         <Text>Request Access</Text>
                     </Button>
                 </View>
@@ -53,6 +55,19 @@ class ClassScreen extends React.Component {
         </Content>
       </View>
     );
+  }
+
+  addClass(title, course_id) {
+    firebase.database()
+      .ref(
+        'users/' + firebase.auth().currentUser.uid +
+          "/classSubscriptions/" +
+          title
+      )
+      .set({
+        course_title: title,
+        course_id: course_id
+      });
   }
 }
 
