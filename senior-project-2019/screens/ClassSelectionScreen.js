@@ -63,7 +63,7 @@ class ClassesSelectionScreen extends React.Component {
       {
         if (item != 'id') {
           children.push( 
-            <ListItem key={this.state.items[i][item].id}>
+            <ListItem key={this.state.items[i][item].id} onPress={() => this.props.navigation.navigate('Class', { title: this.state.items[i][item].title, course_id: this.state.items[i][item].id })}>
               <Left>
                 <Text>{this.state.items[i][item].title}</Text>
               </Left>

@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import {
   Header,
-  H1,
+  H2,
   Button,
   Left,
   Body,
@@ -17,6 +17,9 @@ import {
 } from "native-base";
 class ClassScreen extends React.Component {
   render() {
+    const { navigation } = this.props;
+    const title = navigation.getParam('title', 'Unavailable');
+    const course_id = navigation.getParam('course_id', 'Unavailable');
     return (
       <View behavior="padding" style={styles.container}>
         <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
@@ -28,7 +31,7 @@ class ClassScreen extends React.Component {
               />
             </Button>
           </Left>
-          <Body><Title style={{color: "white" }}>Course Number</Title></Body>
+          <Body><Title style={{color: "white" }}>{course_id}</Title></Body>
           <Right>
             <Button transparent dark>
               <Icon ios='md-more' android="md-more" style={{ color: "white" }} />
@@ -37,12 +40,12 @@ class ClassScreen extends React.Component {
         </Header>
         <Content padder contentContainerStyle={{ justifyContent: 'center', flex: 1 }} style={{backgroundColor:"#F8F8F8"}}>
             <View style={styles.center}>
-                <H1 style={styles.textHeaders}>Course Number</H1>
-                <H1 style={styles.textHeaders}>Course Name</H1>
-                <H1 style={styles.textHeaders}>Professor's Name</H1>
+                <H2 style={styles.textHeaders}>Name: {title}</H2>
+                <H2 style={styles.textHeaders}>Course ID: {course_id}</H2>
+                <H2 style={styles.textHeaders}>Professor: Professor's Name</H2>
                 <Text style={styles.textHeaders}>View past students</Text>
                 <View style={styles.textHeaders}>
-                    <Button style={{alignSelf: "center" }}>
+                    <Button style={{alignSelf: "center" }} onPress={() => console.log(title)}>
                         <Text>Request Access</Text>
                     </Button>
                 </View>
