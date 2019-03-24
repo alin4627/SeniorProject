@@ -59,9 +59,11 @@ class ChatroomScreen extends React.Component {
     const group_title = navigation.getParam('group_title', 'Unavailable');
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i])
+      //var tempTime = new Date();
+      //var t = tempTime.toJSON();
       firebase.database().ref('Courses/' + category + '/' + course_title + '/Groups/' + group_title + '/messages/' + messages[i]._id).set({
         _id: messages[i]._id,
-        createdAt: Date(),//messages[i].createdAt,
+        createdAt: messages[i].createdAt.toISOString(),
         text: messages[i].text,
         user: messages[i].user
       })
