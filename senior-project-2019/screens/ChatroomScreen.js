@@ -39,10 +39,7 @@ class ChatroomScreen extends React.Component {
         if (snapshot.exists()) {
             let items = snapshot.val();
             let newState = [];
-            console.log(items)
             var objectKeys = Object.keys(items);
-            console.log(objectKeys)
-            console.log(items[objectKeys[0]])
             for (i = 0; i < objectKeys.length; i++) {
                 newState.push(items[objectKeys[i]])
             }
@@ -56,9 +53,19 @@ class ChatroomScreen extends React.Component {
 }
 
   onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }))
+    const { navigation } = this.props;
+    const course_title = navigation.getParam('course_title', 'Unavailable');
+    const category = navigation.getParam('category', 'Unavailable');
+    const group_title = navigation.getParam('group_title', 'Unavailable');
+    for (i = 0; i < messages.length; i++) {
+      console.log(messages[i])
+      firebase.database().ref('Courses/' + category + '/' + course_title + '/Groups/' + group_title + '/messages/' + messages[i]._id).set({
+        _id: messages[i]._id,
+        createdAt: messages[i].createdAt,
+        text: messages[i].text,
+        user: messages[i].user
+      })
+    }
   }
 
   render() {
@@ -89,7 +96,7 @@ class ChatroomScreen extends React.Component {
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
           user={{
-            _id: 1,
+            _id: firebase.auth().currentUser.uid,
           }}
         />
         {Platform.OS === 'android' ? <KeyboardSpacer /> : null }
