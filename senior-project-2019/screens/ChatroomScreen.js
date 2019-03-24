@@ -41,17 +41,14 @@ class ChatroomScreen extends React.Component {
             let newState = [];
             console.log(items)
             var objectKeys = Object.keys(items);
-            // for (i = 0; i < objectKeys.length; i++) {
-            //     console.log(Object.keys(items[objectKeys[i]].users).length)
-            //     let data = {
-            //         title: objectKeys[i],
-            //         users_length: Object.keys(items[objectKeys[i]].users).length
-            //     };
-            //     newState.push(data)
-            // }
-            // this.setState({
-            //     items: newState
-            // });
+            console.log(objectKeys)
+            console.log(items[objectKeys[0]])
+            for (i = 0; i < objectKeys.length; i++) {
+                newState.push(items[objectKeys[i]])
+            }
+            this.setState({
+                messages: newState
+            });
         }
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
