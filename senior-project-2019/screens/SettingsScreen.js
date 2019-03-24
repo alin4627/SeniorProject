@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Header, Left, Body, Title, Right, Button, Icon } from "native-base";
+import { Header, Left, Body, Title, Right, Button, Icon, Content } from "native-base";
 import * as firebase from 'firebase';
 
 class SettingsScreen extends React.Component {
@@ -46,7 +46,8 @@ class SettingsScreen extends React.Component {
           </Body>
           <Right />
         </Header>
-        <View
+        <Content>
+          <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
           {this.state.items.map(item => {
@@ -58,6 +59,7 @@ class SettingsScreen extends React.Component {
             );
           })}
         </View>
+        </Content>
       </View>
     );
   }
