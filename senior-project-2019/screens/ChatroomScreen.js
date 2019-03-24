@@ -73,7 +73,7 @@ class ChatroomScreen extends React.Component {
   render() {
     var user = firebase.auth().currentUser;
     var s = "";
-    if (user){ s = user.email }
+    if (user){ s = user.displayName }
     else { s = "Not logged In"}
     return (
       <KeyboardAvoidingView style={styles.container}>
@@ -99,6 +99,7 @@ class ChatroomScreen extends React.Component {
           onSend={messages => this.onSend(messages)}
           user={{
             _id: firebase.auth().currentUser.uid,
+            name: user.displayName
           }}
         />
         {Platform.OS === 'android' ? <KeyboardSpacer /> : null }
