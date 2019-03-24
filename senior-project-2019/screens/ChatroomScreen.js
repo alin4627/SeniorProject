@@ -75,7 +75,7 @@ class ChatroomScreen extends React.Component {
     // Make "pure emoji" messages much bigger than plain text.
     if (currText) {
       messageTextStyle = {
-        fontSize: 28,
+        fontSize: 20,
         // Emoji get clipped if lineHeight isn't increased; make it consistent across platforms.
         lineHeight: Platform.OS === 'android' ? 34 : 30,
       };
