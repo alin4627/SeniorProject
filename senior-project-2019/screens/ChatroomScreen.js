@@ -57,6 +57,21 @@ class ChatroomScreen extends React.Component {
     const course_title = navigation.getParam('course_title', 'Unavailable');
     const category = navigation.getParam('category', 'Unavailable');
     const group_title = navigation.getParam('group_title', 'Unavailable');
+    n = messages.length
+    for(i = 0; i < n-1 ; i++)
+    {
+      for(j = 0; j<n-i-1 ; j++){
+      first = messages[j].createdAt.getTime();
+      second = messages[j+1].createdAt.getTime();
+      if(second<first)
+      {
+        temp = second
+        second = first
+        first = second
+      }
+      }
+     
+    }
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i])
       //var tempTime = new Date();
