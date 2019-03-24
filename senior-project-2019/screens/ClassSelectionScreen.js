@@ -19,7 +19,6 @@ import {
   ListItem,
   Icon
 } from "native-base";
-import { NavigationActions } from "react-navigation";
 import * as firebase from 'firebase';
 
 class ClassesSelectionScreen extends React.Component {
@@ -108,32 +107,6 @@ class ClassesSelectionScreen extends React.Component {
             this.createList()
           }
         </List>
-          {/* <List>
-            <ListItem onPress={() => this.props.navigation.navigate("Class")}>
-              <Left>
-                <Text>Theory Computation (CSCI 610)</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Senior Project (CSCI 455)</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Artificial Intelligence 1 (CSCI 355)</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-          </List> */}
         </Content>
       </KeyboardAvoidingView>
     );

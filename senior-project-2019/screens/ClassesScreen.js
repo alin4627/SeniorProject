@@ -4,7 +4,6 @@ import {
   Text,
   View,
   TextInput,
-  ScrollView,
   KeyboardAvoidingView
 } from "react-native";
 import {
@@ -110,30 +109,6 @@ class ClassesScreen extends React.Component {
         </Header>
         <Content>
             {this.createList()}
-            {/* <ListItem onPress={() => this.props.navigation.navigate("Groups")}>
-              <Left>
-                <Text>Theory Computation (CSCI 610)</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Senior Project (CSCI 455)</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Artificial Intelligence 1 (CSCI 355)</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem> */}
         </Content>
       </KeyboardAvoidingView>
     );
