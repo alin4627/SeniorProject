@@ -16,7 +16,6 @@ class SettingsScreen extends React.Component {
     ref.on("value", snapshot => {
       let items = snapshot.val();
       let newState = [];
-      console.log(items)
       newState.push({
         id: firebase.auth().currentUser.uid,
         firstName: items.firstName,

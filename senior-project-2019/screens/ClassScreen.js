@@ -43,10 +43,8 @@ class ClassScreen extends React.Component {
         </Header>
         <Content padder contentContainerStyle={{ justifyContent: 'center', flex: 1 }} style={{backgroundColor:"#F8F8F8"}}>
             <View style={styles.center}>
-                <H2 style={styles.textHeaders}>Category: {category}</H2>
                 <H2 style={styles.textHeaders}>Name: {title}</H2>
                 <H2 style={styles.textHeaders}>Course ID: {course_id}</H2>
-                <H2 style={styles.textHeaders}>Professor: Professor's Name</H2>
                 <Text style={styles.textHeaders}>View past students</Text>
                 <View style={styles.textHeaders}>
                     <Button style={{alignSelf: "center" }} onPress={() => this.addClass(title, course_id, category)}>
