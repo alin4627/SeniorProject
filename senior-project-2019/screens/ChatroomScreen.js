@@ -30,6 +30,7 @@ class ChatroomScreen extends React.Component {
   };
 
   componentWillMount() {
+    console.log(new Date())
     this.setState({
       messages: [
         {

@@ -23,47 +23,9 @@ import {
   createStackNavigator,
   createAppContainer,
 } from 'react-navigation';
+import OwnGroupScreen from './OwnGroups';
 import ChatroomScreen from './ChatroomScreen';
-
-class OwnGroupScreen extends React.Component {
-  render() {
-    return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
-          <Left>
-            <Button transparent dark>
-              <Icon
-                name="arrow-back"
-                style={{ padding: 10, color: "white"}}
-                onPress={() => this.props.navigation.navigate("Classes")}
-              />
-            </Button>
-          </Left>
-          <Body><Title style={{color:"white"}}>My Groups</Title></Body>
-          <Right>
-            <Button transparent dark>
-              <Icon name="add" style={{color:"white"}}/>
-            </Button>
-          </Right>
-        </Header>
-        <Content padder style={{backgroundColor:"#F8F8F8"}}>
-        <View>
-          <Card>
-            <CardItem header bordered>
-              <Text>Group 1</Text>
-            </CardItem>
-            <CardItem button bordered onPress={() => this.props.navigation.navigate("Chat")}>
-              <Body>
-                <Text># of members: 15</Text>
-              </Body>
-            </CardItem>
-          </Card>
-          </View>
-        </Content>
-      </KeyboardAvoidingView>
-    );
-  }
-}
+import * as firebase from 'firebase';
 
 class OtherGroupsScreen extends React.Component {
   render() {

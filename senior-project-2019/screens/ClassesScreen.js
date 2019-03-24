@@ -62,7 +62,7 @@ class ClassesScreen extends React.Component {
         for (let item in this.state.items[i])
         {
           listitems.push(
-            <ListItem key={this.state.items[i][item].id} onPress={() => this.props.navigation.navigate('Groups', { title: this.state.items[i][item].title, course_id: this.state.items[i][item].id, category: this.state.items[i][item].category })}>
+            <ListItem key={this.state.items[i][item].id} onPress={() => this.props.navigation.navigate('OwnGroups', { title: this.state.items[i][item].title, course_id: this.state.items[i][item].id, category: this.state.items[i][item].category })}>
               <Left>
                 <Text>{this.state.items[i][item].title}</Text>
               </Left>
