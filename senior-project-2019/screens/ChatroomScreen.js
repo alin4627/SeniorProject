@@ -61,7 +61,7 @@ class ChatroomScreen extends React.Component {
       console.log(messages[i])
       firebase.database().ref('Courses/' + category + '/' + course_title + '/Groups/' + group_title + '/messages/' + messages[i]._id).set({
         _id: messages[i]._id,
-        createdAt: 'April 19, 2020', //messages[i].createdAt,
+        createdAt: messages[i].createdAt,
         text: messages[i].text,
         user: messages[i].user
       })
