@@ -83,14 +83,11 @@ class OwnGroups extends React.Component {
                 for (i = 0; i < objectKeys.length; i++) {
                     console.log(Object.keys(items[objectKeys[i]].users).length)
                     let data = {
-                        title: objectKeys[i],
-                        users_length: Object.keys(items[objectKeys[i]].users).length
+                        course_title: title,
+                        group_title: objectKeys[i],
+                        users_length: Object.keys(items[objectKeys[i]].users).length,
+                        category: category
                     };
-                    // data[objectKeys[i]] = {
-                    //         id: items[objectKeys[i]].course_id,
-                    //         title: items[objectKeys[i]].course_title,
-                    //         category: items[objectKeys[i]].category
-                    // }
                     newState.push(data)
                 }
                 this.setState({
@@ -105,13 +102,12 @@ class OwnGroups extends React.Component {
     createCard = () => {
         let card = []
         for (let i = 0; i < this.state.items.length; i++) {
-            console.log(this.state.items[i])
              card.push(
-                <Card key={this.state.items[i].title}>
+                <Card key={this.state.items[i].group_title}>
                     <CardItem header bordered>
-                    <Text>{this.state.items[i].title}</Text>
+                    <Text>{this.state.items[i].group_title}</Text>
                     </CardItem>
-                    <CardItem button bordered onPress={() => this.props.navigation.navigate("Chat")}>
+                    <CardItem button bordered onPress={() => this.props.navigation.navigate('Chat', { course_title: this.state.items[i].course_title, group_title: this.state.items[i].group_title, category: this.state.items[i].category})}>
                     <Body>
                         <Text># of members: {this.state.items[i].users_length}</Text>
                     </Body>

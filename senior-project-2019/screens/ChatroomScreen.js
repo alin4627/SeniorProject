@@ -29,23 +29,34 @@ class ChatroomScreen extends React.Component {
     messages: []
   };
 
-  componentWillMount() {
-    console.log(new Date())
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ],
+  componentDidMount() {
+    const { navigation } = this.props;
+    const course_title = navigation.getParam('course_title', 'Unavailable');
+    const category = navigation.getParam('category', 'Unavailable');
+    const group_title = navigation.getParam('group_title', 'Unavailable');
+    const ref = firebase.database().ref('Courses/' + category + '/' + course_title + '/Groups/' + group_title + '/messages/');
+    ref.on("value", snapshot => {
+        if (snapshot.exists()) {
+            let items = snapshot.val();
+            let newState = [];
+            console.log(items)
+            var objectKeys = Object.keys(items);
+            // for (i = 0; i < objectKeys.length; i++) {
+            //     console.log(Object.keys(items[objectKeys[i]].users).length)
+            //     let data = {
+            //         title: objectKeys[i],
+            //         users_length: Object.keys(items[objectKeys[i]].users).length
+            //     };
+            //     newState.push(data)
+            // }
+            // this.setState({
+            //     items: newState
+            // });
+        }
+    }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
     })
-  }
+}
 
   onSend(messages = []) {
     this.setState(previousState => ({
