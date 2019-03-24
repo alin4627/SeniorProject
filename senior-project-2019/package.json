@@ -17,6 +17,7 @@
     "firebase": "^5.8.6",
     "firebase-tools": "^6.5.0",
     "native-base": "^2.12.0",
+    "prop-types": "^15.7.2",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-gifted-chat": "^0.7.2",

@@ -2,9 +2,6 @@ import React from "react";
 import {
   StyleSheet,
   Platform ,
-  SafeAreaView,
-  TextInput,
-  ScrollView,
   KeyboardAvoidingView
 } from "react-native";
 import {
@@ -14,10 +11,10 @@ import {
   Body,
   Title,
   Right,
-  Footer,
-  FooterTab,
   Icon
 } from "native-base";
+import PropTypes from 'prop-types';
+import SlackMessage from '../components/SlackMessage';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { GiftedChat } from 'react-native-gifted-chat';
 import * as firebase from "firebase";
@@ -85,10 +82,29 @@ class ChatroomScreen extends React.Component {
     }
   }
 
+  renderMessage(props) {
+    const { currentMessage: { text: currText } } = props;
+
+    let messageTextStyle;
+
+    // Make "pure emoji" messages much bigger than plain text.
+    if (currText) {
+      messageTextStyle = {
+        fontSize: 20,
+        // Emoji get clipped if lineHeight isn't increased; make it consistent across platforms.
+        lineHeight: Platform.OS === 'android' ? 34 : 30,
+      };
+    }
+
+    return (
+      <SlackMessage {...props} messageTextStyle={messageTextStyle} />
+    );
+  }
+
   render() {
     var user = firebase.auth().currentUser;
     var s = "";
-    if (user){ s = user.email }
+    if (user){ s = user.displayName }
     else { s = "Not logged In"}
     return (
       <KeyboardAvoidingView style={styles.container}>
@@ -114,7 +130,9 @@ class ChatroomScreen extends React.Component {
           onSend={messages => this.onSend(messages)}
           user={{
             _id: firebase.auth().currentUser.uid,
+            name: user.displayName
           }}
+          renderMessage={this.renderMessage}
         />
         {Platform.OS === 'android' ? <KeyboardSpacer /> : null }
       </KeyboardAvoidingView>

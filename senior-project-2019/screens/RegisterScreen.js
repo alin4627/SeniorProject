@@ -45,6 +45,7 @@ onSignupPress = () => {
 
   firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then((res) => {
+        res.user.updateProfile({displayName: this.state.firstName + ' ' + this.state.lastName});
         firebase.database().ref('users/' + res.user.uid).set({
           firstName: this.state.firstName,
           lastName: this.state.lastName
