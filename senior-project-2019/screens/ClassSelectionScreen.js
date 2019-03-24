@@ -43,7 +43,8 @@ class ClassesSelectionScreen extends React.Component {
         {
           data[item] = {
               id: items[objectKeys[i]][item].course_id,
-              title: items[objectKeys[i]][item].course_title
+              title: items[objectKeys[i]][item].course_title,
+              category: objectKeys[i]
           }
         }
         newState.push(data)
@@ -63,7 +64,7 @@ class ClassesSelectionScreen extends React.Component {
       {
         if (item != 'id') {
           children.push( 
-            <ListItem key={this.state.items[i][item].id} onPress={() => this.props.navigation.navigate('Class', { title: this.state.items[i][item].title, course_id: this.state.items[i][item].id })}>
+            <ListItem key={this.state.items[i][item].id} onPress={() => this.props.navigation.navigate('Class', { title: this.state.items[i][item].title, course_id: this.state.items[i][item].id, category: this.state.items[i][item].category })}>
               <Left>
                 <Text>{this.state.items[i][item].title}</Text>
               </Left>

@@ -19,11 +19,61 @@ import {
   ListItem,
   Icon
 } from "native-base";
+import * as firebase from 'firebase';
 
 class ClassesScreen extends React.Component {
-  state = {
-    text: ""
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: []
+    };
+  }
+
+  componentDidMount() {
+    try {
+    const ref = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/classSubscriptions/');
+    ref.on("value", snapshot => {
+      let items = snapshot.val();
+      let newState = [];
+      // console.log(items)
+      var objectKeys = Object.keys(items);
+      for (i = 0; i < objectKeys.length; i++) {
+        let data = {};
+        data[objectKeys[i]] = {
+              id: items[objectKeys[i]].course_id,
+              title: items[objectKeys[i]].course_title,
+              category: items[objectKeys[i]].category
+        }
+        newState.push(data)
+      }
+      this.setState({
+        items: newState
+      });
+    })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  createList = () => {
+    let list = []
+    for (let i = 0; i < this.state.items.length; i++) {
+      for (let item in this.state.items[i])
+      {
+        list.push(
+          <ListItem key={this.state.items[i][item].id} onPress={() => this.props.navigation.navigate('Groups', { title: this.state.items[i][item].title, course_id: this.state.items[i][item].id, category: this.state.items[i][item].category })}>
+            <Left>
+              <Text>{this.state.items[i][item].title}</Text>
+            </Left>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </ListItem>
+        )
+      }
+    }
+    return list
+  }
 
   render() {
     return (
@@ -47,7 +97,8 @@ class ClassesScreen extends React.Component {
         </Header>
         <Content>
           <List>
-            <ListItem onPress={() => this.props.navigation.navigate("Groups")}>
+            {this.createList()}
+            {/* <ListItem onPress={() => this.props.navigation.navigate("Groups")}>
               <Left>
                 <Text>Theory Computation (CSCI 610)</Text>
               </Left>
@@ -70,7 +121,7 @@ class ClassesScreen extends React.Component {
               <Right>
                 <Icon name="arrow-forward" />
               </Right>
-            </ListItem>
+            </ListItem> */}
           </List>
         </Content>
       </KeyboardAvoidingView>

@@ -22,6 +22,7 @@ class ClassScreen extends React.Component {
     const { navigation } = this.props;
     const title = navigation.getParam('title', 'Unavailable');
     const course_id = navigation.getParam('course_id', 'Unavailable');
+    const category = navigation.getParam('category', 'Unavailable');
     return (
       <View behavior="padding" style={styles.container}>
         <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
@@ -42,12 +43,13 @@ class ClassScreen extends React.Component {
         </Header>
         <Content padder contentContainerStyle={{ justifyContent: 'center', flex: 1 }} style={{backgroundColor:"#F8F8F8"}}>
             <View style={styles.center}>
+                <H2 style={styles.textHeaders}>Category: {category}</H2>
                 <H2 style={styles.textHeaders}>Name: {title}</H2>
                 <H2 style={styles.textHeaders}>Course ID: {course_id}</H2>
                 <H2 style={styles.textHeaders}>Professor: Professor's Name</H2>
                 <Text style={styles.textHeaders}>View past students</Text>
                 <View style={styles.textHeaders}>
-                    <Button style={{alignSelf: "center" }} onPress={() => this.addClass(title, course_id)}>
+                    <Button style={{alignSelf: "center" }} onPress={() => this.addClass(title, course_id, category)}>
                         <Text>Request Access</Text>
                     </Button>
                 </View>
@@ -57,7 +59,7 @@ class ClassScreen extends React.Component {
     );
   }
 
-  addClass(title, course_id) {
+  addClass(title, course_id, category) {
     firebase.database()
       .ref(
         'users/' + firebase.auth().currentUser.uid +
@@ -65,6 +67,7 @@ class ClassScreen extends React.Component {
           title
       )
       .set({
+        category: category,
         course_title: title,
         course_id: course_id
       });
