@@ -1,7 +1,7 @@
 import React from "react";
 import {
   StyleSheet,
-  Text,
+  Platform ,
   SafeAreaView,
   TextInput,
   ScrollView,
@@ -18,6 +18,7 @@ import {
   FooterTab,
   Icon
 } from "native-base";
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { GiftedChat } from 'react-native-gifted-chat';
 import * as firebase from "firebase";
 class ChatroomScreen extends React.Component {
@@ -82,6 +83,7 @@ class ChatroomScreen extends React.Component {
             _id: 1,
           }}
         />
+        {Platform.OS === 'android' ? <KeyboardSpacer /> : null }
       </KeyboardAvoidingView>
     );
   }
