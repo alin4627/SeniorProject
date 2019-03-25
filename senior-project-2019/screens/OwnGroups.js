@@ -70,6 +70,8 @@ class OwnGroups extends React.Component {
           userName: firebase.auth().currentUser.displayName,
           userLevel: 0
         });
+      this.fetchData();
+      this.setModalVisible(!this.state.modalVisible);
     } else {
       Alert.alert("Invalid group name. Please enter a different group name.");
     }
@@ -177,7 +179,7 @@ class OwnGroups extends React.Component {
     );
   }
 
-  componentDidMount() {
+  fetchData() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
     const course_id = navigation.getParam("course_id", "Unavailable");
@@ -193,13 +195,22 @@ class OwnGroups extends React.Component {
           let newState = [];
           var objectKeys = Object.keys(items);
           for (i = 0; i < objectKeys.length; i++) {
+            let subbed = false;
+            let userList = Object.keys(items[objectKeys[i]].users);
+            for (j = 0; j < userList.length; j++) {
+              if (userList[j] == firebase.auth().currentUser.uid) {
+                subbed = true;
+              }
+            }
             let data = {
               course_title: title,
               group_title: objectKeys[i],
               users_length: Object.keys(items[objectKeys[i]].users).length,
               category: category
             };
-            newState.push(data);
+            if (subbed) {
+              newState.push(data);
+            }
           }
           this.setState({
             items: newState
@@ -210,6 +221,10 @@ class OwnGroups extends React.Component {
         console.log("The read failed: " + errorObject.code);
       }
     );
+  }
+
+  componentDidMount() {
+    this.fetchData();
   }
 
   createCard = () => {
