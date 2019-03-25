@@ -25,7 +25,7 @@ class ChatroomScreen extends React.Component {
   state = {
     messages: []
   };
-
+   
   componentDidMount() {
     const { navigation } = this.props;
     const course_title = navigation.getParam('course_title', 'Unavailable');
@@ -61,10 +61,10 @@ class ChatroomScreen extends React.Component {
     const course_title = navigation.getParam('course_title', 'Unavailable');
     const category = navigation.getParam('category', 'Unavailable');
     const group_title = navigation.getParam('group_title', 'Unavailable');
+    
+
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i])
-      //var tempTime = new Date();
-      //var t = tempTime.toJSON();
       firebase.database().ref('Courses/' + category + '/' + course_title + '/Groups/' + group_title + '/messages/' + messages[i]._id).set({
         _id: messages[i]._id,
         createdAt: messages[i].createdAt.toISOString(),
