@@ -32,7 +32,6 @@ class ChatroomScreen extends React.Component {
     const category = navigation.getParam('category', 'Unavailable');
     const group_title = navigation.getParam('group_title', 'Unavailable');
     const ref = firebase.database().ref('Courses/' + category + '/' + course_title + '/Groups/' + group_title + '/messages/');
-    ref.orderByChild('createdAt');
     ref.on("value", snapshot => {
         if (snapshot.exists()) {
             let items = snapshot.val();
