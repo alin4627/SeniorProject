@@ -52,16 +52,6 @@ class OwnGroups extends React.Component {
             <Content padder style={{backgroundColor:"#F8F8F8"}}>
             <View>
                 {this.createCard()}
-            {/* <Card>
-                <CardItem header bordered>
-                <Text>Group 1</Text>
-                </CardItem>
-                <CardItem button bordered onPress={() => this.props.navigation.navigate("Chat")}>
-                <Body>
-                    <Text># of members: 15</Text>
-                </Body>
-                </CardItem>
-            </Card> */}
             </View>
             </Content>
         </KeyboardAvoidingView>
@@ -73,7 +63,6 @@ class OwnGroups extends React.Component {
         const title = navigation.getParam('title', 'Unavailable');
         const course_id = navigation.getParam('course_id', 'Unavailable');
         const category = navigation.getParam('category', 'Unavailable');
-        console.log(category)
         const ref = firebase.database().ref('Courses/' + category + '/' + title + '/Groups');
         ref.on("value", snapshot => {
             if (snapshot.exists()) {
@@ -81,7 +70,6 @@ class OwnGroups extends React.Component {
                 let newState = [];
                 var objectKeys = Object.keys(items);
                 for (i = 0; i < objectKeys.length; i++) {
-                    console.log(Object.keys(items[objectKeys[i]].users).length)
                     let data = {
                         course_title: title,
                         group_title: objectKeys[i],

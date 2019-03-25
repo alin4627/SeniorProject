@@ -36,7 +36,6 @@ class ChatroomScreen extends React.Component {
         if (snapshot.exists()) {
           let newState = []
           snapshot.forEach(function(child){
-            console.log(child.val())
             let items = child.val();
             newState.push(items)
             // var objectKeys = Object.keys(items);
@@ -45,7 +44,6 @@ class ChatroomScreen extends React.Component {
             //     newState.push(items[objectKeys[i]])
             // }
           });
-          console.log(newState)
           newState.reverse()
           this.setState({
             messages: newState
