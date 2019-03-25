@@ -96,7 +96,8 @@ class ClassScreen extends React.Component {
           firebase.auth().currentUser.uid
       )
       .set({
-        userName: firebase.auth().currentUser.displayName
+        userName: firebase.auth().currentUser.displayName,
+        userLevel: 1
       });
   }
 }
