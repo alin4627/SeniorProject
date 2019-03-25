@@ -31,18 +31,25 @@ class ChatroomScreen extends React.Component {
     const course_title = navigation.getParam('course_title', 'Unavailable');
     const category = navigation.getParam('category', 'Unavailable');
     const group_title = navigation.getParam('group_title', 'Unavailable');
-    const ref = firebase.database().ref('Courses/' + category + '/' + course_title + '/Groups/' + group_title + '/messages/');
+    const ref = firebase.database().ref('Courses/' + category + '/' + course_title + '/Groups/' + group_title + '/messages/').orderByChild('createdAt');
     ref.on("value", snapshot => {
         if (snapshot.exists()) {
-            let items = snapshot.val();
-            let newState = [];
-            var objectKeys = Object.keys(items);
-            for (i = 0; i < objectKeys.length; i++) {
-                newState.push(items[objectKeys[i]])
-            }
-            this.setState({
-                messages: newState
-            });
+          let newState = []
+          snapshot.forEach(function(child){
+            console.log(child.val())
+            let items = child.val();
+            newState.push(items)
+            // var objectKeys = Object.keys(items);
+            // console.log(objectKeys)
+            // for (i = 0; i < objectKeys.length; i++) {
+            //     newState.push(items[objectKeys[i]])
+            // }
+          });
+          console.log(newState)
+          newState.reverse()
+          this.setState({
+            messages: newState
+          });
         }
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
@@ -72,14 +79,14 @@ class ChatroomScreen extends React.Component {
 
     let messageTextStyle;
 
-    // Make "pure emoji" messages much bigger than plain text.
-    if (currText) {
-      messageTextStyle = {
-        fontSize: 20,
-        // Emoji get clipped if lineHeight isn't increased; make it consistent across platforms.
-        lineHeight: Platform.OS === 'android' ? 34 : 30,
-      };
-    }
+    // // Make "pure emoji" messages much bigger than plain text.
+    // if (currText) {
+    //   messageTextStyle = {
+    //     fontSize: 15,
+    //     // Emoji get clipped if lineHeight isn't increased; make it consistent across platforms.
+    //     lineHeight: Platform.OS === 'android' ? 34 : 30,
+    //   };
+    // }
 
     return (
       <SlackMessage {...props} messageTextStyle={messageTextStyle} />
@@ -115,7 +122,8 @@ class ChatroomScreen extends React.Component {
           onSend={messages => this.onSend(messages)}
           user={{
             _id: firebase.auth().currentUser.uid,
-            name: user.displayName
+            name: user.displayName,
+            avatar: user.photoURL
           }}
           renderMessage={this.renderMessage}
         />
