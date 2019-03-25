@@ -4,6 +4,7 @@ import {
   Text,
   View,
   Modal,
+  Alert,
   TextInput,
   KeyboardAvoidingView
 } from "react-native";
@@ -32,7 +33,9 @@ class OwnGroups extends React.Component {
     this.state = {
       items: [],
       modalVisible: false,
-      selected: "key0"
+      selected: "key0",
+      groupName: "",
+      finalGroupName: ""
     };
   }
 
@@ -45,6 +48,32 @@ class OwnGroups extends React.Component {
       selected: value
     });
   }
+
+  createGroup = () => {
+    if (this.state.groupName != "" && this.state.groupName.length > 1) {
+      const { navigation } = this.props;
+      const title = navigation.getParam("title", "Unavailable");
+      const category = navigation.getParam("category", "Unavailable");
+      firebase
+        .database()
+        .ref(
+          "Courses/" +
+            category +
+            "/" +
+            title +
+            "/Groups/" +
+            this.state.groupName +
+            "/users/" +
+            firebase.auth().currentUser.uid
+        )
+        .set({
+          userName: firebase.auth().currentUser.displayName,
+          userLevel: 0
+        });
+    } else {
+      Alert.alert("Invalid group name. Please enter a different group name.");
+    }
+  };
 
   render() {
     return (
@@ -111,8 +140,8 @@ class OwnGroups extends React.Component {
                   <Item floatingLabel style={styles.item}>
                     <Label>Name of Group</Label>
                     <Input
-                      onChangeText={email => this.setState({ email })}
-                      value={this.state.email}
+                      onChangeText={groupName => this.setState({ groupName })}
+                      value={this.state.groupName}
                     />
                   </Item>
                   <Item picker style={styles.item}>
@@ -129,7 +158,7 @@ class OwnGroups extends React.Component {
                   </Item>
                   <View style={{ marginTop: 15 }}>
                     <Button
-                      //   onPress={this.onLoginPress}
+                      onPress={() => this.createGroup()}
                       style={{
                         padding: "10%",
                         alignSelf: "center",
