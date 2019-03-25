@@ -34,8 +34,7 @@ class OwnGroups extends React.Component {
       items: [],
       modalVisible: false,
       selected: "key0",
-      groupName: "",
-      finalGroupName: ""
+      groupName: ""
     };
   }
 
@@ -46,6 +45,12 @@ class OwnGroups extends React.Component {
   onValueChange(value: string) {
     this.setState({
       selected: value
+    });
+  }
+
+  setGroupName() {
+    this.setState({
+      groupName: ""
     });
   }
 
@@ -71,6 +76,7 @@ class OwnGroups extends React.Component {
           userLevel: 0
         });
       this.fetchData();
+      this.setGroupName();
       this.setModalVisible(!this.state.modalVisible);
     } else {
       Alert.alert("Invalid group name. Please enter a different group name.");
