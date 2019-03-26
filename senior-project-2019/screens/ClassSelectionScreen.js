@@ -112,7 +112,11 @@ class ClassesSelectionScreen extends React.Component {
           <Body>
             <Title style={{ color: "white" }}>All Courses</Title>
           </Body>
-          <Right />
+          <Right>
+            <Button transparent dark onPress={() => this.props.navigation.navigate("ClassCreate")}>
+              <Icon name="add" style={{color: "white" }} />
+            </Button>
+          </Right>
         </Header>
         <Content style={{ backgroundColor: "#F8F8F8" }}>
           <List>{this.createList()}</List>
