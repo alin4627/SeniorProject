@@ -92,8 +92,9 @@ class OwnGroups extends React.Component {
         this.state.major="" ;
         this.state.courseName="" ;
         this.state.courseId = "";
-        this.setModalVisible(!this.state.modalVisible);
+        this.setModalVisible(false);
     }
+
   createCourse = () => {
     if (this.state.major!="" && this.state.courseName !=""  && this.state.courseId != "") {
         firebase
@@ -106,11 +107,41 @@ class OwnGroups extends React.Component {
           )
           .set({ course_id: this.state.courseId , course_title: this.state.courseName ,
             professor: firebase.auth().currentUser.displayName
-          });
+          });// checks if all info is filled out before creating the course and information
+        firebase
+          .database()
+          .ref(
+            "Courses/" +
+              this.state.major +
+              "/" +
+              this.state.courseName+
+              "/" +
+              "/Groups/Default Group/users/" +
+              firebase.auth().currentUser.uid
+              )
+           .set({
+              userName: firebase.auth().currentUser.displayName,
+              userLevel: 2
+            })//adds creator to default group with user level 2 
+
+        firebase
+            .database()
+            .ref(
+              "users/" +
+                firebase.auth().currentUser.uid +
+                "/classSubscriptions/" +
+                this.state.courseName
+            )
+            .set({
+              category: this.state.major,
+              course_title: this.state.courseName,
+              course_id: this.state.courseId
+            });// puts course in User info allowing connection
+
         this.clearState();
-        
+        this.props.navigation.navigate("Classes")
       } else {
-        Alert.alert("Invalid group name. Please enter a different group name.");
+        Alert.alert("Info missing, Please fill in all information");
       }
     
   };
