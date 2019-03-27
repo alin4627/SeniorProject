@@ -42,7 +42,7 @@ class OwnGroups extends React.Component {
     this.setState({ modalVisible: visible });
   }
 
-  onValueChange(value: string) {
+  onValueChange(value) {
     this.setState({
       selected: value
     });
@@ -77,7 +77,7 @@ class OwnGroups extends React.Component {
         });
       this.fetchData();
       this.setGroupName();
-      this.setModalVisible(!this.state.modalVisible);
+      this.setModalVisible(false);
     } else {
       Alert.alert("Invalid group name. Please enter a different group name.");
     }

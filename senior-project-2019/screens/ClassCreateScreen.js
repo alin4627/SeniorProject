@@ -44,7 +44,7 @@ class OwnGroups extends React.Component {
     this.setState({ modalVisible: visible });
   }
 
-  onValueChange(value: string) {
+  onValueChange(value) {
     this.setState({
       selected: value
     });
@@ -153,7 +153,7 @@ class OwnGroups extends React.Component {
       else{this.createCourse()}
   }
 
-  onValueChange(value: string) {
+  onValueChange(value) {
     this.setState({
       major: value
     });
