@@ -2,11 +2,11 @@ import React from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { Root } from "native-base";
 import { AppLoading, Asset, Font, Icon } from "expo";
-import AppNavigator from "./navigation/AppDrawerNavigator";
+import StudentNavigator from "./navigation/StudentNavigator";
+import TeacherNavigator from "./navigation/TeacherNavigator";
 import AppLoginNavigator from "./navigation/AppLoginNavigator";
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase';
-import Register from './screens/RegisterScreen';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -15,6 +15,7 @@ export default class App extends React.Component {
       loading: true, 
       isAuthenticationReady: false,
       isAuthenticated: false,
+      userLevel: 1
     };
 
     // Initialize firebase...
@@ -25,6 +26,15 @@ export default class App extends React.Component {
   onAuthStateChanged = (user) => {
     this.setState({isAuthenticationReady: true});
     this.setState({isAuthenticated: !!user});
+    if (user) {
+        const ref = firebase.database().ref('users/' + user.uid);
+        ref.on("value", snapshot => {
+        let items = snapshot.val();
+        this.setState({
+          userLevel: items.userLevel
+        });
+      });
+    }
   }
 
   async componentWillMount() {
@@ -46,12 +56,21 @@ export default class App extends React.Component {
           <AppLoginNavigator />
         </Root>
       );
+    } else if (this.state.userLevel == 2) {
+      return (
+        <Root>
+          <View style={styles.container}>
+            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+            <TeacherNavigator />
+          </View>
+        </Root>
+      );
     } else {
       return (
         <Root>
           <View style={styles.container}>
             {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-            <AppNavigator />
+            <StudentNavigator />
           </View>
         </Root>
       );

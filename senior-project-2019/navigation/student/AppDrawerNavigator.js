@@ -7,13 +7,12 @@ import {
   SafeAreaView
 } from "react-navigation";
 
-import HomeScreen from "../screens/HomeScreen";
-import SettingsScreen from "../screens/SettingsScreen";
-import UpcomingScreen from "../screens/UpcomingScreen";
-import { ScrollView } from "react-native-gesture-handler";
+import HomeScreen from "../../screens/HomeScreen";
+import SettingsScreen from "../../screens/SettingsScreen";
+import UpcomingScreen from "../../screens/UpcomingScreen";
 import CourseNavigator from "./CourseNavigator";
-import DrawerContentComponent from "./DrawerContentComponent";
-import HomeStackNavigator from "./HomeStackNavigator";
+import DrawerContentComponent from "../DrawerContentComponent";
+import HomeStackNavigator from "../HomeStackNavigator";
 
 const AppDrawer = createDrawerNavigator(
   {
