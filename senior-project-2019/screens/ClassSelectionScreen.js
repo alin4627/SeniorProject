@@ -93,6 +93,22 @@ class ClassesSelectionScreen extends React.Component {
     return list;
   };
 
+  createAddClass = () => {
+    let content = []
+    const ref = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
+    ref.on("value", snapshot => {
+      let items = snapshot.val();
+      if (items.userLevel == 2) {
+        content.push(
+          <Button transparent dark onPress={() => this.props.navigation.navigate("ClassCreate")} key="createClass">
+              <Icon name="add" style={{color: "white" }} />
+          </Button>
+        )
+      }
+    })
+    return content;
+  }
+
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -113,9 +129,7 @@ class ClassesSelectionScreen extends React.Component {
             <Title style={{ color: "white" }}>All Courses</Title>
           </Body>
           <Right>
-            <Button transparent dark onPress={() => this.props.navigation.navigate("ClassCreate")}>
-              <Icon name="add" style={{color: "white" }} />
-            </Button>
+            {this.createAddClass()}
           </Right>
         </Header>
         <Content style={{ backgroundColor: "#F8F8F8" }}>
