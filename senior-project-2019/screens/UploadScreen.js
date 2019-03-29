@@ -6,55 +6,52 @@ import * as firebase from 'firebase';
 class UploadScreen extends React.Component {
   constructor(props) {
     super(props);
-    var storageRef = firebase.storage().ref();
+    const storageRef = firebase.storage().ref();
+    const name = (+new Date()) + '-' + file.name;
+    const metadata = { contentType: file.type}
+    const uploadTask = ref.child(name).put(file, metadata);
     this.state = {
       items: []
     };
   }
 
-/*class Upload(toString: String, toString1: String){
-    var name : String = " "
-    var url : String = " "
-
-    companion object {
-        fun getName(upload: Upload): String {
-            return upload.name
-        }
-        fun getUrl(upload: Upload): String{
-            return upload.url
-        }
-    }
-    fun Upload(name: String, url: String){
-        this.name = name
-        this.url = url
-    }
-} */
 /*<Button transparent dark>
   <Icon
     name="Upload"
     style={{ padding: 8, color: "white" }}
-    onPress={() => var uploadTask = storageRef.child( ).put(file); }
-  />
+    onPress={() => uploadTask
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => console.log(url))        .catch((error) => {
+            switch (error.code){
+                case 'storage/unothorized':
+                break;
+                case 'storage/canceled':
+                break;
+                case 'storage/unknown':
+                break;
+            }
+        }) }
+  /> 
 </Button>
 <Button transparent dark>
   <Icon
     name="Cancel Upload"
     style={{ padding: 8, color: "white" }}
-    onPress={() => var uploadTask.cancel() }
+    onPress={() => uploadTask.cancel() }
   />
 </Button>
 <Button transparent dark>
   <Icon
     name="Pause Upload"
     style={{ padding: 8, color: "white" }}
-    onPress={() => var uploadTask.pause() }
+    onPress={() => uploadTask.pause() }
   />
 </Button>
 <Button transparent dark>
   <Icon
     name="Resume Upload"
     style={{ padding: 8, color: "white" }}
-    onPress={() => var uploadTask.resume() }
+    onPress={() => uploadTask.resume() }
   />
 </Button> */
 
