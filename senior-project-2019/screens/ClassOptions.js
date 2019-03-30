@@ -51,12 +51,16 @@ class ClassScreen extends React.Component {
         </Header>
         <Content
           padder
-          contentContainerStyle={{ justifyContent: "center", flex: 1 }}
           style={{ backgroundColor: "#F8F8F8" }}
         >
+        <View style={styles.classHeader}>
+          <Text style={styles.classLabel}>Class Name</Text>
+          <Text style={styles.classNameHeader}>{title}</Text>
+        </View>
           <List>
             <ListItem itemHeader first>
-              <Text>Groups</Text>
+              <Icon name="chatboxes" style={{paddingRight: 10}}/>
+              <Text style={styles.categoryHeader}>GROUPS</Text>
             </ListItem>
             <ListItem onPress={() => this.props.navigation.navigate('OwnGroups', { title: title, course_id: course_id, category: category })} >
                 <Left>
@@ -75,7 +79,8 @@ class ClassScreen extends React.Component {
                 </Right>
             </ListItem>
             <ListItem itemHeader>
-              <Text>Roster</Text>
+              <Icon name="contacts" style={{paddingRight: 10}}/>
+              <Text style={styles.categoryHeader}>ROSTER</Text>
             </ListItem>
             <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: title, course_id: course_id, category: category })}>
                 <Left>
@@ -98,10 +103,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  classHeader: {
+    padding: 5
+  },
+  classLabel: {
+    fontSize: 15,
+    color: "#A8A8A8"
+  },
+  classNameHeader: {
+    fontSize: 30, 
+    fontWeight:"bold"
+  },
   center: {
     alignItems: "center"
   },
-  textHeaders: {
-    padding: 20
+  categoryHeader: {
+    fontWeight: "bold"
   }
 });
