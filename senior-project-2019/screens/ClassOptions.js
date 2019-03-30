@@ -23,39 +23,33 @@ class ClassScreen extends React.Component {
     const category = navigation.getParam("category", "Unavailable");
     return (
       <View behavior="padding" style={styles.container}>
-        <Header
-          iosBarStyle={"light-content"}
-          style={{ backgroundColor: "#333333" }}
-        >
+        <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
           <Left>
             <Button
               transparent
               dark
               onPress={() => this.props.navigation.goBack()}
             >
-              <Icon name="arrow-back" style={{ padding: 10, color: "white" }} />
+              <Icon name="arrow-back" style={{ padding: 5}} />
+              <Text>My Courses</Text>
             </Button>
           </Left>
-          <Body>
-            <Title style={{ color: "white" }}>{course_id}</Title>
-          </Body>
-          <Right>
-            <Button transparent dark>
-              <Icon
-                ios="md-more"
-                android="md-more"
-                style={{ color: "white" }}
-              />
-            </Button>
-          </Right>
+          <Body />
+          <Right />
         </Header>
         <Content
           padder
           style={{ backgroundColor: "#F8F8F8" }}
         >
         <View style={styles.classHeader}>
-          <Text style={styles.classLabel}>Class Name</Text>
-          <Text style={styles.classNameHeader}>{title}</Text>
+          <View style={styles.classHeader}>
+            <Text style={styles.classLabel}>Class Name</Text>
+            <Text style={styles.classNameHeader}>{title}</Text>
+          </View>
+          <View style={styles.classHeader}>
+            <Text style={styles.classLabel}>Course ID</Text>
+          <Text style={styles.classIDHeader}>{course_id}</Text>
+          </View>
         </View>
           <List>
             <ListItem itemHeader first>
@@ -112,6 +106,10 @@ const styles = StyleSheet.create({
   },
   classNameHeader: {
     fontSize: 30, 
+    fontWeight:"bold"
+  },
+  classIDHeader: {
+    fontSize: 25, 
     fontWeight:"bold"
   },
   center: {
