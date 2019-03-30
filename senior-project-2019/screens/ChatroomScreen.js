@@ -167,7 +167,7 @@ class ChatroomScreen extends React.Component {
                   })
 
                   if( isAdmin == true || isGroupMod == true){
-                    alert('first delete as teacher')
+                    //alert('first delete as teacher')
                     firebase.database().ref('Courses/' + category + 
                     '/' + course_title + '/Groups/' + group_title + 
                     '/messages/' + currentMessage._id).remove();
@@ -175,7 +175,7 @@ class ChatroomScreen extends React.Component {
                   }
                   else{
                       if( currentMessage.user._id == firebase.auth().currentUser.uid){
-                        alert('2 delete as student')
+                        //alert('2 delete as student')
                           firebase.database().ref('Courses/' + category + 
                         '/' + course_title + '/Groups/' + group_title + 
                         '/messages/' + currentMessage._id).remove();
