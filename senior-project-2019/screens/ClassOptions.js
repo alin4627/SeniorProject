@@ -2,7 +2,8 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Header,
-  H2,
+  List,
+  ListItem,
   Button,
   Left,
   Body,
@@ -53,65 +54,41 @@ class ClassScreen extends React.Component {
           contentContainerStyle={{ justifyContent: "center", flex: 1 }}
           style={{ backgroundColor: "#F8F8F8" }}
         >
-          <View style={styles.center}>
-            <H2 style={styles.textHeaders}>Name: {title}</H2>
-            <H2 style={styles.textHeaders}>Course ID: {course_id}</H2>
-            <Text style={styles.textHeaders}>View past students</Text>
-            <View style={styles.textHeaders}>
-              <Button
-                style={{ alignSelf: "center" }}
-                onPress={() => this.addClass(title, course_id, category)}
-              >
-                <Text>Request Access</Text>
-              </Button>
-            </View>
-          </View>
+          <List>
+            <ListItem itemHeader first>
+              <Text>Groups</Text>
+            </ListItem>
+            <ListItem onPress={() => this.props.navigation.navigate('OwnGroups', { title: title, course_id: course_id, category: category })} >
+                <Left>
+                    <Text>My Groups</Text>
+                </Left>
+                <Right>
+                    <Icon name="arrow-forward" />
+                </Right>
+            </ListItem>
+            <ListItem last>
+                <Left>
+                    <Text>Open Groups</Text>
+                </Left>
+                <Right>
+                    <Icon name="arrow-forward" />
+                </Right>
+            </ListItem>
+            <ListItem itemHeader>
+              <Text>Roster</Text>
+            </ListItem>
+            <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: title, course_id: course_id, category: category })}>
+                <Left>
+                    <Text>View Course Roster</Text>
+                </Left>
+                <Right>
+                    <Icon name="arrow-forward" />
+                </Right>
+            </ListItem>
+          </List>
         </Content>
       </View>
     );
-  }
-
-  addClass(title, course_id, category) {
-    firebase
-      .database()
-      .ref(
-        "users/" +
-          firebase.auth().currentUser.uid +
-          "/classSubscriptions/" +
-          title
-      )
-      .set({
-        category: category,
-        course_title: title,
-        course_id: course_id
-      });
-    firebase
-      .database()
-      .ref(
-        "Courses/" +
-          category +
-          "/" +
-          title +
-          "/users/" +
-          firebase.auth().currentUser.uid
-      )
-      .set({
-        userName: firebase.auth().currentUser.displayName
-      });
-    firebase
-      .database()
-      .ref(
-        "Courses/" +
-          category +
-          "/" +
-          title +
-          "/Groups/Default Group/users/" +
-          firebase.auth().currentUser.uid
-      )
-      .set({
-        userName: firebase.auth().currentUser.displayName,
-        userLevel: 1
-      });
   }
 }
 

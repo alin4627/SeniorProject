@@ -20,7 +20,7 @@ import {
 } from "native-base";
 import * as firebase from 'firebase';
 
-class ClassesScreen extends React.Component {
+class RosterList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,19 +29,22 @@ class ClassesScreen extends React.Component {
   }
 
   componentDidMount() {
-    const ref = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/classSubscriptions/');
+    const { navigation } = this.props;
+    const title = navigation.getParam("title", "Unavailable");
+    const category = navigation.getParam("category", "Unavailable");
+    const ref = firebase.database().ref("Courses/" +category + "/" + title + "/users/");
     ref.on("value", snapshot => {
       if (snapshot.exists()) {
         let items = snapshot.val();
         let newState = [];
-        // console.log(items)
+        console.log(items)
         var objectKeys = Object.keys(items);
+        console.log(objectKeys)
         for (i = 0; i < objectKeys.length; i++) {
-          let data = {};
+          let data = {}
           data[objectKeys[i]] = {
-                id: items[objectKeys[i]].course_id,
-                title: items[objectKeys[i]].course_title,
-                category: items[objectKeys[i]].category
+            userID: objectKeys[i],
+            userName: items[objectKeys[i]].userName
           }
           newState.push(data)
         }
@@ -62,9 +65,9 @@ class ClassesScreen extends React.Component {
         for (let item in this.state.items[i])
         {
           listitems.push(
-            <ListItem key={this.state.items[i][item].id} onPress={() => this.props.navigation.navigate('ClassOptions', { title: this.state.items[i][item].title, course_id: this.state.items[i][item].id, category: this.state.items[i][item].category })}>
+            <ListItem key={this.state.items[i][item].userID}>
               <Left>
-                <Text>{this.state.items[i][item].title}</Text>
+                <Text>{this.state.items[i][item].userName}</Text>
               </Left>
               <Right>
                 <Icon name="arrow-forward" />
@@ -73,14 +76,14 @@ class ClassesScreen extends React.Component {
           )
         }
       }
-      list.push(<List key={'SubClasses'}>{listitems}</List>)
+      list.push(<List key={'Roster'}>{listitems}</List>)
       return list
     }
     else{
       let content = []
       content.push(
         <View key={'emptyList'} style={styles.content}>
-          <Text>No classes subscribed. Please add a class</Text>
+          <Text>No one is registered in this course</Text>
         </View>
       )
       return content
@@ -92,20 +95,16 @@ class ClassesScreen extends React.Component {
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
           <Left>
-            <Button transparent dark>
-              <Icon
-                name="menu"
-                style={{ padding: 10, color: "white" }}
-                onPress={() => this.props.navigation.openDrawer()}
-              />
+          <Button
+              transparent
+              dark
+              onPress={() => this.props.navigation.goBack()}
+            >
+              <Icon name="arrow-back" style={{ padding: 10, color: "white" }} />
             </Button>
           </Left>
-          <Body><Title style={{color: "white" }}>My Courses</Title></Body>
-          <Right>
-            <Button transparent dark onPress={() => this.props.navigation.navigate("ClassesSelection")}>
-              <Icon name="add" style={{color: "white" }} />
-            </Button>
-          </Right>
+          <Body><Title style={{color: "white" }}>Course Roster</Title></Body>
+          <Right />
         </Header>
         <Content>
             {this.createList()}
@@ -115,7 +114,7 @@ class ClassesScreen extends React.Component {
   }
 }
 
-export default ClassesScreen;
+export default RosterList;
 
 const styles = StyleSheet.create({
   container: {
@@ -127,8 +126,5 @@ const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     justifyContent: "center"
-  },
-  form: {
-    width: "90%"
   }
 });
