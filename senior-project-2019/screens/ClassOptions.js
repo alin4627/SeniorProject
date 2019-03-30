@@ -16,6 +16,65 @@ import {
 import * as firebase from "firebase";
 
 class ClassScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isStudent: true
+    };
+  }
+
+  componentDidMount() {
+    const ref = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
+    ref.on("value", snapshot => {
+      let items = snapshot.val();
+      if(items.userLevel != 1) {
+        this.setState({
+          isStudent: false
+        })
+      }
+    });
+  }
+
+  createRosterCategory() {
+    let content = []
+    if (!this.state.isStudent)
+    {
+      content.push(
+        <View key="nonStudentRoster">
+          <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: title, course_id: course_id, category: category })}>
+          <Left>
+            <Text>View Course Roster</Text>
+          </Left>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+        <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: title, course_id: course_id, category: category })}>
+        <Left>
+          <Text>View Requested Students</Text>
+        </Left>
+        <Right>
+          <Icon name="arrow-forward" />
+        </Right>
+      </ListItem>
+        </View>
+      )
+    }
+    else {
+      content.push(
+        <ListItem key="rosterList" onPress={() => this.props.navigation.navigate('RosterList', { title: title, course_id: course_id, category: category })}>
+            <Left>
+              <Text>View Course Roster</Text>
+            </Left>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+        </ListItem>
+      )
+    }
+    return content
+  }
+
   render() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
@@ -76,14 +135,7 @@ class ClassScreen extends React.Component {
               <Icon name="contacts" style={{paddingRight: 10}}/>
               <Text style={styles.categoryHeader}>ROSTER</Text>
             </ListItem>
-            <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: title, course_id: course_id, category: category })}>
-                <Left>
-                    <Text>View Course Roster</Text>
-                </Left>
-                <Right>
-                    <Icon name="arrow-forward" />
-                </Right>
-            </ListItem>
+            {this.createRosterCategory()}
           </List>
         </Content>
       </View>
