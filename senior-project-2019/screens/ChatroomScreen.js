@@ -8,6 +8,7 @@ import {
   Header,
   Button,
   Left,
+  ActionSheet,
   Body,
   Title,
   Right,
@@ -18,12 +19,18 @@ import SlackMessage from '../components/SlackMessage';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { GiftedChat } from 'react-native-gifted-chat';
 import * as firebase from "firebase";
+
+var BUTTONS = ["Copy Text ", "Delete", "Cancel"];
+var DESTRUCTIVE_INDEX = 1;
+var CANCEL_INDEX = 2;
+
 class ChatroomScreen extends React.Component {
   static navigationOptions = {
     tabBarVisible: false
   };
   state = {
-    messages: []
+    messages: [],
+    clicked:'none'
   };
    
   componentDidMount() {
@@ -52,6 +59,8 @@ class ChatroomScreen extends React.Component {
     }, function (errorObject) {
         console.log("The read failed: " + errorObject.code);
     })
+      
+
 }
 
   onSend(messages = []) {
@@ -74,7 +83,6 @@ class ChatroomScreen extends React.Component {
 
   renderMessage(props) {
     const { currentMessage: { text: currText } } = props;
-
     let messageTextStyle;
 
     // // Make "pure emoji" messages much bigger than plain text.
@@ -90,6 +98,8 @@ class ChatroomScreen extends React.Component {
       <SlackMessage {...props} messageTextStyle={messageTextStyle} />
     );
   }
+
+  
 
   render() {
     var user = firebase.auth().currentUser;
@@ -116,14 +126,78 @@ class ChatroomScreen extends React.Component {
           </Right>
         </Header>
           <GiftedChat
+          
           messages={this.state.messages}
+          
           onSend={messages => this.onSend(messages)}
+          onLongPress={(ctx, currentMessage) => ActionSheet.show(
+            {
+              options: BUTTONS,
+              cancelButtonIndex: CANCEL_INDEX,
+              destructiveButtonIndex: DESTRUCTIVE_INDEX,
+              title: "Testing ActionSheet"
+            },
+            buttonIndex => {
+              switch (buttonIndex) {
+                case 0:
+                  Clipboard.setString(this.props.currentMessage.text);
+                  break;
+                case 1:
+                const { navigation } = this.props;
+                const course_title = navigation.getParam('course_title', 'Unavailable');
+                const category = navigation.getParam('category', 'Unavailable');
+                const group_title = navigation.getParam('group_title', 'Unavailable');
+                const refCheckAdmin = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
+                const isAdmin = false;
+                const isGroupMod = false;
+                  refCheckAdmin.on("value", snapshot => {
+                    let items = snapshot.val();
+                    if (items.userLevel == 0) {
+                        isAdmin = true;
+                    }// check if user is a admin on app userLevel == 0
+                  })
+                const refCheckGroupMod = firebase.database().ref('Courses/' + category + 
+                '/' + course_title + '/Groups/' + group_title + 
+                '/users/' + firebase.auth().currentUser.uid);
+                  refCheckGroupMod.on("value", snapshot => {
+                    let items = snapshot.val();
+                    if (items.userLevel == 2) {
+                        isGroupMod = true;
+                    } // Checks if user is a moderator of the group userLevel == 2
+                  })
+
+                  if( isAdmin == true || isGroupMod == true){
+                    alert('first delete as teacher')
+                    firebase.database().ref('Courses/' + category + 
+                    '/' + course_title + '/Groups/' + group_title + 
+                    '/messages/' + currentMessage._id).remove();
+                    alert(currentMessage.text + " written by " + currentMessage.user.name + " has been deleted")
+                  }
+                  else{
+                      if( currentMessage.user._id == firebase.auth().currentUser.uid){
+                        alert('2 delete as student')
+                          firebase.database().ref('Courses/' + category + 
+                        '/' + course_title + '/Groups/' + group_title + 
+                        '/messages/' + currentMessage._id).remove();
+                        alert(currentMessage.text + " written by " + currentMessage.user.name + " has been deleted")
+                      }
+                      else{
+                        alert('Cannot delete other Users Messages')
+                      }
+                    }
+                  }
+
+              
+            }
+          )}
+          
           user={{
             _id: firebase.auth().currentUser.uid,
             name: user.displayName,
             avatar: user.photoURL
           }}
           renderMessage={this.renderMessage}
+          
         />
         {Platform.OS === 'android' ? <KeyboardSpacer /> : null }
       </KeyboardAvoidingView>
