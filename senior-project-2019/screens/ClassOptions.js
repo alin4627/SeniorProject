@@ -16,11 +16,78 @@ import {
 import * as firebase from "firebase";
 
 class ClassScreen extends React.Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "",
+      course_id: "",
+      category: "",
+      isStudent: true
+    };
+  }
+
+  componentDidMount() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
     const course_id = navigation.getParam("course_id", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
+    this.setState({
+      title: title,
+      course_id: course_id,
+      category: category
+    })
+    const ref = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
+    ref.on("value", snapshot => {
+      let items = snapshot.val();
+      if(items.userLevel != 1) {
+        this.setState({
+          isStudent: false
+        })
+      }
+    });
+  }
+
+  createRosterCategory() {
+    let content = []
+    if (!this.state.isStudent)
+    {
+      content.push(
+        <View key="nonStudentRoster">
+          <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: this.state.title, course_id: this.state.course_id, category: this.state.category })}>
+          <Left>
+            <Text>View Course Roster</Text>
+          </Left>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+        <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: this.state.title, course_id: this.state.course_id, category: this.state.category })}>
+        <Left>
+          <Text>View Requested Students</Text>
+        </Left>
+        <Right>
+          <Icon name="arrow-forward" />
+        </Right>
+      </ListItem>
+        </View>
+      )
+    }
+    else {
+      content.push(
+        <ListItem key="rosterList" onPress={() => this.props.navigation.navigate('RosterList', { title: this.state.title, course_id: this.state.course_id, category: this.state.category })}>
+            <Left>
+              <Text>View Course Roster</Text>
+            </Left>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+        </ListItem>
+      )
+    }
+    return content
+  }
+
+  render() {
     return (
       <View behavior="padding" style={styles.container}>
         <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
@@ -44,11 +111,11 @@ class ClassScreen extends React.Component {
         <View style={styles.classHeader}>
           <View style={styles.classHeader}>
             <Text style={styles.classLabel}>Class Name</Text>
-            <Text style={styles.classNameHeader}>{title}</Text>
+            <Text style={styles.classNameHeader}>{this.state.title}</Text>
           </View>
           <View style={styles.classHeader}>
             <Text style={styles.classLabel}>Course ID</Text>
-          <Text style={styles.classIDHeader}>{course_id}</Text>
+          <Text style={styles.classIDHeader}>{this.state.course_id}</Text>
           </View>
         </View>
           <List>
@@ -56,7 +123,7 @@ class ClassScreen extends React.Component {
               <Icon name="chatboxes" style={{paddingRight: 10}}/>
               <Text style={styles.categoryHeader}>GROUPS</Text>
             </ListItem>
-            <ListItem onPress={() => this.props.navigation.navigate('OwnGroups', { title: title, course_id: course_id, category: category })} >
+            <ListItem onPress={() => this.props.navigation.navigate('OwnGroups', { title: this.state.title, course_id: this.state.course_id, category: this.state.category })} >
                 <Left>
                     <Text>My Groups</Text>
                 </Left>
@@ -76,14 +143,7 @@ class ClassScreen extends React.Component {
               <Icon name="contacts" style={{paddingRight: 10}}/>
               <Text style={styles.categoryHeader}>ROSTER</Text>
             </ListItem>
-            <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: title, course_id: course_id, category: category })}>
-                <Left>
-                    <Text>View Course Roster</Text>
-                </Left>
-                <Right>
-                    <Icon name="arrow-forward" />
-                </Right>
-            </ListItem>
+            {this.createRosterCategory()}
           </List>
         </Content>
       </View>
