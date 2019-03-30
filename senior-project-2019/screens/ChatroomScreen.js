@@ -148,8 +148,8 @@ class ChatroomScreen extends React.Component {
                 const category = navigation.getParam('category', 'Unavailable');
                 const group_title = navigation.getParam('group_title', 'Unavailable');
                 const refCheckAdmin = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
-                const isAdmin = false;
-                const isGroupMod = false;
+                 isAdmin = false;
+                 isGroupMod = false;
                   refCheckAdmin.on("value", snapshot => {
                     let items = snapshot.val();
                     if (items.userLevel == 0) {
