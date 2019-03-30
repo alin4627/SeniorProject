@@ -73,7 +73,7 @@ class OwnGroups extends React.Component {
         )
         .set({
           userName: firebase.auth().currentUser.displayName,
-          userLevel: 0
+          userLevel: 2
         });
       this.fetchData();
       this.setGroupName();
