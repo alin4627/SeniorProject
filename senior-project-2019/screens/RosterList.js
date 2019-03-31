@@ -75,9 +75,16 @@ class RosterList extends React.Component {
       });
       const ref = firebase.database().ref("Courses/" +this.state.category + "/" + this.state.title + "/users/pending/" + uid);
       ref.remove();
+      this.setState({ state: this.state });
   }
 
-  componentDidMount() {
+  removeRequest(uid) {
+      const ref = firebase.database().ref("Courses/" +this.state.category + "/" + this.state.title + "/users/pending/" + uid);
+      ref.remove();
+      this.setState({ state: this.state });
+  }
+
+  fetchData() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
@@ -138,6 +145,10 @@ class RosterList extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.fetchData()
+  }
+
   createList = () => {
     if(this.state.items.length > 0) {
       let list = []
@@ -167,7 +178,15 @@ class RosterList extends React.Component {
                       </Button>
                     </View>
                     <View style={styles.button}>
-                      <Button transparent >
+                      <Button transparent onPress={() => Alert.alert(
+                          'Confirmation',
+                          'You are about to decline the request of this student',
+                          [
+                            {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+                            {text: 'OK', onPress: () => this.removeRequest(this.state.items[i][item].userID)},
+                          ],
+                          { cancelable: false }
+                        )}>
                         <Icon name="close" style={{color:"red", fontSize: 30}} />
                       </Button>
                     </View>
