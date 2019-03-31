@@ -154,7 +154,6 @@ class RosterList extends React.Component {
                 <Right>
                   <View style={{flexDirection: 'row'}}>
                     <View style={styles.button}>
-                      {/* <Button transparent onPress={() => this.addClass(this.state.items[i][item].userID, this.state.items[i][item].userName)}> */}
                       <Button transparent onPress={() => Alert.alert(
                           'Confirmation',
                           'You are about to accept this student into the course',
