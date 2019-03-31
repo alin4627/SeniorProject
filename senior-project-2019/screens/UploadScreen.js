@@ -4,7 +4,7 @@ import { Header, Left, Body, Title, Right, Button, Icon, Content } from "native-
 import * as firebase from 'firebase';
 
 class UploadScreen extends React.Component {
-  constructor(props) {
+  /*constructor(props) {
     super(props);
     const storageRef = firebase.storage().ref();
     const name = (+new Date()) + '-' + file.name;
@@ -13,8 +13,25 @@ class UploadScreen extends React.Component {
     this.state = {
       items: []
     };
-  }
+  }*/
+    
 
+onClick()
+{
+  var uploadFile = document.getElementById('uploadFile');
+  fileButton.addEventListener('change', function(j)
+  {
+  var file = j.target.files[0];
+  var storageRef = firebase.storage().ref('img/'+file.name);
+  var task = storageRef.put(file);
+  })
+}
+
+}
+<div class="mainDiv" align="right">
+		<h1 align="left">Firebase File Upload Test </h1>
+		<input type="file" id="uploadFile" value="upload"/>
+</div>
 /*<Button transparent dark>
   <Icon
     name="Upload"
@@ -55,4 +72,3 @@ class UploadScreen extends React.Component {
   />
 </Button> */
 
-} 
