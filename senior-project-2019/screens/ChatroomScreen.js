@@ -7,6 +7,7 @@ import {
 import {
   Header,
   Button,
+  Clipboard,
   Left,
   ActionSheet,
   Body,
