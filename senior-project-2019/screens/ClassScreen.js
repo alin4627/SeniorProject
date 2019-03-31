@@ -60,7 +60,7 @@ class ClassScreen extends React.Component {
             <View style={styles.textHeaders}>
               <Button
                 style={{ alignSelf: "center" }}
-                onPress={() => this.addClass(title, course_id, category)}
+                onPress={() => this.requestClass(title, category)}
               >
                 <Text>Request Access</Text>
               </Button>
@@ -71,20 +71,7 @@ class ClassScreen extends React.Component {
     );
   }
 
-  addClass(title, course_id, category) {
-    firebase
-      .database()
-      .ref(
-        "users/" +
-          firebase.auth().currentUser.uid +
-          "/classSubscriptions/" +
-          title
-      )
-      .set({
-        category: category,
-        course_title: title,
-        course_id: course_id
-      });
+  requestClass(title, category) {
     firebase
       .database()
       .ref(
@@ -92,20 +79,7 @@ class ClassScreen extends React.Component {
           category +
           "/" +
           title +
-          "/users/" +
-          firebase.auth().currentUser.uid
-      )
-      .set({
-        userName: firebase.auth().currentUser.displayName
-      });
-    firebase
-      .database()
-      .ref(
-        "Courses/" +
-          category +
-          "/" +
-          title +
-          "/Groups/Default Group/users/" +
+          "/users/pending/" +
           firebase.auth().currentUser.uid
       )
       .set({

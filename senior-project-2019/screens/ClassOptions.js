@@ -53,7 +53,7 @@ class ClassScreen extends React.Component {
     {
       content.push(
         <View key="nonStudentRoster">
-          <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: this.state.title, course_id: this.state.course_id, category: this.state.category })}>
+          <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: this.state.title, course_id: this.state.course_id, category: this.state.category, status: "current" })}>
           <Left>
             <Text>View Course Roster</Text>
           </Left>
@@ -61,7 +61,7 @@ class ClassScreen extends React.Component {
             <Icon name="arrow-forward" />
           </Right>
         </ListItem>
-        <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: this.state.title, course_id: this.state.course_id, category: this.state.category })}>
+        <ListItem onPress={() => this.props.navigation.navigate('RosterList', { title: this.state.title, course_id: this.state.course_id, category: this.state.category, status: "pending" })}>
         <Left>
           <Text>View Requested Students</Text>
         </Left>

@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
+  Alert,
   KeyboardAvoidingView
 } from "react-native";
 import {
@@ -24,37 +24,118 @@ class RosterList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: "",
+      course_id: "",
+      category: "",
+      status: "",
       items: []
     };
+  }
+
+  addClass(uid, displayName) {
+    firebase
+      .database()
+      .ref(
+        "users/" +
+          uid +
+          "/classSubscriptions/" +
+          this.state.title
+      )
+      .set({
+        category: this.state.category,
+        course_title: this.state.title,
+        course_id: this.state.course_id
+      });
+    firebase
+      .database()
+      .ref(
+        "Courses/" +
+        this.state.category +
+          "/" +
+          this.state.title +
+          "/users/" +
+          uid
+      )
+      .set({
+        userName: displayName
+      });
+    firebase
+      .database()
+      .ref(
+        "Courses/" +
+          this.state.category +
+          "/" +
+          this.state.title +
+          "/Groups/Default Group/users/" +
+          uid
+      )
+      .set({
+        userName: displayName,
+        userLevel: 1
+      });
+      const ref = firebase.database().ref("Courses/" +this.state.category + "/" + this.state.title + "/users/pending/" + uid);
+      ref.remove();
   }
 
   componentDidMount() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
-    const ref = firebase.database().ref("Courses/" +category + "/" + title + "/users/");
-    ref.on("value", snapshot => {
-      if (snapshot.exists()) {
-        let items = snapshot.val();
-        let newState = [];
-        console.log(items)
-        var objectKeys = Object.keys(items);
-        console.log(objectKeys)
-        for (i = 0; i < objectKeys.length; i++) {
-          let data = {}
-          data[objectKeys[i]] = {
-            userID: objectKeys[i],
-            userName: items[objectKeys[i]].userName
+    const course_id = navigation.getParam("course_id", "Unavailable");
+    const status = navigation.getParam("status", "Unavailable");
+    this.setState({
+      title: title,
+      course_id: course_id,
+      category: category
+    });
+    if (status == "pending") {
+      this.setState({
+        status: "pending"
+      });
+      const ref = firebase.database().ref("Courses/" +category + "/" + title + "/users/pending");
+      ref.on("value", snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          let newState = [];
+          var objectKeys = Object.keys(items);
+          for (i = 0; i < objectKeys.length; i++) {
+            let data = {}
+            data[objectKeys[i]] = {
+              userID: objectKeys[i],
+              userName: items[objectKeys[i]].userName
+            }
+            newState.push(data)
           }
-          newState.push(data)
+          this.setState({
+            items: newState
+          });
         }
-        this.setState({
-          items: newState
-        });
-      }
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    })
+      }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      })
+    } else {
+      const ref = firebase.database().ref("Courses/" +category + "/" + title + "/users/");
+      ref.on("value", snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          let newState = [];
+          var objectKeys = Object.keys(items);
+          for (i = 0; i < objectKeys.length; i++) {
+            let data = {}
+            data[objectKeys[i]] = {
+              userID: objectKeys[i],
+              userName: items[objectKeys[i]].userName
+            }
+            newState.push(data)
+          }
+          this.setState({
+            items: newState
+          });
+        }
+      }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      })
+    }
   }
 
   createList = () => {
@@ -64,28 +145,69 @@ class RosterList extends React.Component {
       for (let i = 0; i < this.state.items.length; i++) {
         for (let item in this.state.items[i])
         {
-          listitems.push(
-            <ListItem key={this.state.items[i][item].userID}>
-              <Left>
-                <Text>{this.state.items[i][item].userName}</Text>
-              </Left>
-              <Right>
+          if (this.state.status == "pending") {
+            listitems.push(
+              <ListItem key={this.state.items[i][item].userID}>
+                <Left>
+                  <Text style={styles.listText}>{this.state.items[i][item].userName}</Text>
+                </Left>
+                <Right>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={styles.button}>
+                      {/* <Button transparent onPress={() => this.addClass(this.state.items[i][item].userID, this.state.items[i][item].userName)}> */}
+                      <Button transparent onPress={() => Alert.alert(
+                          'Confirmation',
+                          'You are about to accept this student into the course',
+                          [
+                            {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
+                            {text: 'OK', onPress: () => this.addClass(this.state.items[i][item].userID, this.state.items[i][item].userName)},
+                          ],
+                          { cancelable: false }
+                        )}>
+                        <Icon name="checkmark" style={{color:"green", fontSize: 30}} />
+                      </Button>
+                    </View>
+                    <View style={styles.button}>
+                      <Button transparent >
+                        <Icon name="close" style={{color:"red", fontSize: 30}} />
+                      </Button>
+                    </View>
+                  </View>
+                </Right>
+              </ListItem>
+            )
+          } else {
+            listitems.push(
+              <ListItem key={this.state.items[i][item].userID}>
+                <Left>
+                  <Text style={styles.listText}>{this.state.items[i][item].userName}</Text>
+                </Left>
+                <Right>
                 <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-          )
+                </Right>
+              </ListItem>
+            )
+          }     
         }
       }
       list.push(<List key={'Roster'}>{listitems}</List>)
       return list
-    }
-    else{
+    } else {
       let content = []
-      content.push(
-        <View key={'emptyList'} style={styles.content}>
-          <Text>No one is registered in this course</Text>
-        </View>
-      )
+      if (this.state.status == "pending") {
+        content.push(
+          <View key={'emptyList'} style={styles.content}>
+            <Text>There are no pending students</Text>
+          </View>
+        )
+      }
+      else {
+        content.push(
+          <View key={'emptyList'} style={styles.content}>
+            <Text>No one is registered in this course</Text>
+          </View>
+        )
+      }   
       return content
     }
   }
@@ -126,5 +248,13 @@ const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     justifyContent: "center"
+  },
+  button: {
+    paddingLeft: 5,
+    paddingRight: 5
+  },
+  listText: {
+    fontSize: 20,
+    paddingLeft: 5
   }
 });
