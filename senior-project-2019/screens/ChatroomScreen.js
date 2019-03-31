@@ -1,13 +1,13 @@
 import React from "react";
 import {
   StyleSheet,
+  Clipboard,
   Platform ,
   KeyboardAvoidingView
 } from "react-native";
 import {
   Header,
   Button,
-  Clipboard,
   Left,
   ActionSheet,
   Body,
@@ -141,7 +141,7 @@ class ChatroomScreen extends React.Component {
             buttonIndex => {
               switch (buttonIndex) {
                 case 0:
-                  Clipboard.setString(this.props.currentMessage.text);
+                  Clipboard.setString(currentMessage.text);
                   break;
                 case 1:
                 const { navigation } = this.props;
