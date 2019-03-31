@@ -30,7 +30,7 @@ onClick()
 }
 <div class="mainDiv" align="right">
 		<h1 align="left">Firebase File Upload Test </h1>
-		<input type="file" id="uploadFile" value="upload"/>
+		<input type="file" id="uploadFile" onclick = 'onClick()' value="upload"/>
 </div>
 /*<Button transparent dark>
   <Icon
