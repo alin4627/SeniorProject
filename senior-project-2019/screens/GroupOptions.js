@@ -189,11 +189,23 @@ class GroupOptions extends React.Component {
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
-            <ListItem itemHeader>
+            <ListItem itemHeader first>
               <Icon name="contacts" style={{ paddingRight: 10 }} />
               <Text style={styles.categoryHeader}>ROSTER</Text>
             </ListItem>
             {this.createRosterCategory()}
+            <ListItem itemHeader first>
+              <Icon name="settings" style={{ paddingRight: 10 }} />
+              <Text style={styles.categoryHeader}>SETTINGS</Text>
+            </ListItem>
+            <ListItem>
+              <Left>
+                <Text>Group Settings</Text>
+              </Left>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
           </List>
         </Content>
       </View>

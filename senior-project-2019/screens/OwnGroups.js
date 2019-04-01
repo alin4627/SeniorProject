@@ -54,21 +54,7 @@ class OwnGroups extends React.Component {
           <Body>
             <Title>My Groups</Title>
           </Body>
-          <Right>
-            <Button
-              transparent
-              dark
-              onPress={() =>
-                this.props.navigation.navigate("OpenGroupsScreen", {
-                  title: this.state.title,
-                  course_id: this.state.course_id,
-                  category: this.state.category
-                })
-              }
-            >
-              <Icon name="add" />
-            </Button>
-          </Right>
+          <Right />
         </Header>
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
           <View>{this.createCard()}</View>
