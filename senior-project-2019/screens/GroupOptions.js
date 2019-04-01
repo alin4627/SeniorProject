@@ -15,47 +15,60 @@ import {
 } from "native-base";
 import * as firebase from "firebase";
 
-class ClassScreen extends React.Component {
+class GroupOptions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: "",
-      course_id: "",
+      group_title: "",
+      course_title: "",
       category: "",
-      isStudent: ""
+      isAdmin: ""
     };
   }
 
   componentDidMount() {
     const { navigation } = this.props;
-    const title = navigation.getParam("title", "Unavailable");
-    const course_id = navigation.getParam("course_id", "Unavailable");
+    const group_title = navigation.getParam("group_title", "Unavailable");
+    const course_title = navigation.getParam("course_title", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
     this.setState({
-      title: title,
-      course_id: course_id,
+      group_title: group_title,
+      course_title: course_title,
       category: category
     });
     const ref = firebase
       .database()
-      .ref("users/" + firebase.auth().currentUser.uid);
+      .ref(
+        "Courses/" +
+          category +
+          "/" +
+          course_title +
+          "/Groups/" +
+          group_title +
+          "/users"
+      );
     ref.on("value", snapshot => {
       let items = snapshot.val();
-      if (items.userLevel != 1) {
-        this.setState({
-          isStudent: false
-        });
-      } else {
-        this.setState({
-          isStudent: true
-        });
+      var objectKeys = Object.keys(items);
+      for (i = 0; i < objectKeys.length; i++) {
+        if (items[objectKeys[i]] == firebase.auth().currentUser.uid) {
+          if (items[objectKeys[i]].userLevel == 2) {
+            this.setState({
+              isAdmin: true
+            });
+          } else {
+            this.setState({
+              isAdmin: false
+            });
+          }
+        }
       }
     });
   }
 
   createRosterCategory() {
     let content = [];
-    if (this.state.isStudent == false) {
+    if (this.state.isAdmin == false) {
       content.push(
         <View key="nonStudentRoster">
           <ListItem
@@ -69,7 +82,7 @@ class ClassScreen extends React.Component {
             }
           >
             <Left>
-              <Text>View Course Roster</Text>
+              <Text>View Group Roster</Text>
             </Left>
             <Right>
               <Icon name="arrow-forward" />
@@ -86,7 +99,7 @@ class ClassScreen extends React.Component {
             }
           >
             <Left>
-              <Text>View Requested Students</Text>
+              <Text>View Pending Members</Text>
             </Left>
             <Right>
               <Icon name="arrow-forward" />
@@ -107,7 +120,7 @@ class ClassScreen extends React.Component {
           }
         >
           <Left>
-            <Text>View Course Roster</Text>
+            <Text>View Group Roster</Text>
           </Left>
           <Right>
             <Icon name="arrow-forward" />
@@ -129,7 +142,6 @@ class ClassScreen extends React.Component {
               onPress={() => this.props.navigation.goBack()}
             >
               <Icon name="arrow-back" style={{ padding: 5 }} />
-              <Text>My Courses</Text>
             </Button>
           </Left>
           <Body />
@@ -138,47 +150,40 @@ class ClassScreen extends React.Component {
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
           <View style={styles.classHeader}>
             <View style={styles.classHeader}>
-              <Text style={styles.classLabel}>Class Name</Text>
-              <Text style={styles.classNameHeader}>{this.state.title}</Text>
-            </View>
-            <View style={styles.classHeader}>
-              <Text style={styles.classLabel}>Course ID</Text>
-              <Text style={styles.classIDHeader}>{this.state.course_id}</Text>
+              <Text style={styles.classLabel}>Group Name</Text>
+              <Text style={styles.classNameHeader}>
+                {this.state.group_title}
+              </Text>
             </View>
           </View>
           <List>
             <ListItem itemHeader first>
               <Icon name="chatboxes" style={{ paddingRight: 10 }} />
-              <Text style={styles.categoryHeader}>GROUPS</Text>
+              <Text style={styles.categoryHeader}>DISCUSSION</Text>
             </ListItem>
             <ListItem
               onPress={() =>
-                this.props.navigation.navigate("Groups", {
-                  title: this.state.title,
-                  course_id: this.state.course_id,
+                this.props.navigation.navigate("ChatroomScreen", {
+                  group_title: this.state.group_title,
+                  course_title: this.state.course_title,
                   category: this.state.category
                 })
               }
             >
               <Left>
-                <Text>My Groups</Text>
+                <Text>Chatroom</Text>
               </Left>
               <Right>
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
-            <ListItem
-              last
-              onPress={() =>
-                this.props.navigation.navigate("OpenGroupsScreen", {
-                  title: this.state.title,
-                  course_id: this.state.course_id,
-                  category: this.state.category
-                })
-              }
-            >
+            <ListItem itemHeader first>
+              <Icon name="document" style={{ paddingRight: 10 }} />
+              <Text style={styles.categoryHeader}>UPLOADS</Text>
+            </ListItem>
+            <ListItem>
               <Left>
-                <Text>Open Groups</Text>
+                <Text>Files/Uploads</Text>
               </Left>
               <Right>
                 <Icon name="arrow-forward" />
@@ -196,7 +201,7 @@ class ClassScreen extends React.Component {
   }
 }
 
-export default ClassScreen;
+export default GroupOptions;
 
 const styles = StyleSheet.create({
   container: {

@@ -138,7 +138,7 @@ class OwnGroups extends React.Component {
           <CardItem
             button
             onPress={() =>
-              this.props.navigation.navigate("ChatroomScreen", {
+              this.props.navigation.navigate("GroupOptionScreen", {
                 course_title: this.state.items[i].course_title,
                 group_title: this.state.items[i].group_title,
                 category: this.state.items[i].category
