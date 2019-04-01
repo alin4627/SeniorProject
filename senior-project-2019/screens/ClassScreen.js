@@ -15,11 +15,74 @@ import {
 import * as firebase from "firebase";
 
 class ClassScreen extends React.Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "",
+      course_id: "",
+      category: "",
+      hasAccess: false
+    };
+  }
+
+  componentDidMount() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
     const course_id = navigation.getParam("course_id", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
+    this.setState({
+      title: title,
+      course_id: course_id,
+      category: category
+    });
+    const ref = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid + "/classSubscriptions");
+    ref.on("value", snapshot => {
+      let items = snapshot.val();
+      var objectKeys = Object.keys(items);
+      for (i = 0; i < objectKeys.length; i++) {
+        if (objectKeys[i] == title) {
+          this.setState({
+            hasAccess: true
+          });
+        }
+      }
+    });
+  }
+
+  renderButton() {
+    let content = [];
+    if (this.state.hasAccess == true) {
+      content.push(
+        <Button
+          disabled
+          key="disabledrequest"
+          style={{ alignSelf: "center" }}
+          onPress={() =>
+            this.requestClass(this.state.title, this.state.category)
+          }
+        >
+          <Text>You already have access</Text>
+        </Button>
+      );
+    } else {
+      content.push(
+        <Button
+          key="request"
+          style={{ alignSelf: "center" }}
+          onPress={() =>
+            this.requestClass(this.state.title, this.state.category)
+          }
+        >
+          <Text>Request Access</Text>
+        </Button>
+      );
+    }
+    return content;
+  }
+
+  render() {
     return (
       <View behavior="padding" style={styles.container}>
         <Header
@@ -36,7 +99,7 @@ class ClassScreen extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Title style={{ color: "white" }}>{course_id}</Title>
+            <Title style={{ color: "white" }}>{this.state.course_id}</Title>
           </Body>
           <Right>
             <Button transparent dark>
@@ -54,17 +117,12 @@ class ClassScreen extends React.Component {
           style={{ backgroundColor: "#F8F8F8" }}
         >
           <View style={styles.center}>
-            <H2 style={styles.textHeaders}>Name: {title}</H2>
-            <H2 style={styles.textHeaders}>Course ID: {course_id}</H2>
+            <H2 style={styles.textHeaders}>Name: {this.state.title}</H2>
+            <H2 style={styles.textHeaders}>
+              Course ID: {this.state.course_id}
+            </H2>
             <Text style={styles.textHeaders}>View past students</Text>
-            <View style={styles.textHeaders}>
-              <Button
-                style={{ alignSelf: "center" }}
-                onPress={() => this.requestClass(title, category)}
-              >
-                <Text>Request Access</Text>
-              </Button>
-            </View>
+            <View style={styles.textHeaders}>{this.renderButton()}</View>
           </View>
         </Content>
       </View>
