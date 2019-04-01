@@ -31,155 +31,47 @@ class OwnGroups extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [],
-      modalVisible: false,
-      selected: "key0",
-      groupName: ""
+      title: "",
+      course_id: "",
+      category: "",
+      items: []
     };
   }
-
-  setModalVisible(visible) {
-    this.setState({ modalVisible: visible });
-  }
-
-  onValueChange(value) {
-    this.setState({
-      selected: value
-    });
-  }
-
-  setGroupName() {
-    this.setState({
-      groupName: ""
-    });
-  }
-
-  createGroup = () => {
-    if (this.state.groupName != "" && this.state.groupName.length > 1) {
-      const { navigation } = this.props;
-      const title = navigation.getParam("title", "Unavailable");
-      const category = navigation.getParam("category", "Unavailable");
-      firebase
-        .database()
-        .ref(
-          "Courses/" +
-            category +
-            "/" +
-            title +
-            "/Groups/" +
-            this.state.groupName +
-            "/users/" +
-            firebase.auth().currentUser.uid
-        )
-        .set({
-          userName: firebase.auth().currentUser.displayName,
-          userLevel: 2
-        });
-      this.fetchData();
-      this.setGroupName();
-      this.setModalVisible(false);
-    } else {
-      Alert.alert("Invalid group name. Please enter a different group name.");
-    }
-  };
 
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header
-          iosBarStyle={"light-content"}
-          style={{ backgroundColor: "#333333" }}
-        >
+        <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
           <Left>
             <Button transparent dark>
               <Icon
                 name="arrow-back"
-                style={{ padding: 10, color: "white" }}
+                style={{ padding: 10 }}
                 onPress={() => this.props.navigation.navigate("Classes")}
               />
             </Button>
           </Left>
           <Body>
-            <Title style={{ color: "white" }}>My Groups</Title>
+            <Title>My Groups</Title>
           </Body>
           <Right>
             <Button
               transparent
               dark
-              onPress={() => {
-                this.setModalVisible(true);
-              }}
+              onPress={() =>
+                this.props.navigation.navigate("OpenGroupsScreen", {
+                  title: this.state.title,
+                  course_id: this.state.course_id,
+                  category: this.state.category
+                })
+              }
             >
-              <Icon name="add" style={{ color: "white" }} />
+              <Icon name="add" />
             </Button>
           </Right>
         </Header>
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
-          <View>
-            {this.createCard()}
-            <Modal
-              animationType="slide"
-              transparent={false}
-              visible={this.state.modalVisible}
-            >
-              <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
-                <Left>
-                  <Button transparent dark>
-                    <Icon
-                      name="arrow-back"
-                      style={{ padding: 10 }}
-                      onPress={() => {
-                        this.setModalVisible(false);
-                      }}
-                    />
-                  </Button>
-                </Left>
-              </Header>
-              <View
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#F8F8F8"
-                }}
-              >
-                <Title style={{ color: "black" }}>Create a Group</Title>
-                <Form style={styles.form}>
-                  <Item floatingLabel style={styles.item}>
-                    <Label>Name of Group</Label>
-                    <Input
-                      onChangeText={groupName => this.setState({ groupName })}
-                      value={this.state.groupName}
-                    />
-                  </Item>
-                  <Item picker style={styles.item}>
-                    <Label>Group Privacy</Label>
-                    <Picker
-                      mode="dropdown"
-                      iosIcon={<Icon name="arrow-down" />}
-                      selectedValue={this.state.selected}
-                      onValueChange={this.onValueChange.bind(this)}
-                    >
-                      <Picker.Item label="Public" value="key0" />
-                      <Picker.Item label="Private" value="key1" />
-                    </Picker>
-                  </Item>
-                  <View style={{ marginTop: 15 }}>
-                    <Button
-                      onPress={() => this.createGroup()}
-                      style={{
-                        padding: "10%",
-                        alignSelf: "center",
-                        color: "#7e7b7b"
-                      }}
-                    >
-                      <Text style={{ color: "white" }}> Create Group </Text>
-                    </Button>
-                  </View>
-                </Form>
-              </View>
-            </Modal>
-          </View>
+          <View>{this.createCard()}</View>
         </Content>
       </KeyboardAvoidingView>
     );
@@ -190,6 +82,11 @@ class OwnGroups extends React.Component {
     const title = navigation.getParam("title", "Unavailable");
     const course_id = navigation.getParam("course_id", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
+    this.setState({
+      title: title,
+      course_id: course_id,
+      category: category
+    });
     const ref = firebase
       .database()
       .ref("Courses/" + category + "/" + title + "/Groups");
@@ -238,14 +135,10 @@ class OwnGroups extends React.Component {
     for (let i = 0; i < this.state.items.length; i++) {
       card.push(
         <Card key={this.state.items[i].group_title}>
-          <CardItem header bordered>
-            <Text>{this.state.items[i].group_title}</Text>
-          </CardItem>
           <CardItem
             button
-            bordered
             onPress={() =>
-              this.props.navigation.navigate("Chat", {
+              this.props.navigation.navigate("ChatroomScreen", {
                 course_title: this.state.items[i].course_title,
                 group_title: this.state.items[i].group_title,
                 category: this.state.items[i].category
@@ -253,7 +146,12 @@ class OwnGroups extends React.Component {
             }
           >
             <Body>
-              <Text># of members: {this.state.items[i].users_length}</Text>
+              <Text style={styles.cardHeader}>
+                {this.state.items[i].group_title}
+              </Text>
+              <Text style={styles.cardItem}>
+                # of members: {this.state.items[i].users_length}
+              </Text>
             </Body>
           </CardItem>
         </Card>
@@ -271,6 +169,15 @@ const styles = StyleSheet.create({
   },
   form: {
     width: "80%"
+  },
+  cardHeader: {
+    fontSize: 20,
+    fontWeight: "bold",
+    padding: 5
+  },
+  cardItem: {
+    fontSize: 19,
+    padding: 5
   },
   item: {
     padding: 15
