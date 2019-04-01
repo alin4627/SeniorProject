@@ -21,7 +21,8 @@ class ClassScreen extends React.Component {
       title: "",
       course_id: "",
       category: "",
-      hasAccess: false
+      hasAccess: false,
+      isPending: false
     };
   }
 
@@ -39,13 +40,32 @@ class ClassScreen extends React.Component {
       .database()
       .ref("users/" + firebase.auth().currentUser.uid + "/classSubscriptions");
     ref.on("value", snapshot => {
-      let items = snapshot.val();
-      var objectKeys = Object.keys(items);
-      for (i = 0; i < objectKeys.length; i++) {
-        if (objectKeys[i] == title) {
-          this.setState({
-            hasAccess: true
-          });
+      if (snapshot.exists()) {
+        let items = snapshot.val();
+        var objectKeys = Object.keys(items);
+        for (i = 0; i < objectKeys.length; i++) {
+          if (objectKeys[i] == title) {
+            this.setState({
+              hasAccess: true
+            });
+          }
+        }
+      }
+    });
+    const ref1 = firebase
+      .database()
+      .ref("Courses/" + category + "/" + title + "/users/pending/");
+    ref1.on("value", snapshot => {
+      if (snapshot.exists()) {
+        let items = snapshot.val();
+        var objectKeys = Object.keys(items);
+        console.log(objectKeys);
+        for (i = 0; i < objectKeys.length; i++) {
+          if (objectKeys[i] == firebase.auth().currentUser.uid) {
+            this.setState({
+              isPending: true
+            });
+          }
         }
       }
     });
@@ -64,6 +84,19 @@ class ClassScreen extends React.Component {
           }
         >
           <Text>You already have access</Text>
+        </Button>
+      );
+    } else if (this.state.isPending == true) {
+      content.push(
+        <Button
+          disabled
+          key="disabledrequest"
+          style={{ alignSelf: "center" }}
+          onPress={() =>
+            this.requestClass(this.state.title, this.state.category)
+          }
+        >
+          <Text>You are waiting for approval</Text>
         </Button>
       );
     } else {
