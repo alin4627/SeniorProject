@@ -64,7 +64,8 @@ class ClassScreen extends React.Component {
                 title: this.state.title,
                 course_id: this.state.course_id,
                 category: this.state.category,
-                status: "current"
+                status: "current",
+                source: "class"
               })
             }
           >
@@ -81,7 +82,8 @@ class ClassScreen extends React.Component {
                 title: this.state.title,
                 course_id: this.state.course_id,
                 category: this.state.category,
-                status: "pending"
+                status: "pending",
+                source: "class"
               })
             }
           >
@@ -102,7 +104,8 @@ class ClassScreen extends React.Component {
             this.props.navigation.navigate("RosterList", {
               title: this.state.title,
               course_id: this.state.course_id,
-              category: this.state.category
+              category: this.state.category,
+              source: "class"
             })
           }
         >

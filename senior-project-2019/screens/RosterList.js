@@ -100,73 +100,154 @@ class RosterList extends React.Component {
   fetchData() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
+    const group_title = navigation.getParam("group_title", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
     const course_id = navigation.getParam("course_id", "Unavailable");
     const status = navigation.getParam("status", "Unavailable");
+    const source = navigation.getParam("source", "Unavailable");
     this.setState({
       title: title,
       course_id: course_id,
       category: category
     });
-    if (status == "pending") {
-      this.setState({
-        status: "pending"
-      });
-      const ref = firebase
-        .database()
-        .ref("Courses/" + category + "/" + title + "/users/pending");
-      ref.on(
-        "value",
-        snapshot => {
-          if (snapshot.exists()) {
-            let items = snapshot.val();
-            let newState = [];
-            var objectKeys = Object.keys(items);
-            for (i = 0; i < objectKeys.length; i++) {
-              let data = {};
-              data[objectKeys[i]] = {
-                userID: objectKeys[i],
-                userName: items[objectKeys[i]].userName
-              };
-              newState.push(data);
+    if (source == "class") {
+      if (status == "pending") {
+        this.setState({
+          status: "pending"
+        });
+        const ref = firebase
+          .database()
+          .ref("Courses/" + category + "/" + title + "/users/pending");
+        ref.on(
+          "value",
+          snapshot => {
+            if (snapshot.exists()) {
+              let items = snapshot.val();
+              let newState = [];
+              var objectKeys = Object.keys(items);
+              for (i = 0; i < objectKeys.length; i++) {
+                let data = {};
+                data[objectKeys[i]] = {
+                  userID: objectKeys[i],
+                  userName: items[objectKeys[i]].userName
+                };
+                newState.push(data);
+              }
+              this.setState({
+                items: newState
+              });
             }
-            this.setState({
-              items: newState
-            });
+          },
+          function(errorObject) {
+            console.log("The read failed: " + errorObject.code);
           }
-        },
-        function(errorObject) {
-          console.log("The read failed: " + errorObject.code);
-        }
-      );
-    } else {
-      const ref = firebase
-        .database()
-        .ref("Courses/" + category + "/" + title + "/users/approved/");
-      ref.on(
-        "value",
-        snapshot => {
-          if (snapshot.exists()) {
-            let items = snapshot.val();
-            let newState = [];
-            var objectKeys = Object.keys(items);
-            for (i = 0; i < objectKeys.length; i++) {
-              let data = {};
-              data[objectKeys[i]] = {
-                userID: objectKeys[i],
-                userName: items[objectKeys[i]].userName
-              };
-              newState.push(data);
+        );
+      } else {
+        const ref = firebase
+          .database()
+          .ref("Courses/" + category + "/" + title + "/users/approved/");
+        ref.on(
+          "value",
+          snapshot => {
+            if (snapshot.exists()) {
+              let items = snapshot.val();
+              let newState = [];
+              var objectKeys = Object.keys(items);
+              for (i = 0; i < objectKeys.length; i++) {
+                let data = {};
+                data[objectKeys[i]] = {
+                  userID: objectKeys[i],
+                  userName: items[objectKeys[i]].userName
+                };
+                newState.push(data);
+              }
+              this.setState({
+                items: newState
+              });
             }
-            this.setState({
-              items: newState
-            });
+          },
+          function(errorObject) {
+            console.log("The read failed: " + errorObject.code);
           }
-        },
-        function(errorObject) {
-          console.log("The read failed: " + errorObject.code);
-        }
-      );
+        );
+      }
+    } else if (source == "group") {
+      if (status == "pending") {
+        this.setState({
+          status: "pending"
+        });
+        const ref = firebase
+          .database()
+          .ref(
+            "Courses/" +
+              category +
+              "/" +
+              title +
+              "/Groups/" +
+              group_title +
+              "/pending"
+          );
+        ref.on(
+          "value",
+          snapshot => {
+            if (snapshot.exists()) {
+              let items = snapshot.val();
+              let newState = [];
+              var objectKeys = Object.keys(items);
+              for (i = 0; i < objectKeys.length; i++) {
+                let data = {};
+                data[objectKeys[i]] = {
+                  userID: objectKeys[i],
+                  userName: items[objectKeys[i]].userName
+                };
+                newState.push(data);
+              }
+              this.setState({
+                items: newState
+              });
+            }
+          },
+          function(errorObject) {
+            console.log("The read failed: " + errorObject.code);
+          }
+        );
+      } else {
+        const ref = firebase
+          .database()
+          .ref(
+            "Courses/" +
+              category +
+              "/" +
+              title +
+              "/Groups/" +
+              group_title +
+              "/users/"
+          );
+        ref.on(
+          "value",
+          snapshot => {
+            if (snapshot.exists()) {
+              let items = snapshot.val();
+              let newState = [];
+              var objectKeys = Object.keys(items);
+              for (i = 0; i < objectKeys.length; i++) {
+                let data = {};
+                data[objectKeys[i]] = {
+                  userID: objectKeys[i],
+                  userName: items[objectKeys[i]].userName
+                };
+                newState.push(data);
+              }
+              this.setState({
+                items: newState
+              });
+            }
+          },
+          function(errorObject) {
+            console.log("The read failed: " + errorObject.code);
+          }
+        );
+      }
     }
   }
 

@@ -74,10 +74,11 @@ class GroupOptions extends React.Component {
           <ListItem
             onPress={() =>
               this.props.navigation.navigate("RosterList", {
-                title: this.state.title,
-                course_id: this.state.course_id,
+                group_title: this.state.group_title,
+                title: this.state.course_title,
                 category: this.state.category,
-                status: "current"
+                status: "current",
+                source: "group"
               })
             }
           >
@@ -91,10 +92,11 @@ class GroupOptions extends React.Component {
           <ListItem
             onPress={() =>
               this.props.navigation.navigate("RosterList", {
-                title: this.state.title,
-                course_id: this.state.course_id,
+                group_title: this.state.group_title,
+                title: this.state.course_title,
                 category: this.state.category,
-                status: "pending"
+                status: "pending",
+                source: "group"
               })
             }
           >
@@ -113,9 +115,10 @@ class GroupOptions extends React.Component {
           key="rosterList"
           onPress={() =>
             this.props.navigation.navigate("RosterList", {
-              title: this.state.title,
+              group_title: this.state.title,
               course_id: this.state.course_id,
-              category: this.state.category
+              category: this.state.category,
+              source: "group"
             })
           }
         >
