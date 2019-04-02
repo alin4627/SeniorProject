@@ -18,7 +18,7 @@ import {
   ListItem,
   Icon
 } from "native-base";
-import * as firebase from 'firebase';
+import * as firebase from "firebase";
 
 class ClassesScreen extends React.Component {
   constructor(props) {
@@ -29,40 +29,54 @@ class ClassesScreen extends React.Component {
   }
 
   componentDidMount() {
-    const ref = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/classSubscriptions/');
-    ref.on("value", snapshot => {
-      if (snapshot.exists()) {
-        let items = snapshot.val();
-        let newState = [];
-        // console.log(items)
-        var objectKeys = Object.keys(items);
-        for (i = 0; i < objectKeys.length; i++) {
-          let data = {};
-          data[objectKeys[i]] = {
-                id: items[objectKeys[i]].course_id,
-                title: items[objectKeys[i]].course_title,
-                category: items[objectKeys[i]].category
+    const ref = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid + "/classSubscriptions/");
+    ref.on(
+      "value",
+      snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          let newState = [];
+          // console.log(items)
+          var objectKeys = Object.keys(items);
+          for (i = 0; i < objectKeys.length; i++) {
+            let data = {};
+            data[objectKeys[i]] = {
+              id: items[objectKeys[i]].course_id,
+              title: items[objectKeys[i]].course_title,
+              category: items[objectKeys[i]].category
+            };
+            newState.push(data);
           }
-          newState.push(data)
+          this.setState({
+            items: newState
+          });
         }
-        this.setState({
-          items: newState
-        });
+      },
+      function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
       }
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
-    })
+    );
   }
 
   createList = () => {
-    if(this.state.items.length > 0) {
-      let list = []
-      let listitems = []
+    if (this.state.items.length > 0) {
+      let list = [];
+      let listitems = [];
       for (let i = 0; i < this.state.items.length; i++) {
-        for (let item in this.state.items[i])
-        {
+        for (let item in this.state.items[i]) {
           listitems.push(
-            <ListItem key={this.state.items[i][item].id} onPress={() => this.props.navigation.navigate('ClassOptions', { title: this.state.items[i][item].title, course_id: this.state.items[i][item].id, category: this.state.items[i][item].category })}>
+            <ListItem
+              key={this.state.items[i][item].id}
+              onPress={() =>
+                this.props.navigation.navigate("ClassOptions", {
+                  title: this.state.items[i][item].title,
+                  course_id: this.state.items[i][item].id,
+                  category: this.state.items[i][item].category
+                })
+              }
+            >
               <Left>
                 <Text>{this.state.items[i][item].title}</Text>
               </Left>
@@ -70,46 +84,44 @@ class ClassesScreen extends React.Component {
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
-          )
+          );
         }
       }
-      list.push(<List key={'SubClasses'}>{listitems}</List>)
-      return list
-    }
-    else{
-      let content = []
+      list.push(<List key={"SubClasses"}>{listitems}</List>);
+      return list;
+    } else {
+      let content = [];
       content.push(
-        <View key={'emptyList'} style={styles.content}>
+        <View key={"emptyList"} style={styles.content}>
           <Text>No classes subscribed. Please add a class</Text>
         </View>
-      )
-      return content
+      );
+      return content;
     }
-  }
+  };
 
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header iosBarStyle={"light-content"} style={{ backgroundColor: "#333333" }}>
-          <Left>
-            <Button transparent dark>
-              <Icon
-                name="menu"
-                style={{ padding: 10, color: "white" }}
-                onPress={() => this.props.navigation.openDrawer()}
-              />
-            </Button>
-          </Left>
-          <Body><Title style={{color: "white" }}>My Courses</Title></Body>
+        <Header
+          iosBarStyle={"light-content"}
+          style={{ backgroundColor: "#333333" }}
+        >
+          <Left />
+          <Body>
+            <Title style={{ color: "white" }}>My Courses</Title>
+          </Body>
           <Right>
-            <Button transparent dark onPress={() => this.props.navigation.navigate("ClassesSelection")}>
-              <Icon name="add" style={{color: "white" }} />
+            <Button
+              transparent
+              dark
+              onPress={() => this.props.navigation.navigate("ClassesSelection")}
+            >
+              <Icon name="add" style={{ color: "white" }} />
             </Button>
           </Right>
         </Header>
-        <Content>
-            {this.createList()}
-        </Content>
+        <Content>{this.createList()}</Content>
       </KeyboardAvoidingView>
     );
   }
@@ -122,7 +134,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   center: {
-    alignItems: "center", 
+    alignItems: "center"
   },
   content: {
     alignItems: "center",

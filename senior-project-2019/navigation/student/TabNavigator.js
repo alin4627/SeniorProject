@@ -24,9 +24,11 @@ import {
   createStackNavigator,
   createAppContainer
 } from "react-navigation";
-import HomeScreen from "../screens/HomeScreen";
-import ChatroomScreen from "../screens/ChatroomScreen";
-import CourseNavigator from "./teacher/CourseNavigator";
+import HomeScreen from "../../screens/HomeScreen";
+import ChatroomScreen from "../../screens/ChatroomScreen";
+import CourseNavigator from "./CourseNavigator";
+import SettingsScreen from "../../screens/SettingsScreen";
+
 class OtherGroupsScreen extends React.Component {
   render() {
     return (
@@ -35,15 +37,7 @@ class OtherGroupsScreen extends React.Component {
           iosBarStyle={"light-content"}
           style={{ backgroundColor: "#333333" }}
         >
-          <Left>
-            <Button transparent dark>
-              <Icon
-                name="menu"
-                style={{ padding: 10, color: "white" }}
-                onPress={() => this.props.navigation.openDrawer()}
-              />
-            </Button>
-          </Left>
+          <Left />
           <Body>
             <Title style={{ color: "white" }}>Messages</Title>
           </Body>
@@ -153,6 +147,18 @@ export default createAppContainer(
           tabBarIcon: ({ tintColor, activeTintColor }) => (
             <Icon
               name="mail"
+              style={{ padding: 8, fontSize: 25, color: tintColor }}
+            />
+          )
+        }
+      },
+      Profile: {
+        screen: SettingsScreen,
+        navigationOptions: {
+          tabBarLabel: "Profile",
+          tabBarIcon: ({ tintColor, activeTintColor }) => (
+            <Icon
+              name="person"
               style={{ padding: 8, fontSize: 25, color: tintColor }}
             />
           )

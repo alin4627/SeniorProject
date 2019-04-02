@@ -1,12 +1,12 @@
 import React from "react";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
-import AppDrawerNavigator from "./student/AppDrawerNavigator";
+import TabNavigator from "./student/TabNavigator";
 import CourseNavigator from "./student/CourseNavigator";
 
 export default createAppContainer(
   createSwitchNavigator({
-    Main: AppDrawerNavigator,
+    Main: TabNavigator,
     Course: CourseNavigator
   })
 );
