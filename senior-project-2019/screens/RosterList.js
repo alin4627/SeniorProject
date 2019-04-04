@@ -154,12 +154,14 @@ class RosterList extends React.Component {
               let newState = [];
               var objectKeys = Object.keys(items);
               for (i = 0; i < objectKeys.length; i++) {
-                let data = {};
-                data[objectKeys[i]] = {
-                  userID: objectKeys[i],
-                  userName: items[objectKeys[i]].userName
-                };
-                newState.push(data);
+                if (objectKeys[i] != firebase.auth().currentUser.uid) {
+                  let data = {};
+                  data[objectKeys[i]] = {
+                    userID: objectKeys[i],
+                    userName: items[objectKeys[i]].userName
+                  };
+                  newState.push(data);
+                }
               }
               this.setState({
                 items: newState
@@ -231,12 +233,14 @@ class RosterList extends React.Component {
               let newState = [];
               var objectKeys = Object.keys(items);
               for (i = 0; i < objectKeys.length; i++) {
-                let data = {};
-                data[objectKeys[i]] = {
-                  userID: objectKeys[i],
-                  userName: items[objectKeys[i]].userName
-                };
-                newState.push(data);
+                if (objectKeys[i] != firebase.auth().currentUser.uid) {
+                  let data = {};
+                  data[objectKeys[i]] = {
+                    userID: objectKeys[i],
+                    userName: items[objectKeys[i]].userName
+                  };
+                  newState.push(data);
+                }
               }
               this.setState({
                 items: newState
@@ -258,15 +262,17 @@ class RosterList extends React.Component {
             let newState = [];
             var objectKeys = Object.keys(items);
             for (i = 0; i < objectKeys.length; i++) {
-              let data = {};
-              data[objectKeys[i]] = {
-                userID: objectKeys[i],
-                userName:
-                  items[objectKeys[i]].firstName +
-                  " " +
-                  items[objectKeys[i]].lastName
-              };
-              newState.push(data);
+              if (objectKeys[i] != firebase.auth().currentUser.uid) {
+                let data = {};
+                data[objectKeys[i]] = {
+                  userID: objectKeys[i],
+                  userName:
+                    items[objectKeys[i]].firstName +
+                    " " +
+                    items[objectKeys[i]].lastName
+                };
+                newState.push(data);
+              }
             }
             this.setState({
               items: newState
