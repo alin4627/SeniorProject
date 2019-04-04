@@ -66,6 +66,9 @@ class Profile extends React.Component {
               }}
             />
             <Text style={styles.userNameHeader}>{this.state.userName}</Text>
+            <Button style={{ padding: "10%", alignSelf: "center" }}>
+              <Text style={{ color: "white" }}> Message User </Text>
+            </Button>
           </View>
         </Content>
       </KeyboardAvoidingView>
