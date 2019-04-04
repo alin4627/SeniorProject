@@ -257,8 +257,6 @@ class RosterList extends React.Component {
             let items = snapshot.val();
             let newState = [];
             var objectKeys = Object.keys(items);
-            console.log(items);
-            console.log(objectKeys);
             for (i = 0; i < objectKeys.length; i++) {
               let data = {};
               data[objectKeys[i]] = {
