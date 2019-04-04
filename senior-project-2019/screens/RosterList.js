@@ -248,6 +248,37 @@ class RosterList extends React.Component {
           }
         );
       }
+    } else if (source == "all") {
+      const ref = firebase.database().ref("users/");
+      ref.on(
+        "value",
+        snapshot => {
+          if (snapshot.exists()) {
+            let items = snapshot.val();
+            let newState = [];
+            var objectKeys = Object.keys(items);
+            console.log(items);
+            console.log(objectKeys);
+            for (i = 0; i < objectKeys.length; i++) {
+              let data = {};
+              data[objectKeys[i]] = {
+                userID: objectKeys[i],
+                userName:
+                  items[objectKeys[i]].firstName +
+                  " " +
+                  items[objectKeys[i]].lastName
+              };
+              newState.push(data);
+            }
+            this.setState({
+              items: newState
+            });
+          }
+        },
+        function(errorObject) {
+          console.log("The read failed: " + errorObject.code);
+        }
+      );
     }
   }
 

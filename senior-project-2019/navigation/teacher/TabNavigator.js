@@ -25,71 +25,14 @@ import {
   createAppContainer
 } from "react-navigation";
 import HomeScreen from "../../screens/HomeScreen";
+import MessagesScreen from "../../screens/MessagesScreen";
 import ChatroomScreen from "../../screens/ChatroomScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
 import CourseNavigator from "./CourseNavigator";
-class OtherGroupsScreen extends React.Component {
-  render() {
-    return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header
-          iosBarStyle={"light-content"}
-          style={{ backgroundColor: "#333333" }}
-        >
-          <Left />
-          <Body>
-            <Title style={{ color: "white" }}>Messages</Title>
-          </Body>
-          <Right>
-            <Button transparent dark>
-              <Icon name="add" style={{ color: "white" }} />
-            </Button>
-          </Right>
-        </Header>
-        <Content padder>
-          <List>
-            <ListItem avatar>
-              <Left>
-                <Thumbnail
-                  small
-                  source={{
-                    uri:
-                      "https://s.thestreet.com/files/tsc/v2008/photos/contrib/uploads/0-fs5ztag0_600x400.jpg"
-                  }}
-                />
-              </Left>
-              <Body>
-                <Text>Student 1</Text>
-                <Text note>
-                  Doing what you like will always keep you happy . .
-                </Text>
-              </Body>
-              <Right>
-                <Text note>3:43 pm</Text>
-              </Right>
-            </ListItem>
-          </List>
-        </Content>
-      </KeyboardAvoidingView>
-    );
-  }
-}
 
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen
-  },
-  {
-    defaultNavigationOptions: {
-      header: null
-    }
-  }
-);
-
-const OtherGroupStack = createStackNavigator(
-  {
-    OtherGroups: OtherGroupsScreen,
-    Chat: ChatroomScreen
   },
   {
     defaultNavigationOptions: {
@@ -140,7 +83,7 @@ export default createAppContainer(
         }
       },
       Messages: {
-        screen: OtherGroupStack,
+        screen: MessagesScreen,
         navigationOptions: {
           tabBarLabel: "Messages",
           tabBarIcon: ({ tintColor, activeTintColor }) => (
