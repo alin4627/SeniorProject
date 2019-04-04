@@ -338,7 +338,15 @@ class RosterList extends React.Component {
             );
           } else {
             listitems.push(
-              <ListItem key={this.state.items[i][item].userID}>
+              <ListItem
+                key={this.state.items[i][item].userID}
+                onPress={() =>
+                  this.props.navigation.navigate("ProfileScreen", {
+                    userID: this.state.items[i][item].userID,
+                    userName: this.state.items[i][item].userName
+                  })
+                }
+              >
                 <Left>
                   <Text style={styles.listText}>
                     {this.state.items[i][item].userName}

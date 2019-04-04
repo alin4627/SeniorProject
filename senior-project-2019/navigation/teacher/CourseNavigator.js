@@ -10,6 +10,7 @@ import ClassOptions from "../../screens/ClassOptions";
 import RosterList from "../../screens/RosterList";
 import ChatroomScreen from "../../screens/ChatroomScreen";
 import GroupOptionScreen from "../../screens/GroupOptions";
+import ProfileScreen from "../../screens/Profile";
 
 const CourseNavigator = createStackNavigator(
   {
@@ -22,7 +23,8 @@ const CourseNavigator = createStackNavigator(
     RosterList: RosterList,
     ChatroomScreen: ChatroomScreen,
     OpenGroupsScreen: OpenGroupsScreen,
-    GroupOptionScreen: GroupOptionScreen
+    GroupOptionScreen: GroupOptionScreen,
+    ProfileScreen: ProfileScreen
   },
   {
     defaultNavigationOptions: {
