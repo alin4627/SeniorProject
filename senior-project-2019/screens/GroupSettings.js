@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Alert } from "react-native";
+import { StyleSheet, View } from "react-native";
 import {
   Header,
   List,
@@ -15,7 +15,7 @@ import {
 } from "native-base";
 import * as firebase from "firebase";
 
-class GroupOptions extends React.Component {
+class GroupSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -134,12 +134,6 @@ class GroupOptions extends React.Component {
     return content;
   }
 
-  leaveGroup() {
-    const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title +"/users/" + firebase.auth().currentUser.uid)
-    ref.remove()
-    this.props.navigation.goBack()
-  }
-
   render() {
     return (
       <View behavior="padding" style={styles.container}>
@@ -157,103 +151,20 @@ class GroupOptions extends React.Component {
           <Right />
         </Header>
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
-          <View style={styles.classHeader}>
-            <View style={styles.classHeader}>
-              <Text style={styles.classLabel}>Group Name</Text>
-              <Text style={styles.classNameHeader}>
-                {this.state.group_title}
-              </Text>
-            </View>
-          </View>
-          <List>
-            <ListItem itemHeader first>
-              <Icon name="chatboxes" style={{ paddingRight: 10 }} />
-              <Text style={styles.categoryHeader}>DISCUSSION</Text>
-            </ListItem>
-            <ListItem
-              onPress={() =>
-                this.props.navigation.navigate("ChatroomScreen", {
-                  group_title: this.state.group_title,
-                  course_title: this.state.course_title,
-                  category: this.state.category
-                })
-              }
-            >
-              <Left>
-                <Text>Chatroom</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem itemHeader first>
-              <Icon name="document" style={{ paddingRight: 10 }} />
-              <Text style={styles.categoryHeader}>UPLOADS</Text>
-            </ListItem>
-            <ListItem>
-              <Left>
-                <Text>Files/Uploads</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem itemHeader first>
-              <Icon name="contacts" style={{ paddingRight: 10 }} />
-              <Text style={styles.categoryHeader}>ROSTER</Text>
-            </ListItem>
-            {this.createRosterCategory()}
-            <ListItem itemHeader first>
-              <Icon name="settings" style={{ paddingRight: 10 }} />
-              <Text style={styles.categoryHeader}>SETTINGS</Text>
-            </ListItem>
-            <ListItem onPress={() =>
-                this.props.navigation.navigate("GroupSettings", {
-                  group_title: this.state.group_title,
-                  course_title: this.state.course_title,
-                  category: this.state.category
-                })
-              }>
-              <Left>
-                <Text>Group Settings</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem onPress={() =>
-                          Alert.alert(
-                            "Confirmation",
-                            "You are about to leave this group",
-                            [
-                              {
-                                text: "Cancel",
-                                onPress: () => console.log("Cancel Pressed!")
-                              },
-                              {
-                                text: "OK",
-                                onPress: () =>
-                                  this.leaveGroup()
-                              }
-                            ],
-                            { cancelable: false }
-                          )
-                        }>
-              <Left>
-                <Text>Leave Group</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-          </List>
+            <Button
+                light
+                onPress={this.signOutUser}
+                style={{ padding: "10%", alignSelf: "center" }}
+                >
+              <Text> Leave Group </Text>
+            </Button>
         </Content>
       </View>
     );
   }
 }
 
-export default GroupOptions;
+export default GroupSettings;
 
 const styles = StyleSheet.create({
   container: {

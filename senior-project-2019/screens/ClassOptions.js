@@ -39,7 +39,7 @@ class ClassScreen extends React.Component {
     const ref = firebase
       .database()
       .ref("users/" + firebase.auth().currentUser.uid);
-    ref.on("value", snapshot => {
+    ref.once("value", snapshot => {
       let items = snapshot.val();
       if (items.userLevel != 1) {
         this.setState({
