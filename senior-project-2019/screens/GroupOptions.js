@@ -137,7 +137,7 @@ class GroupOptions extends React.Component {
   leaveGroup() {
     const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title +"/users/" + firebase.auth().currentUser.uid)
     ref.remove()
-    this.props.navigation.goBack()
+    this.props.navigation.navigate("ClassOptions")
   }
 
   render() {

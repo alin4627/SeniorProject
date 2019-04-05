@@ -31,6 +31,8 @@ class OpenGroups extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      course_title: "",
+      category: "",
       items: [],
       modalVisible: false,
       selected: "open",
@@ -87,6 +89,14 @@ class OpenGroups extends React.Component {
     }
   };
 
+  joinGroup(group_title) {
+    firebase.database().ref("Courses/" + this.state.category + "/" + this.state.course_title + "/Groups/" + group_title + "/users/" + firebase.auth().currentUser.uid).set({
+      userName: firebase.auth().currentUser.displayName,
+      userLevel: 1
+    })
+    this.props.navigation.goBack()
+  }
+
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -96,7 +106,7 @@ class OpenGroups extends React.Component {
               <Icon
                 name="arrow-back"
                 style={{ padding: 10 }}
-                onPress={() => this.props.navigation.navigate("Classes")}
+                onPress={() => this.props.navigation.goBack()}
               />
             </Button>
           </Left>
@@ -191,6 +201,10 @@ class OpenGroups extends React.Component {
     const title = navigation.getParam("title", "Unavailable");
     const course_id = navigation.getParam("course_id", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
+    this.setState({
+      course_title: title,
+      category: category
+    })
     const ref = firebase
       .database()
       .ref("Courses/" + category + "/" + title + "/Groups");
@@ -253,7 +267,24 @@ class OpenGroups extends React.Component {
               </Text>
             </Body>
           </CardItem>
-          <CardItem footer bordered button onPress={console.log("Joining")}>
+          <CardItem footer bordered button onPress={() =>
+                          Alert.alert(
+                            "Confirmation",
+                            "You are about to join this group.",
+                            [
+                              {
+                                text: "Cancel",
+                                onPress: () => console.log("Cancel Pressed!")
+                              },
+                              {
+                                text: "OK",
+                                onPress: () =>
+                                  this.joinGroup(this.state.items[i].group_title)
+                              }
+                            ],
+                            { cancelable: false }
+                          )
+                        }>
             <Text style={styles.cardItem}>Join</Text>
           </CardItem>
         </Card>
