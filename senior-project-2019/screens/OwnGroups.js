@@ -18,7 +18,6 @@ import {
   Item,
   Label,
   Input,
-  Picker,
   Right,
   Card,
   CardItem,
@@ -118,31 +117,39 @@ class OwnGroups extends React.Component {
 
   createCard = () => {
     let card = [];
-    for (let i = 0; i < this.state.items.length; i++) {
+    if (this.state.items.length > 0) {
+      for (let i = 0; i < this.state.items.length; i++) {
+        card.push(
+          <Card key={this.state.items[i].group_title}>
+            <CardItem
+              button
+              onPress={() =>
+                this.props.navigation.navigate("GroupOptionScreen", {
+                  course_title: this.state.items[i].course_title,
+                  group_title: this.state.items[i].group_title,
+                  category: this.state.items[i].category
+                })
+              }
+            >
+              <Body>
+                <Text style={styles.cardHeader}>
+                  {this.state.items[i].group_title}
+                </Text>
+                <Text style={styles.cardItem}>
+                  # of members: {this.state.items[i].users_length}
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
+        );
+      }
+    } else {
       card.push(
-        <Card key={this.state.items[i].group_title}>
-          <CardItem
-            button
-            onPress={() =>
-              this.props.navigation.navigate("GroupOptionScreen", {
-                course_title: this.state.items[i].course_title,
-                group_title: this.state.items[i].group_title,
-                category: this.state.items[i].category
-              })
-            }
-          >
-            <Body>
-              <Text style={styles.cardHeader}>
-                {this.state.items[i].group_title}
-              </Text>
-              <Text style={styles.cardItem}>
-                # of members: {this.state.items[i].users_length}
-              </Text>
-            </Body>
-          </CardItem>
-        </Card>
-      );
-    }
+        <View key="nogroupstext">
+          <Text>You currently are not in any groups! Make sure to join any open ones.</Text>
+        </View>
+      )
+    }  
     return card;
   };
 }
