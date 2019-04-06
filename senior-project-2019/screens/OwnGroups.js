@@ -40,7 +40,7 @@ class OwnGroups extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
+        {/* <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
           <Left>
             <Button transparent dark>
               <Icon
@@ -54,7 +54,7 @@ class OwnGroups extends React.Component {
             <Title>My Groups</Title>
           </Body>
           <Right />
-        </Header>
+        </Header> */}
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
           <View>{this.createCard()}</View>
         </Content>
@@ -63,19 +63,17 @@ class OwnGroups extends React.Component {
   }
 
   fetchData() {
-    const { navigation } = this.props;
-    const title = navigation.getParam("title", "Unavailable");
-    const course_id = navigation.getParam("course_id", "Unavailable");
-    const category = navigation.getParam("category", "Unavailable");
-    this.setState({
-      title: title,
-      course_id: course_id,
-      category: category
-    });
+    // const { navigation } = this.props;
+    // const title = navigation.getParam("title", "Unavailable");
+    // const course_id = navigation.getParam("course_id", "Unavailable");
+    // const category = navigation.getParam("category", "Unavailable");
+    // const title = this.props.title
+    // const course_id = this.props.course_id;
+    // const category = this.props.category;
     const ref = firebase
       .database()
-      .ref("Courses/" + category + "/" + title + "/Groups");
-    ref.on(
+      .ref("Courses/" + this.props.category + "/" + this.props.title + "/Groups");
+    ref.once(
       "value",
       snapshot => {
         if (snapshot.exists()) {
@@ -91,10 +89,10 @@ class OwnGroups extends React.Component {
               }
             }
             let data = {
-              course_title: title,
+              course_title: this.props.title,
               group_title: objectKeys[i],
               users_length: Object.keys(items[objectKeys[i]].users).length,
-              category: category
+              category: this.props.category
             };
             if (subbed) {
               newState.push(data);
@@ -112,31 +110,32 @@ class OwnGroups extends React.Component {
   }
 
   componentDidMount() {
+    console.log(this.props.category)
     this.fetchData();
   }
 
   createCard = () => {
     let card = [];
-    if (this.state.items.length > 0) {
-      for (let i = 0; i < this.state.items.length; i++) {
+    if (this.props.items.length > 0) {
+      for (let i = 0; i < this.props.items.length; i++) {
         card.push(
-          <Card key={this.state.items[i].group_title}>
+          <Card key={this.props.items[i].group_title}>
             <CardItem
               button
               onPress={() =>
                 this.props.navigation.navigate("GroupOptionScreen", {
-                  course_title: this.state.items[i].course_title,
-                  group_title: this.state.items[i].group_title,
-                  category: this.state.items[i].category
+                  course_title: this.props.items[i].course_title,
+                  group_title: this.props.items[i].group_title,
+                  category: this.props.items[i].category
                 })
               }
             >
               <Body>
                 <Text style={styles.cardHeader}>
-                  {this.state.items[i].group_title}
+                  {this.props.items[i].group_title}
                 </Text>
                 <Text style={styles.cardItem}>
-                  # of members: {this.state.items[i].users_length}
+                  # of members: {this.props.items[i].users_length}
                 </Text>
               </Body>
             </CardItem>

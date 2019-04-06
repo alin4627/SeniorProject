@@ -156,7 +156,7 @@ class ClassScreen extends React.Component {
             </ListItem>
             <ListItem
               onPress={() =>
-                this.props.navigation.navigate("Groups", {
+                this.props.navigation.navigate("GroupTabs", {
                   title: this.state.title,
                   course_id: this.state.course_id,
                   category: this.state.category
@@ -164,13 +164,13 @@ class ClassScreen extends React.Component {
               }
             >
               <Left>
-                <Text>My Groups</Text>
+                <Text>View Groups</Text>
               </Left>
               <Right>
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
-            <ListItem
+            {/* <ListItem
               last
               onPress={() =>
                 this.props.navigation.navigate("OpenGroupsScreen", {
@@ -186,7 +186,7 @@ class ClassScreen extends React.Component {
               <Right>
                 <Icon name="arrow-forward" />
               </Right>
-            </ListItem>
+            </ListItem> */}
             <ListItem itemHeader>
               <Icon name="contacts" style={{ paddingRight: 10 }} />
               <Text style={styles.categoryHeader}>ROSTER</Text>

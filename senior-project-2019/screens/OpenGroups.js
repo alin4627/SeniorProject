@@ -100,7 +100,7 @@ class OpenGroups extends React.Component {
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
+        {/* <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
           <Left>
             <Button transparent dark>
               <Icon
@@ -124,7 +124,7 @@ class OpenGroups extends React.Component {
               <Icon name="add" />
             </Button>
           </Right>
-        </Header>
+        </Header> */}
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
           <View>
             {this.createCard()}
@@ -197,10 +197,13 @@ class OpenGroups extends React.Component {
   }
 
   fetchData() {
-    const { navigation } = this.props;
-    const title = navigation.getParam("title", "Unavailable");
-    const course_id = navigation.getParam("course_id", "Unavailable");
-    const category = navigation.getParam("category", "Unavailable");
+    // const { navigation } = this.props;
+    // const title = navigation.getParam("title", "Unavailable");
+    // const course_id = navigation.getParam("course_id", "Unavailable");
+    // const category = navigation.getParam("category", "Unavailable");
+    const title = this.props.title
+    const course_id = this.props.course_id;
+    const category = this.props.category;
     this.setState({
       course_title: title,
       category: category
@@ -254,42 +257,51 @@ class OpenGroups extends React.Component {
 
   createCard = () => {
     let card = [];
-    for (let i = 0; i < this.state.items.length; i++) {
+    if (this.state.items.length > 0) {
+        for (let i = 0; i < this.state.items.length; i++) {
+          card.push(
+            <Card key={this.state.items[i].group_title}>
+              <CardItem>
+                <Body>
+                  <Text style={styles.cardHeader}>
+                    {this.state.items[i].group_title}
+                  </Text>
+                  <Text style={styles.cardItem}>
+                    # of members: {this.state.items[i].users_length}
+                  </Text>
+                </Body>
+              </CardItem>
+              <CardItem footer bordered button onPress={() =>
+                              Alert.alert(
+                                "Confirmation",
+                                "You are about to join this group.",
+                                [
+                                  {
+                                    text: "Cancel",
+                                    onPress: () => console.log("Cancel Pressed!")
+                                  },
+                                  {
+                                    text: "OK",
+                                    onPress: () =>
+                                      this.joinGroup(this.state.items[i].group_title)
+                                  }
+                                ],
+                                { cancelable: false }
+                              )
+                            }>
+                <Text style={styles.cardItem}>Join</Text>
+              </CardItem>
+            </Card>
+          );
+        }
+    } else {
       card.push(
-        <Card key={this.state.items[i].group_title}>
-          <CardItem>
-            <Body>
-              <Text style={styles.cardHeader}>
-                {this.state.items[i].group_title}
-              </Text>
-              <Text style={styles.cardItem}>
-                # of members: {this.state.items[i].users_length}
-              </Text>
-            </Body>
-          </CardItem>
-          <CardItem footer bordered button onPress={() =>
-                          Alert.alert(
-                            "Confirmation",
-                            "You are about to join this group.",
-                            [
-                              {
-                                text: "Cancel",
-                                onPress: () => console.log("Cancel Pressed!")
-                              },
-                              {
-                                text: "OK",
-                                onPress: () =>
-                                  this.joinGroup(this.state.items[i].group_title)
-                              }
-                            ],
-                            { cancelable: false }
-                          )
-                        }>
-            <Text style={styles.cardItem}>Join</Text>
-          </CardItem>
-        </Card>
-      );
+        <View key="nogroupstext">
+          <Text>No open groups currently</Text>
+        </View>
+      )
     }
+    
     return card;
   };
 }
