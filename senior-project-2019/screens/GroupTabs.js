@@ -69,6 +69,7 @@ class GroupTabs extends React.Component {
             });
           this.setGroupName();
           this.setModalVisible(false);
+          this.fetchUserGroups();
         } else {
           Alert.alert("Invalid group name. Please enter a different group name.");
         }
