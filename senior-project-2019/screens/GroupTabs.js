@@ -1,5 +1,12 @@
-import React, { Component } from 'react';
-import { Container, Header, Left, Body, Button, Icon, Right, Title, Tab, Tabs } from 'native-base';
+import React from 'react';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Modal,
+    Alert,
+  } from "react-native";
+import { Container, Header, Left, Body, Button, Icon, Right, Title, Form, Item, Label, Picker, Input, Tab, Tabs } from 'native-base';
 import OwnGroups from "./OwnGroups"
 import OpenGroups from "./OpenGroups"
 import * as firebase from "firebase";
@@ -12,9 +19,60 @@ class GroupTabs extends React.Component {
           course_id: "",
           category: "",
           userGroups: [],
-          openGroups: []
+          openGroups: [],
+          modalVisible: false,
+        selected: "open",
+        groupName: ""
         };
       }
+
+      setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+      }
+    
+      onValueChange(value) {
+        this.setState({
+          selected: value
+        });
+      }
+    
+      setGroupName() {
+        this.setState({
+          groupName: ""
+        });
+      }
+
+      createGroup = () => {
+        if (this.state.groupName != "" && this.state.groupName.length > 1) {
+          const { navigation } = this.props;
+          const title = navigation.getParam("title", "Unavailable");
+          const category = navigation.getParam("category", "Unavailable");
+          let userData = {};
+          userData[firebase.auth().currentUser.uid] = {
+            userName: firebase.auth().currentUser.displayName,
+            userLevel: 2
+          };
+          console.log(userData);
+          firebase
+            .database()
+            .ref(
+              "Courses/" +
+                category +
+                "/" +
+                title +
+                "/Groups/" +
+                this.state.groupName
+            )
+            .set({
+              privacy: this.state.selected,
+              users: userData
+            });
+          this.setGroupName();
+          this.setModalVisible(false);
+        } else {
+          Alert.alert("Invalid group name. Please enter a different group name.");
+        }
+      };
 
     fetchUserGroups() {
         const { navigation } = this.props;
@@ -136,8 +194,80 @@ class GroupTabs extends React.Component {
           <Body>
             <Title>Groups</Title>
           </Body>
-          <Right />
+          <Right>
+            <Button
+              transparent
+              dark
+              onPress={() => {
+                this.setModalVisible(true);
+              }}
+            >
+              <Icon name="add" />
+            </Button>
+          </Right>
         </Header>
+        <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+            >
+              <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
+                <Left>
+                  <Button transparent dark>
+                    <Icon
+                      name="arrow-back"
+                      style={{ padding: 10 }}
+                      onPress={() => {
+                        this.setModalVisible(false);
+                      }}
+                    />
+                  </Button>
+                </Left>
+              </Header>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#F8F8F8"
+                }}
+              >
+                <Title style={{ color: "black" }}>Create a Group</Title>
+                <Form style={styles.form}>
+                  <Item floatingLabel style={styles.item}>
+                    <Label>Name of Group</Label>
+                    <Input
+                      onChangeText={groupName => this.setState({ groupName })}
+                      value={this.state.groupName}
+                    />
+                  </Item>
+                  <Item picker style={styles.item}>
+                    <Label>Group Privacy</Label>
+                    <Picker
+                      mode="dropdown"
+                      iosIcon={<Icon name="arrow-down" />}
+                      selectedValue={this.state.selected}
+                      onValueChange={this.onValueChange.bind(this)}
+                    >
+                      <Picker.Item label="Public" value="open" />
+                      <Picker.Item label="Private" value="private" />
+                    </Picker>
+                  </Item>
+                  <View style={{ marginTop: 15 }}>
+                    <Button
+                      onPress={() => this.createGroup()}
+                      style={{
+                        padding: "10%",
+                        alignSelf: "center",
+                        color: "#7e7b7b"
+                      }}
+                    >
+                      <Text style={{ color: "white" }}> Create Group </Text>
+                    </Button>
+                  </View>
+                </Form>
+              </View>
+            </Modal>
             <Tabs>
             <Tab heading="My Groups">
                 <OwnGroups title={this.state.title} course_id={this.state.course_id} category={this.state.category} navigation={this.props.navigation} items={this.state.userGroups}/>
@@ -152,3 +282,24 @@ class GroupTabs extends React.Component {
 }
 
 export default GroupTabs;
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1
+    },
+    form: {
+      width: "80%"
+    },
+    cardHeader: {
+      fontSize: 20,
+      fontWeight: "bold",
+      padding: 5
+    },
+    cardItem: {
+      fontSize: 19,
+      padding: 5
+    },
+    item: {
+      padding: 15
+    }
+  });
