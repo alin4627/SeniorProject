@@ -135,7 +135,42 @@ class GroupOptions extends React.Component {
   }
 
   leaveGroup() {
-    const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title +"/users/" + firebase.auth().currentUser.uid)
+    let oneUser = false;
+    const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title +"/users/")
+    ref.once("value", snapshot => {
+      let items = snapshot.val();
+      var objectKeys = Object.keys(items);
+      if (objectKeys.length == 1){
+        oneUser = true;
+      }
+    });
+    if (!oneUser) {
+      const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title +"/users/" + firebase.auth().currentUser.uid)
+      ref.remove()
+      this.props.navigation.navigate("ClassOptions")
+    } else {
+      Alert.alert(
+        "Warning",
+        "You are the only person in this group. Leaving the group will delete it. Are you sure?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed!")
+          },
+          {
+            text: "OK",
+            onPress: () =>
+              this.removeGroup()
+          }
+        ],
+        { cancelable: false }
+      )
+    }
+
+  }
+
+  removeGroup() {
+    const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title)
     ref.remove()
     this.props.navigation.navigate("ClassOptions")
   }
