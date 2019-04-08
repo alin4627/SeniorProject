@@ -27,7 +27,7 @@ import {
 } from "native-base";
 import * as firebase from "firebase";
 
-class OwnGroups extends React.Component {
+class ClassCreateScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -305,7 +305,7 @@ class OwnGroups extends React.Component {
   };
 }
 
-export default OwnGroups;
+export default ClassCreateScreen;
 
 const styles = StyleSheet.create({
   container: {
