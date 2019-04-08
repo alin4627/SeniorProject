@@ -64,6 +64,28 @@ class GroupOptions extends React.Component {
         }
       }
     });
+    const ref1 = firebase
+      .database()
+      .ref(
+        "Courses/" + category + "/" + course_title + "/Groups/" + group_title
+      );
+    ref1.once("value", snapshot => {
+      let items = snapshot.val();
+      console.log(items["privacy"]);
+      // for (i = 0; i < objectKeys.length; i++) {
+      //   if (items[objectKeys[i]] == firebase.auth().currentUser.uid) {
+      //     if (items[objectKeys[i]].userLevel == 2) {
+      //       this.setState({
+      //         isAdmin: true
+      //       });
+      //     } else {
+      //       this.setState({
+      //         isAdmin: false
+      //       });
+      //     }
+      //   }
+      // }
+    });
   }
 
   createRosterCategory() {
@@ -136,18 +158,39 @@ class GroupOptions extends React.Component {
 
   leaveGroup() {
     let oneUser = false;
-    const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title +"/users/")
+    const ref = firebase
+      .database()
+      .ref(
+        "Courses/" +
+          this.state.category +
+          "/" +
+          this.state.course_title +
+          "/Groups/" +
+          this.state.group_title +
+          "/users/"
+      );
     ref.once("value", snapshot => {
       let items = snapshot.val();
       var objectKeys = Object.keys(items);
-      if (objectKeys.length == 1){
+      if (objectKeys.length == 1) {
         oneUser = true;
       }
     });
     if (!oneUser) {
-      const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title +"/users/" + firebase.auth().currentUser.uid)
-      ref.remove()
-      this.props.navigation.navigate("ClassOptions")
+      const ref = firebase
+        .database()
+        .ref(
+          "Courses/" +
+            this.state.category +
+            "/" +
+            this.state.course_title +
+            "/Groups/" +
+            this.state.group_title +
+            "/users/" +
+            firebase.auth().currentUser.uid
+        );
+      ref.remove();
+      this.props.navigation.navigate("ClassOptions");
     } else {
       Alert.alert(
         "Warning",
@@ -159,20 +202,27 @@ class GroupOptions extends React.Component {
           },
           {
             text: "OK",
-            onPress: () =>
-              this.removeGroup()
+            onPress: () => this.removeGroup()
           }
         ],
         { cancelable: false }
-      )
+      );
     }
-
   }
 
   removeGroup() {
-    const ref = firebase.database().ref("Courses/" + this.state.category +"/" + this.state.course_title +"/Groups/" + this.state.group_title)
-    ref.remove()
-    this.props.navigation.navigate("ClassOptions")
+    const ref = firebase
+      .database()
+      .ref(
+        "Courses/" +
+          this.state.category +
+          "/" +
+          this.state.course_title +
+          "/Groups/" +
+          this.state.group_title
+      );
+    ref.remove();
+    this.props.navigation.navigate("ClassOptions");
   }
 
   render() {
@@ -225,7 +275,9 @@ class GroupOptions extends React.Component {
               <Icon name="document" style={{ paddingRight: 10 }} />
               <Text style={styles.categoryHeader}>UPLOADS</Text>
             </ListItem>
-            <ListItem>
+            <ListItem
+              onPress={() => this.props.navigation.navigate("UploadScreen")}
+            >
               <Left>
                 <Text>Files/Uploads</Text>
               </Left>
@@ -242,13 +294,15 @@ class GroupOptions extends React.Component {
               <Icon name="settings" style={{ paddingRight: 10 }} />
               <Text style={styles.categoryHeader}>SETTINGS</Text>
             </ListItem>
-            <ListItem onPress={() =>
+            <ListItem
+              onPress={() =>
                 this.props.navigation.navigate("GroupSettings", {
                   group_title: this.state.group_title,
                   course_title: this.state.course_title,
                   category: this.state.category
                 })
-              }>
+              }
+            >
               <Left>
                 <Text>Group Settings</Text>
               </Left>
@@ -256,24 +310,25 @@ class GroupOptions extends React.Component {
                 <Icon name="arrow-forward" />
               </Right>
             </ListItem>
-            <ListItem onPress={() =>
-                          Alert.alert(
-                            "Confirmation",
-                            "You are about to leave this group",
-                            [
-                              {
-                                text: "Cancel",
-                                onPress: () => console.log("Cancel Pressed!")
-                              },
-                              {
-                                text: "OK",
-                                onPress: () =>
-                                  this.leaveGroup()
-                              }
-                            ],
-                            { cancelable: false }
-                          )
-                        }>
+            <ListItem
+              onPress={() =>
+                Alert.alert(
+                  "Confirmation",
+                  "You are about to leave this group",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed!")
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => this.leaveGroup()
+                    }
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
               <Left>
                 <Text>Leave Group</Text>
               </Left>

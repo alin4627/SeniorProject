@@ -13,7 +13,7 @@ import GroupOptionScreen from "../../screens/GroupOptions";
 import ProfileScreen from "../../screens/Profile";
 import GroupSettings from "../../screens/GroupSettings";
 import GroupTabs from "../../screens/GroupTabs";
-
+import UploadScreen from "../../screens/UploadScreen";
 
 const CourseNavigator = createStackNavigator(
   {
@@ -29,7 +29,8 @@ const CourseNavigator = createStackNavigator(
     GroupOptionScreen: GroupOptionScreen,
     ProfileScreen: ProfileScreen,
     GroupSettings: GroupSettings,
-    GroupTabs: GroupTabs
+    GroupTabs: GroupTabs,
+    UploadScreen: UploadScreen
   },
   {
     defaultNavigationOptions: {
