@@ -14,6 +14,8 @@ import ProfileScreen from "../../screens/Profile";
 import GroupSettings from "../../screens/GroupSettings";
 import GroupTabs from "../../screens/GroupTabs";
 import UploadScreen from "../../screens/UploadScreen";
+import BeTeacherReq from "../../screens/BeTeacherReq";
+import SettingsScreen from "../../screens/SettingsScreen";
 
 const CourseNavigator = createStackNavigator(
   {
@@ -21,6 +23,7 @@ const CourseNavigator = createStackNavigator(
     Groups: GroupsScreen,
     ClassesSelection: ClassesSelectionScreen,
     Class: ClassScreen,
+    Settings: SettingsScreen,
     ClassCreate: ClassCreateScreen,
     ClassOptions: ClassOptions,
     RosterList: RosterList,
@@ -30,7 +33,9 @@ const CourseNavigator = createStackNavigator(
     ProfileScreen: ProfileScreen,
     GroupSettings: GroupSettings,
     GroupTabs: GroupTabs,
-    UploadScreen: UploadScreen
+    UploadScreen: UploadScreen,
+    BeTeacherReq: BeTeacherReq,
+
   },
   {
     defaultNavigationOptions: {
