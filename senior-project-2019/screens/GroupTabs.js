@@ -30,6 +30,7 @@ class GroupTabs extends React.Component {
       category: "",
       userGroups: [],
       openGroups: [],
+      invites: [],
       modalVisible: false,
       selected: "open",
       groupName: ""
@@ -62,7 +63,6 @@ class GroupTabs extends React.Component {
         userName: firebase.auth().currentUser.displayName,
         userLevel: 2
       };
-      console.log(userData);
       firebase
         .database()
         .ref(
@@ -175,6 +175,53 @@ class GroupTabs extends React.Component {
     );
   }
 
+  fetchInvites() {
+    const { navigation } = this.props;
+    const title = navigation.getParam("title", "Unavailable");
+    const category = navigation.getParam("category", "Unavailable");
+    const ref = firebase
+      .database()
+      .ref("Courses/" + category + "/" + title + "/Groups");
+    ref.once(
+      "value",
+      snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          var objectKeys = Object.keys(items);
+          let newState = [];
+          for (i = 0; i < objectKeys.length; i++) {
+            try {
+              let invited = false;
+              let userList = Object.keys(items[objectKeys[i]].invited);
+              for (j = 0; j < userList.length; j++) {
+                if (userList[j] == firebase.auth().currentUser.uid) {
+                  invited = true;
+                }
+              }
+              let data = {
+                course_title: title,
+                group_title: objectKeys[i],
+                users_length: Object.keys(items[objectKeys[i]].users).length,
+                category: category
+              };
+              if (invited) {
+                newState.push(data);
+              }
+            } catch (err) {
+              console.log("No invited members");
+            }
+          }
+          this.setState({
+            invites: newState
+          });
+        }
+      },
+      function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      }
+    );
+  }
+
   componentDidMount() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
@@ -187,6 +234,7 @@ class GroupTabs extends React.Component {
     });
     this.fetchUserGroups();
     this.fetchOpenGroups();
+    this.fetchInvites();
   }
 
   render() {
@@ -296,6 +344,7 @@ class GroupTabs extends React.Component {
               category={this.state.category}
               navigation={this.props.navigation}
               items={this.state.userGroups}
+              invites={this.state.invites}
             />
           </Tab>
           <Tab

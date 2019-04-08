@@ -28,6 +28,7 @@ class RosterList extends React.Component {
       course_id: "",
       category: "",
       status: "",
+      source: "",
       items: []
     };
   }
@@ -79,7 +80,7 @@ class RosterList extends React.Component {
           uid
       );
     ref.remove();
-    this.setState({ state: this.state });
+    this.fetchData();
   }
 
   removeRequest(uid) {
@@ -94,7 +95,7 @@ class RosterList extends React.Component {
           uid
       );
     ref.remove();
-    this.setState({ state: this.state });
+    this.fetchData();
   }
 
   sendInvite(uid) {
@@ -113,7 +114,8 @@ class RosterList extends React.Component {
     this.setState({
       title: title,
       course_id: course_id,
-      category: category
+      category: category,
+      source: source
     });
     if (source == "class") {
       if (status == "pending") {
@@ -331,7 +333,45 @@ class RosterList extends React.Component {
       let listitems = [];
       for (let i = 0; i < this.state.items.length; i++) {
         for (let item in this.state.items[i]) {
-          if (this.state.status == "pending") {
+          if (this.state.source == "invite") {
+            listitems.push(
+              <ListItem key={this.state.items[i][item].userID}>
+                <Left>
+                  <Text style={styles.listText}>
+                    {this.state.items[i][item].userName}
+                  </Text>
+                </Left>
+                <Right>
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={styles.button}>
+                      <Button
+                        transparent
+                        onPress={() =>
+                          Alert.alert(
+                            "Confirmation",
+                            "You are about to invite this student into the group",
+                            [
+                              {
+                                text: "Cancel",
+                                onPress: () => console.log("Cancel Pressed!")
+                              },
+                              {
+                                text: "OK",
+                                onPress: () => console.log("okay pressed!")
+                              }
+                            ],
+                            { cancelable: false }
+                          )
+                        }
+                      >
+                        <Icon name="add" style={{ fontSize: 30 }} />
+                      </Button>
+                    </View>
+                  </View>
+                </Right>
+              </ListItem>
+            );
+          } else if (this.state.status == "pending") {
             listitems.push(
               <ListItem key={this.state.items[i][item].userID}>
                 <Left>

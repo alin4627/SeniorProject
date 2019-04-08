@@ -33,7 +33,8 @@ class OwnGroups extends React.Component {
       title: "",
       course_id: "",
       category: "",
-      items: []
+      items: [],
+      invites: []
     };
   }
 
@@ -56,7 +57,10 @@ class OwnGroups extends React.Component {
           <Right />
         </Header> */}
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
-          <View>{this.createCard()}</View>
+          <View>
+            {this.createInvite()}
+            {this.createCard()}
+          </View>
         </Content>
       </KeyboardAvoidingView>
     );
@@ -72,7 +76,9 @@ class OwnGroups extends React.Component {
     // const category = this.props.category;
     const ref = firebase
       .database()
-      .ref("Courses/" + this.props.category + "/" + this.props.title + "/Groups");
+      .ref(
+        "Courses/" + this.props.category + "/" + this.props.title + "/Groups"
+      );
     ref.once(
       "value",
       snapshot => {
@@ -110,8 +116,22 @@ class OwnGroups extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.category)
+    console.log(this.props.category);
     this.fetchData();
+  }
+
+  createInvite() {
+    console.log(this.props.invites);
+    console.log(this.props.invites.length);
+    let content = [];
+    if (this.props.invites.length > 0) {
+      content.push(
+        <View key="groupinvites" style={styles.invite}>
+          <Text>You have {this.props.invites.length} group invite(s)</Text>
+        </View>
+      );
+    }
+    return content;
   }
 
   createCard = () => {
@@ -145,10 +165,13 @@ class OwnGroups extends React.Component {
     } else {
       card.push(
         <View key="nogroupstext">
-          <Text>You currently are not in any groups! Make sure to join any open ones.</Text>
+          <Text>
+            You currently are not in any groups! Make sure to join any open
+            ones.
+          </Text>
         </View>
-      )
-    }  
+      );
+    }
     return card;
   };
 }
@@ -173,5 +196,10 @@ const styles = StyleSheet.create({
   },
   item: {
     padding: 15
+  },
+  invite: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10
   }
 });
