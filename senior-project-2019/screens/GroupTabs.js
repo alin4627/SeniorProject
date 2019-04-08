@@ -192,18 +192,22 @@ class GroupTabs extends React.Component {
   render() {
     return (
       <Container>
-        <Header hasTabs style={{ backgroundColor: "#F8F8F8" }}>
+        <Header
+          hasTabs
+          iosBarStyle={"light-content"}
+          style={{ backgroundColor: "#333333" }}
+        >
           <Left>
             <Button transparent dark>
               <Icon
                 name="arrow-back"
-                style={{ padding: 10 }}
+                style={{ color: "white", padding: 10 }}
                 onPress={() => this.props.navigation.goBack()}
               />
             </Button>
           </Left>
           <Body>
-            <Title>Groups</Title>
+            <Title style={{ color: "white" }}>Groups</Title>
           </Body>
           <Right>
             <Button
@@ -213,7 +217,7 @@ class GroupTabs extends React.Component {
                 this.setModalVisible(true);
               }}
             >
-              <Icon name="add" />
+              <Icon name="add" style={{ color: "white" }} />
             </Button>
           </Right>
         </Header>
@@ -280,7 +284,12 @@ class GroupTabs extends React.Component {
           </View>
         </Modal>
         <Tabs>
-          <Tab heading="My Groups">
+          <Tab
+            tabStyle={{ backgroundColor: "#333333" }}
+            activeTabStyle={{ backgroundColor: "#333333" }}
+            activeTextStyle={{ color: "white" }}
+            heading="My Groups"
+          >
             <OwnGroups
               title={this.state.title}
               course_id={this.state.course_id}
@@ -289,7 +298,12 @@ class GroupTabs extends React.Component {
               items={this.state.userGroups}
             />
           </Tab>
-          <Tab heading="Open Groups">
+          <Tab
+            tabStyle={{ backgroundColor: "#333333" }}
+            activeTabStyle={{ backgroundColor: "#333333" }}
+            activeTextStyle={{ color: "white" }}
+            heading="Open Groups"
+          >
             <OpenGroups
               title={this.state.title}
               course_id={this.state.course_id}
