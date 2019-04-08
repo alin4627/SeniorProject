@@ -45,11 +45,11 @@ class SettingsScreen extends React.Component {
     ref.on("value", snapshot => {
       let items = snapshot.val();
       let newState = [];
-      this.setState({userLevel: items.userLevel})
+      this.setState({ userLevel: items.userLevel });
       newState.push({
         id: firebase.auth().currentUser.uid,
         firstName: items.firstName,
-        lastName: items.lastName,
+        lastName: items.lastName
       });
       this.setState({
         items: newState
@@ -74,8 +74,9 @@ class SettingsScreen extends React.Component {
         });
   }
 
-  accountType= () => { 
+  accountType = () => {
     let content = [];
+<<<<<<< HEAD
     if(this.state.userLevel == 1){
     content.push(<Title>Student Account</Title>);
     if (this.state.isPending == true) {
@@ -105,13 +106,28 @@ class SettingsScreen extends React.Component {
     }
     else if(this.state.userLevel == 2){
       content.push(<Title>Teacher Account</Title>);
+=======
+    if (this.state.userLevel == 1) {
+      content.push(<Title key="student">Student Account</Title>);
+      content.push(
+        <Button
+          light
+          onPress={this.signOutUser}
+          style={{ padding: "10%", alignSelf: "center" }}
+        >
+          <Text> Request Teacher Priveledges </Text>
+        </Button>
+      );
+>>>>>>> 95c61cda17be0264391706f7f3c1f3b7c026adc7
+      return content;
+    } else if (this.state.userLevel == 2) {
+      content.push(<Title key="teacher">Teacher Account</Title>);
+      return content;
+    } else {
+      content.push(<Title key="admin">Admin Account</Title>);
       return content;
     }
-    else{
-      content.push(<Title>Admin Account</Title>);
-      return content;
-    }
-  }
+  };
 
   render() {
     return (
@@ -146,7 +162,6 @@ class SettingsScreen extends React.Component {
             >
               <Text> Sign Out </Text>
             </Button>
-            
           </View>
         </Content>
       </View>
