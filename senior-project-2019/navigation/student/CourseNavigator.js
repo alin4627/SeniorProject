@@ -1,7 +1,5 @@
 import React from "react";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import GroupsScreen from "../../screens/OwnGroups";
-import OpenGroupsScreen from "../../screens/OpenGroups";
 import ClassesScreen from "../../screens/ClassesScreen";
 import ClassesSelectionScreen from "../../screens/ClassSelectionScreen";
 import ClassScreen from "../../screens/ClassScreen";
@@ -20,7 +18,6 @@ import SettingsScreen from "../../screens/SettingsScreen";
 const CourseNavigator = createStackNavigator(
   {
     Classes: ClassesScreen,
-    Groups: GroupsScreen,
     ClassesSelection: ClassesSelectionScreen,
     Class: ClassScreen,
     Settings: SettingsScreen,
@@ -28,14 +25,12 @@ const CourseNavigator = createStackNavigator(
     ClassOptions: ClassOptions,
     RosterList: RosterList,
     ChatroomScreen: ChatroomScreen,
-    OpenGroupsScreen: OpenGroupsScreen,
     GroupOptionScreen: GroupOptionScreen,
     ProfileScreen: ProfileScreen,
     GroupSettings: GroupSettings,
     GroupTabs: GroupTabs,
     UploadScreen: UploadScreen,
-    BeTeacherReq: BeTeacherReq,
-
+    BeTeacherReq: BeTeacherReq
   },
   {
     defaultNavigationOptions: {

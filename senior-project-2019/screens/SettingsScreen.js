@@ -34,7 +34,7 @@ class SettingsScreen extends React.Component {
     super(props);
     this.state = {
       items: [],
-      isPending:false
+      isPending: false
     };
   }
 
@@ -55,70 +55,51 @@ class SettingsScreen extends React.Component {
         items: newState
       });
     });
-    const ref1 = firebase
-            .database()
-            .ref("TeacherReq/pending/");
-        ref1.on("value", snapshot => {
-            if (snapshot.exists()) {
-            let items = snapshot.val();
-            var objectKeys = Object.keys(items);
-            console.log(objectKeys);
-            for (i = 0; i < objectKeys.length; i++) {
-                if (objectKeys[i] == firebase.auth().currentUser.uid) {
-                this.setState({
-                    isPending: true
-                });
-                }
-            }
-            }
-        });
+    const ref1 = firebase.database().ref("TeacherReq/pending/");
+    ref1.on("value", snapshot => {
+      if (snapshot.exists()) {
+        let items = snapshot.val();
+        var objectKeys = Object.keys(items);
+        console.log(objectKeys);
+        for (i = 0; i < objectKeys.length; i++) {
+          if (objectKeys[i] == firebase.auth().currentUser.uid) {
+            this.setState({
+              isPending: true
+            });
+          }
+        }
+      }
+    });
   }
 
   accountType = () => {
     let content = [];
-<<<<<<< HEAD
-    if(this.state.userLevel == 1){
-    content.push(<Title>Student Account</Title>);
-    if (this.state.isPending == true) {
-    content.push( 
-                 <Button
-                  light
-                  disabled
-                   key="disabledrequest"
-                  onPress={() => this.props.navigation.navigate("BeTeacherReq")}
-                  style={{ padding: "10%", alignSelf: "center" }}
-                  >
-                  <Text> awaiting approval from admin </Text>
-                  </Button> );
-    }
-    else{
-      content.push( 
-                   <Button
-                    light
-                    key="request"
-                    onPress={() => this.props.navigation.navigate("BeTeacherReq")}
-                    style={{ padding: "10%", alignSelf: "center" }}
-                    >
-                    <Text> Request Teacher Priveledges </Text>
-                    </Button> );
-    }
-    return content;
-    }
-    else if(this.state.userLevel == 2){
-      content.push(<Title>Teacher Account</Title>);
-=======
     if (this.state.userLevel == 1) {
-      content.push(<Title key="student">Student Account</Title>);
-      content.push(
-        <Button
-          light
-          onPress={this.signOutUser}
-          style={{ padding: "10%", alignSelf: "center" }}
-        >
-          <Text> Request Teacher Priveledges </Text>
-        </Button>
-      );
->>>>>>> 95c61cda17be0264391706f7f3c1f3b7c026adc7
+      content.push(<Title>Student Account</Title>);
+      if (this.state.isPending == true) {
+        content.push(
+          <Button
+            light
+            disabled
+            key="disabledrequest"
+            onPress={() => this.props.navigation.navigate("BeTeacherReq")}
+            style={{ padding: "10%", alignSelf: "center" }}
+          >
+            <Text> awaiting approval from admin </Text>
+          </Button>
+        );
+      } else {
+        content.push(
+          <Button
+            light
+            key="request"
+            onPress={() => this.props.navigation.navigate("BeTeacherReq")}
+            style={{ padding: "10%", alignSelf: "center" }}
+          >
+            <Text> Request Teacher Priveledges </Text>
+          </Button>
+        );
+      }
       return content;
     } else if (this.state.userLevel == 2) {
       content.push(<Title key="teacher">Teacher Account</Title>);

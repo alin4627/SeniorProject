@@ -90,11 +90,23 @@ class OpenGroups extends React.Component {
   };
 
   joinGroup(group_title) {
-    firebase.database().ref("Courses/" + this.state.category + "/" + this.state.course_title + "/Groups/" + group_title + "/users/" + firebase.auth().currentUser.uid).set({
-      userName: firebase.auth().currentUser.displayName,
-      userLevel: 1
-    })
-    this.props.navigation.goBack()
+    firebase
+      .database()
+      .ref(
+        "Courses/" +
+          this.state.category +
+          "/" +
+          this.state.course_title +
+          "/Groups/" +
+          group_title +
+          "/users/" +
+          firebase.auth().currentUser.uid
+      )
+      .set({
+        userName: firebase.auth().currentUser.displayName,
+        userLevel: 1
+      });
+    this.props.navigation.goBack();
   }
 
   render() {
@@ -201,13 +213,13 @@ class OpenGroups extends React.Component {
     // const title = navigation.getParam("title", "Unavailable");
     // const course_id = navigation.getParam("course_id", "Unavailable");
     // const category = navigation.getParam("category", "Unavailable");
-    const title = this.props.title
+    const title = this.props.title;
     const course_id = this.props.course_id;
     const category = this.props.category;
     this.setState({
       course_title: title,
       category: category
-    })
+    });
     const ref = firebase
       .database()
       .ref("Courses/" + category + "/" + title + "/Groups");
@@ -258,50 +270,55 @@ class OpenGroups extends React.Component {
   createCard = () => {
     let card = [];
     if (this.state.items.length > 0) {
-        for (let i = 0; i < this.state.items.length; i++) {
-          card.push(
-            <Card key={this.state.items[i].group_title}>
-              <CardItem>
-                <Body>
-                  <Text style={styles.cardHeader}>
-                    {this.state.items[i].group_title}
-                  </Text>
-                  <Text style={styles.cardItem}>
-                    # of members: {this.state.items[i].users_length}
-                  </Text>
-                </Body>
-              </CardItem>
-              <CardItem footer bordered button onPress={() =>
-                              Alert.alert(
-                                "Confirmation",
-                                "You are about to join this group.",
-                                [
-                                  {
-                                    text: "Cancel",
-                                    onPress: () => console.log("Cancel Pressed!")
-                                  },
-                                  {
-                                    text: "OK",
-                                    onPress: () =>
-                                      this.joinGroup(this.state.items[i].group_title)
-                                  }
-                                ],
-                                { cancelable: false }
-                              )
-                            }>
-                <Text style={styles.cardItem}>Join</Text>
-              </CardItem>
-            </Card>
-          );
-        }
+      for (let i = 0; i < this.state.items.length; i++) {
+        card.push(
+          <Card key={this.state.items[i].group_title}>
+            <CardItem>
+              <Body>
+                <Text style={styles.cardHeader}>
+                  {this.state.items[i].group_title}
+                </Text>
+                <Text style={styles.cardItem}>
+                  # of members: {this.state.items[i].users_length}
+                </Text>
+              </Body>
+            </CardItem>
+            <CardItem
+              footer
+              bordered
+              button
+              onPress={() =>
+                Alert.alert(
+                  "Confirmation",
+                  "You are about to join this group.",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed!")
+                    },
+                    {
+                      text: "OK",
+                      onPress: () =>
+                        this.joinGroup(this.state.items[i].group_title)
+                    }
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
+              <Text style={styles.cardItem}>Join</Text>
+            </CardItem>
+          </Card>
+        );
+      }
     } else {
       card.push(
         <View key="nogroupstext">
           <Text>No open groups currently</Text>
         </View>
-      )
+      );
     }
-    
+
     return card;
   };
 }

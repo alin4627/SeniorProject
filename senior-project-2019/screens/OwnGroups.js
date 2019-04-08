@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Modal,
+  TouchableOpacity,
   Alert,
   TextInput,
   KeyboardAvoidingView
@@ -126,13 +126,73 @@ class OwnGroups extends React.Component {
     let content = [];
     if (this.props.invites.length > 0) {
       content.push(
-        <View key="groupinvites" style={styles.invite}>
-          <Text>You have {this.props.invites.length} group invite(s)</Text>
-        </View>
+        <TouchableOpacity
+          key="groupinvites"
+          style={styles.invite}
+          onPress={() => console.log("Hi")}
+        >
+          <Text style={styles.inviteText}>
+            YOU HAVE {this.props.invites.length} GROUP INVITE(S)
+          </Text>
+        </TouchableOpacity>
       );
     }
     return content;
   }
+
+  createInviteCard = () => {
+    let card = [];
+    if (this.props.invites.length > 0) {
+      for (let i = 0; i < this.props.invites.length; i++) {
+        card.push(
+          <Card key={this.props.invites[i].group_title}>
+            <CardItem>
+              <Body>
+                <Text style={styles.cardHeader}>
+                  {this.props.invites[i].group_title}
+                </Text>
+                <Text style={styles.cardItem}>
+                  # of members: {this.props.invites[i].users_length}
+                </Text>
+              </Body>
+            </CardItem>
+            <CardItem
+              footer
+              bordered
+              button
+              onPress={() =>
+                Alert.alert(
+                  "Confirmation",
+                  "You are about to join this group.",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed!")
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => console.log("Hi")
+                    }
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
+              <Text style={styles.cardItem}>Join</Text>
+            </CardItem>
+          </Card>
+        );
+      }
+    } else {
+      card.push(
+        <View key="nogroupstext">
+          <Text>No open groups currently</Text>
+        </View>
+      );
+    }
+
+    return card;
+  };
 
   createCard = () => {
     let card = [];
@@ -201,5 +261,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 10
+  },
+  inviteText: {
+    fontWeight: "bold"
   }
 });
