@@ -97,6 +97,10 @@ class RosterList extends React.Component {
     this.setState({ state: this.state });
   }
 
+  sendInvite(uid) {
+    const ref = firebase.database().ref("users/" + uid + "/invites");
+  }
+
   fetchData() {
     const { navigation } = this.props;
     const title = navigation.getParam("title", "Unavailable");
@@ -105,6 +109,7 @@ class RosterList extends React.Component {
     const course_id = navigation.getParam("course_id", "Unavailable");
     const status = navigation.getParam("status", "Unavailable");
     const source = navigation.getParam("source", "Unavailable");
+    const groupUsers = navigation.getParam("groupUsers", []);
     this.setState({
       title: title,
       course_id: course_id,
@@ -270,6 +275,36 @@ class RosterList extends React.Component {
                     items[objectKeys[i]].firstName +
                     " " +
                     items[objectKeys[i]].lastName
+                };
+                newState.push(data);
+              }
+            }
+            this.setState({
+              items: newState
+            });
+          }
+        },
+        function(errorObject) {
+          console.log("The read failed: " + errorObject.code);
+        }
+      );
+    } else if (source == "invite") {
+      const ref = firebase
+        .database()
+        .ref("Courses/" + category + "/" + title + "/users/approved/");
+      ref.on(
+        "value",
+        snapshot => {
+          if (snapshot.exists()) {
+            let items = snapshot.val();
+            let newState = [];
+            var objectKeys = Object.keys(items);
+            for (i = 0; i < objectKeys.length; i++) {
+              if (!groupUsers.includes(objectKeys[i])) {
+                let data = {};
+                data[objectKeys[i]] = {
+                  userID: objectKeys[i],
+                  userName: items[objectKeys[i]].userName
                 };
                 newState.push(data);
               }

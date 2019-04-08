@@ -23,7 +23,8 @@ class GroupOptions extends React.Component {
       course_title: "",
       category: "",
       isAdmin: "",
-      privacy: "open"
+      privacy: "open",
+      groupUsers: []
     };
   }
 
@@ -88,13 +89,38 @@ class GroupOptions extends React.Component {
     });
   }
 
+  getGroupUsers() {
+    const { navigation } = this.props;
+    const group_title = navigation.getParam("group_title", "Unavailable");
+    const course_title = navigation.getParam("course_title", "Unavailable");
+    const category = navigation.getParam("category", "Unavailable");
+    const ref = firebase
+      .database()
+      .ref(
+        "Courses/" +
+          category +
+          "/" +
+          course_title +
+          "/Groups/" +
+          group_title +
+          "/users/"
+      );
+    ref.once("value", snapshot => {
+      let items = snapshot.val();
+      var objectKeys = Object.keys(items);
+      this.setState({
+        groupUsers: objectKeys
+      });
+    });
+  }
+
   componentDidMount() {
     this.getAdminStatus();
     this.getGroupPrivacy();
+    this.getGroupUsers();
   }
 
   createRosterCategory() {
-    console.log(this.state.isAdmin);
     let content = [];
     if (this.state.isAdmin == true) {
       content.push(
@@ -152,6 +178,29 @@ class GroupOptions extends React.Component {
         >
           <Left>
             <Text>View Group Roster</Text>
+          </Left>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+      );
+    }
+    if (this.state.isAdmin && this.state.privacy == "private") {
+      content.push(
+        <ListItem
+          key="invite"
+          onPress={() =>
+            this.props.navigation.navigate("RosterList", {
+              title: this.state.course_title,
+              course_id: this.state.course_id,
+              category: this.state.category,
+              groupUsers: this.state.groupUsers,
+              source: "invite"
+            })
+          }
+        >
+          <Left>
+            <Text>Invite people</Text>
           </Left>
           <Right>
             <Icon name="arrow-forward" />
