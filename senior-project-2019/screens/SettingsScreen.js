@@ -44,15 +44,40 @@ class SettingsScreen extends React.Component {
     ref.on("value", snapshot => {
       let items = snapshot.val();
       let newState = [];
+      this.setState({userLevel: items.userLevel})
       newState.push({
         id: firebase.auth().currentUser.uid,
         firstName: items.firstName,
-        lastName: items.lastName
+        lastName: items.lastName,
       });
       this.setState({
         items: newState
       });
     });
+  }
+
+  accountType= () => { 
+    let content = [];
+    if(this.state.userLevel == 1){
+    content.push(<Title>Student Account</Title>);
+    content.push( 
+                 <Button
+                  light
+                  onPress={this.signOutUser}
+                  style={{ padding: "10%", alignSelf: "center" }}
+                  >
+                  <Text> Request Teacher Priveledges </Text>
+                  </Button> );
+    return content;
+    }
+    else if(this.state.userLevel == 2){
+      content.push(<Title>Teacher Account</Title>);
+      return content;
+    }
+    else{
+      content.push(<Title>Admin Account</Title>);
+      return content;
+    }
   }
 
   render() {
@@ -77,9 +102,11 @@ class SettingsScreen extends React.Component {
                 <View key={item.id}>
                   <Title>{item.firstName}</Title>
                   <Title>{item.lastName}</Title>
+                  <Title>{item.userLevel}</Title>
                 </View>
               );
             })}
+            {this.accountType()}
             <Button
               light
               onPress={this.signOutUser}
@@ -87,6 +114,7 @@ class SettingsScreen extends React.Component {
             >
               <Text> Sign Out </Text>
             </Button>
+            
           </View>
         </Content>
       </View>
