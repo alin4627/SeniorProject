@@ -22,11 +22,12 @@ class GroupOptions extends React.Component {
       group_title: "",
       course_title: "",
       category: "",
-      isAdmin: ""
+      isAdmin: "",
+      privacy: "open"
     };
   }
 
-  componentDidMount() {
+  getAdminStatus() {
     const { navigation } = this.props;
     const group_title = navigation.getParam("group_title", "Unavailable");
     const course_title = navigation.getParam("course_title", "Unavailable");
@@ -51,7 +52,7 @@ class GroupOptions extends React.Component {
       let items = snapshot.val();
       var objectKeys = Object.keys(items);
       for (i = 0; i < objectKeys.length; i++) {
-        if (items[objectKeys[i]] == firebase.auth().currentUser.uid) {
+        if (objectKeys[i] == firebase.auth().currentUser.uid) {
           if (items[objectKeys[i]].userLevel == 2) {
             this.setState({
               isAdmin: true
@@ -64,33 +65,38 @@ class GroupOptions extends React.Component {
         }
       }
     });
-    const ref1 = firebase
+  }
+
+  getGroupPrivacy() {
+    const { navigation } = this.props;
+    const group_title = navigation.getParam("group_title", "Unavailable");
+    const course_title = navigation.getParam("course_title", "Unavailable");
+    const category = navigation.getParam("category", "Unavailable");
+    const ref = firebase
       .database()
       .ref(
         "Courses/" + category + "/" + course_title + "/Groups/" + group_title
       );
-    ref1.once("value", snapshot => {
+    ref.once("value", snapshot => {
       let items = snapshot.val();
-      console.log(items["privacy"]);
-      // for (i = 0; i < objectKeys.length; i++) {
-      //   if (items[objectKeys[i]] == firebase.auth().currentUser.uid) {
-      //     if (items[objectKeys[i]].userLevel == 2) {
-      //       this.setState({
-      //         isAdmin: true
-      //       });
-      //     } else {
-      //       this.setState({
-      //         isAdmin: false
-      //       });
-      //     }
-      //   }
-      // }
+      // console.log(items["privacy"]);
+      if (items["privacy"] == "private") {
+        this.setState({
+          privacy: "private"
+        });
+      }
     });
   }
 
+  componentDidMount() {
+    this.getAdminStatus();
+    this.getGroupPrivacy();
+  }
+
   createRosterCategory() {
+    console.log(this.state.isAdmin);
     let content = [];
-    if (this.state.isAdmin == false) {
+    if (this.state.isAdmin == true) {
       content.push(
         <View key="nonStudentRoster">
           <ListItem
