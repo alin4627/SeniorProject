@@ -23,6 +23,16 @@ class HomeScreen extends React.Component {
     text: ""
   };
 
+  componentDidMount() {
+    const ref = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid);
+    ref.on("value", snapshot => {
+      let items = snapshot.val();
+      this.setState({ userLevel: items.userLevel });
+    })
+  }
+  
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -44,7 +54,8 @@ class HomeScreen extends React.Component {
             </Button>
           </Right>
         </Header>
-        <Content padder style={{ backgroundColor: "#F8F8F8" }} />
+        <Content padder style={{ backgroundColor: "#F8F8F8" }}>
+        </Content> />
       </KeyboardAvoidingView>
     );
   }
