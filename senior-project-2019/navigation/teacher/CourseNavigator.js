@@ -14,6 +14,7 @@ import ProfileScreen from "../../screens/Profile";
 import GroupSettings from "../../screens/GroupSettings";
 import GroupTabs from "../../screens/GroupTabs";
 import UploadScreen from "../../screens/UploadScreen";
+import InvitedGroupList from "../../screens/InvitedGroupList";
 
 const CourseNavigator = createStackNavigator(
   {
@@ -30,7 +31,8 @@ const CourseNavigator = createStackNavigator(
     ProfileScreen: ProfileScreen,
     GroupSettings: GroupSettings,
     GroupTabs: GroupTabs,
-    UploadScreen: UploadScreen
+    UploadScreen: UploadScreen,
+    InvitedGroupList: InvitedGroupList
   },
   {
     defaultNavigationOptions: {

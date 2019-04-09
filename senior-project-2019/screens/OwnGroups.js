@@ -129,7 +129,14 @@ class OwnGroups extends React.Component {
         <TouchableOpacity
           key="groupinvites"
           style={styles.invite}
-          onPress={() => console.log("Hi")}
+          onPress={() =>
+            this.props.navigation.navigate("InvitedGroupList", {
+              items: this.props.invites,
+              status: "invite",
+              category: this.props.category,
+              course_title: this.props.title
+            })
+          }
         >
           <Text style={styles.inviteText}>
             YOU HAVE {this.props.invites.length} GROUP INVITE(S)

@@ -195,6 +195,7 @@ class GroupOptions extends React.Component {
               course_id: this.state.course_id,
               category: this.state.category,
               groupUsers: this.state.groupUsers,
+              group_title: this.state.group_title,
               source: "invite"
             })
           }

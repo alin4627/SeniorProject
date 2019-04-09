@@ -27,6 +27,7 @@ class RosterList extends React.Component {
       title: "",
       course_id: "",
       category: "",
+      group_title: "",
       status: "",
       source: "",
       items: []
@@ -98,8 +99,23 @@ class RosterList extends React.Component {
     this.fetchData();
   }
 
-  sendInvite(uid) {
-    const ref = firebase.database().ref("users/" + uid + "/invites");
+  sendInvite(uid, username) {
+    firebase
+      .database()
+      .ref(
+        "Courses/" +
+          this.state.category +
+          "/" +
+          this.state.title +
+          "/Groups/" +
+          this.state.group_title +
+          "/invited/" +
+          uid
+      )
+      .set({
+        userName: username,
+        userLevel: 1
+      });
   }
 
   fetchData() {
@@ -115,6 +131,7 @@ class RosterList extends React.Component {
       title: title,
       course_id: course_id,
       category: category,
+      group_title: group_title,
       source: source
     });
     if (source == "class") {
@@ -357,7 +374,11 @@ class RosterList extends React.Component {
                               },
                               {
                                 text: "OK",
-                                onPress: () => console.log("okay pressed!")
+                                onPress: () =>
+                                  this.sendInvite(
+                                    this.state.items[i][item].userID,
+                                    this.state.items[i][item].userName
+                                  )
                               }
                             ],
                             { cancelable: false }
