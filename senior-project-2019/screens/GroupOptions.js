@@ -246,7 +246,7 @@ class GroupOptions extends React.Component {
             firebase.auth().currentUser.uid
         );
       ref.remove();
-      this.props.navigation.navigate("ClassOptions");
+      this.props.navigation.navigate("GroupTabs");
     } else {
       Alert.alert(
         "Warning",
@@ -278,7 +278,7 @@ class GroupOptions extends React.Component {
           this.state.group_title
       );
     ref.remove();
-    this.props.navigation.navigate("ClassOptions");
+    this.props.navigation.navigate("GroupTabs");
   }
 
   render() {

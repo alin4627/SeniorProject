@@ -24,10 +24,14 @@ import * as firebase from "firebase";
 class GroupTabs extends React.Component {
   constructor(props) {
     super(props);
+    // const { navigation } = this.props;
+    const title = props.navigation.getParam("title", "Unavailable");
+    const course_id = props.navigation.getParam("course_id", "Unavailable");
+    const category = props.navigation.getParam("category", "Unavailable");
     this.state = {
-      title: "",
-      course_id: "",
-      category: "",
+      title: title,
+      course_id: course_id,
+      category: category,
       userGroups: [],
       openGroups: [],
       invites: [],
@@ -86,12 +90,14 @@ class GroupTabs extends React.Component {
   };
 
   fetchUserGroups() {
-    const { navigation } = this.props;
-    const title = navigation.getParam("title", "Unavailable");
-    const category = navigation.getParam("category", "Unavailable");
+    // const { navigation } = this.props;
+    // const title = navigation.getParam("title", "Unavailable");
+    // const category = navigation.getParam("category", "Unavailable");
     const ref = firebase
       .database()
-      .ref("Courses/" + category + "/" + title + "/Groups");
+      .ref(
+        "Courses/" + this.state.category + "/" + this.state.title + "/Groups"
+      );
     ref.once(
       "value",
       snapshot => {
@@ -108,10 +114,10 @@ class GroupTabs extends React.Component {
               }
             }
             let data = {
-              course_title: title,
+              course_title: this.state.title,
               group_title: objectKeys[i],
               users_length: Object.keys(items[objectKeys[i]].users).length,
-              category: category
+              category: this.state.category
             };
             if (subbed) {
               newState.push(data);
@@ -129,12 +135,14 @@ class GroupTabs extends React.Component {
   }
 
   fetchOpenGroups() {
-    const { navigation } = this.props;
-    const title = navigation.getParam("title", "Unavailable");
-    const category = navigation.getParam("category", "Unavailable");
+    // const { navigation } = this.props;
+    // const title = navigation.getParam("title", "Unavailable");
+    // const category = navigation.getParam("category", "Unavailable");
     const ref = firebase
       .database()
-      .ref("Courses/" + category + "/" + title + "/Groups");
+      .ref(
+        "Courses/" + this.state.category + "/" + this.state.title + "/Groups"
+      );
     ref.once(
       "value",
       snapshot => {
@@ -155,10 +163,10 @@ class GroupTabs extends React.Component {
               }
             }
             let data = {
-              course_title: title,
+              course_title: this.state.title,
               group_title: objectKeys[i],
               users_length: Object.keys(items[objectKeys[i]].users).length,
-              category: category
+              category: this.state.category
             };
             if (open && !subbed) {
               newState.push(data);
@@ -176,12 +184,14 @@ class GroupTabs extends React.Component {
   }
 
   fetchInvites() {
-    const { navigation } = this.props;
-    const title = navigation.getParam("title", "Unavailable");
-    const category = navigation.getParam("category", "Unavailable");
+    // const { navigation } = this.props;
+    // const title = navigation.getParam("title", "Unavailable");
+    // const category = navigation.getParam("category", "Unavailable");
     const ref = firebase
       .database()
-      .ref("Courses/" + category + "/" + title + "/Groups");
+      .ref(
+        "Courses/" + this.state.category + "/" + this.state.title + "/Groups"
+      );
     ref.once(
       "value",
       snapshot => {
@@ -199,10 +209,10 @@ class GroupTabs extends React.Component {
                 }
               }
               let data = {
-                course_title: title,
+                course_title: this.state.title,
                 group_title: objectKeys[i],
                 users_length: Object.keys(items[objectKeys[i]].users).length,
-                category: category
+                category: this.state.category
               };
               if (invited) {
                 newState.push(data);
@@ -223,23 +233,14 @@ class GroupTabs extends React.Component {
   }
 
   componentDidMount() {
-    const { navigation } = this.props;
-    const title = navigation.getParam("title", "Unavailable");
-    const course_id = navigation.getParam("course_id", "Unavailable");
-    const category = navigation.getParam("category", "Unavailable");
-    this.setState({
-      title: title,
-      course_id: course_id,
-      category: category
-    });
-    this.fetchUserGroups();
-    this.fetchOpenGroups();
-    this.fetchInvites();
-    this.willFocusListener = navigation.addListener("willFocus", () => {
-      this.fetchUserGroups();
-      this.fetchOpenGroups();
-      this.fetchInvites();
-    });
+    this.willFocusListener = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        this.fetchUserGroups();
+        this.fetchOpenGroups();
+        this.fetchInvites();
+      }
+    );
   }
 
   componentWillUnmount() {
