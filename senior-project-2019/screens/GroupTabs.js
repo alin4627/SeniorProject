@@ -135,7 +135,7 @@ class GroupTabs extends React.Component {
     const ref = firebase
       .database()
       .ref("Courses/" + category + "/" + title + "/Groups");
-    ref.on(
+    ref.once(
       "value",
       snapshot => {
         if (snapshot.exists()) {
