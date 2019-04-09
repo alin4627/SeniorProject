@@ -235,6 +235,15 @@ class GroupTabs extends React.Component {
     this.fetchUserGroups();
     this.fetchOpenGroups();
     this.fetchInvites();
+    this.willFocusListener = navigation.addListener("willFocus", () => {
+      this.fetchUserGroups();
+      this.fetchOpenGroups();
+      this.fetchInvites();
+    });
+  }
+
+  componentWillUnmount() {
+    this.willFocusListener.remove();
   }
 
   render() {
