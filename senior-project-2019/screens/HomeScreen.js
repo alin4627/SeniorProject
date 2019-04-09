@@ -55,7 +55,7 @@ class HomeScreen extends React.Component {
           </Right>
         </Header>
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
-        </Content> />
+        </Content> 
       </KeyboardAvoidingView>
     );
   }
