@@ -14,6 +14,7 @@ import GroupTabs from "../../screens/GroupTabs";
 import UploadScreen from "../../screens/UploadScreen";
 import BeTeacherReq from "../../screens/BeTeacherReq";
 import SettingsScreen from "../../screens/SettingsScreen";
+import PrivateChat from "../../screens/PrivateChat"
 
 const CourseNavigator = createStackNavigator(
   {
@@ -30,7 +31,8 @@ const CourseNavigator = createStackNavigator(
     GroupSettings: GroupSettings,
     GroupTabs: GroupTabs,
     UploadScreen: UploadScreen,
-    BeTeacherReq: BeTeacherReq
+    BeTeacherReq: BeTeacherReq,
+    PrivateChat: PrivateChat
   },
   {
     defaultNavigationOptions: {
