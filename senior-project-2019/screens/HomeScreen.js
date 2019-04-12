@@ -61,6 +61,18 @@ class HomeScreen extends React.Component {
    
   }
 
+  upgradeYes(uid,displayName,expertise,reasons){
+    firebase.database().ref("users/" + uid).update({userLevel:2}) // set userLevel to 2
+    firebase.database().ref("TeacherReq/approved/" + uid ) //add request to approved in case abused and open for review in db
+    .set({ Reasons: reasons,
+      displayName:displayName, 
+      expertise:expertise,
+      approvedBy: firebase.auth().currentUser.displayName + " " + firebase.auth().currentUser.uid,
+    })
+    firebase.database().ref("TeacherReq/pending/" + uid ).remove() //deletes pending request
+    this.generateState() //refreshes list and ui
+    //alert('Yes');
+  }
 
   generateContent = () => {
 
@@ -93,7 +105,7 @@ class HomeScreen extends React.Component {
                         onPress={() =>
                           Alert.alert(
                             "Confirmation",
-                            "You are about to accept this student into the course",
+                            "You are about to give teacher priveledges to user",
                             [
                               {
                                 text: "Cancel",
@@ -102,7 +114,9 @@ class HomeScreen extends React.Component {
                               {
                                 text: "OK",
                                 onPress: () =>
-                                  alert('okay')
+                                  this.upgradeYes(this.state.request[i].id,this.state.request[i].displayName,
+                                    this.state.request[i].expertise,this.state.request[i].Reasons)
+                                  //confirmed to add student upgrade
                               }
                             ],
                             { cancelable: false }
@@ -121,7 +135,7 @@ class HomeScreen extends React.Component {
                         onPress={() =>
                           Alert.alert(
                             "Confirmation",
-                            "You are about to decline the request of this student",
+                            "You are about to decline the teacher priveledges to user",
                             [
                               {
                                 text: "Cancel",
@@ -131,6 +145,7 @@ class HomeScreen extends React.Component {
                                 text: "OK",
                                 onPress: () =>
                                  alert('declined')
+                                 //confirmed to decline student upgrade
                               }
                             ],
                             { cancelable: false }
@@ -143,12 +158,12 @@ class HomeScreen extends React.Component {
                         />
                       </Button>
                     </View>
-                  </View>
+                   </View>
                 </Right>
               </ListItem>
             );
             listitems.push(<ListItem>
-              <Text style={styles.listText}>Expertise: { this.state.request[i].expertise} {"\n"} Reason:{ this.state.request[i].Reasons}</Text>
+              <Text style={styles.listText}>Expertise: { this.state.request[i].expertise} {"\n"}Reason:{ this.state.request[i].Reasons}</Text>
               
             </ListItem>)
           }
