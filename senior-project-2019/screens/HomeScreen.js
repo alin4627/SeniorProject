@@ -74,6 +74,11 @@ class HomeScreen extends React.Component {
     //alert('Yes');
   }
 
+  upgradeNo(uid){
+    firebase.database().ref("TeacherReq/pending/" + uid ).remove() //deletes pending request
+    this.generateState()
+  }
+
   generateContent = () => {
 
     if(this.state.userLevel == 0 ){ //user is a admin
@@ -144,7 +149,7 @@ class HomeScreen extends React.Component {
                               {
                                 text: "OK",
                                 onPress: () =>
-                                 alert('declined')
+                                 this.upgradeNo(this.state.request[i].id)
                                  //confirmed to decline student upgrade
                               }
                             ],
@@ -170,11 +175,29 @@ class HomeScreen extends React.Component {
           list.push(<List key={"Request"}>{listitems}</List>);
           return list;
         }
-      
+        else {
+          let list = [];
+          let listitems = [];
+          listitems.push(
+            <ListItem key='header'>
+                <Text style={styles.listText}>
+                  Requests to be a Teacher
+                </Text>
+            </ListItem>)
+          listitems.push(
+             <ListItem key='header'>
+                 <Text style={styles.listText}>
+                   No Requests
+                 </Text>
+            </ListItem>)
+          list.push(<List key={"Request"}>{listitems}</List>);
+          return list;
+        }
+    
       }
+      
     }
-  
-
+    
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
