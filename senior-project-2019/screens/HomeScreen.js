@@ -28,6 +28,7 @@ class HomeScreen extends React.Component {
     this.state = {
       text: "",
       request:[],
+      userLevel:1
     };  
   }
   

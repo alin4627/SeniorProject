@@ -34,7 +34,8 @@ class SettingsScreen extends React.Component {
     super(props);
     this.state = {
       items: [],
-      isPending: false
+      isPending: false,
+      userLevel:1
     };
   }
 
