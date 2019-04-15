@@ -57,20 +57,16 @@ class SettingsScreen extends React.Component {
       });
     });
     const ref1 = firebase.database().ref("TeacherReq/pending/");
-    ref1.on("value", snapshot => {
-      if (snapshot.exists()) {
-        let items = snapshot.val();
-        var objectKeys = Object.keys(items);
-        console.log(objectKeys);
-        for (i = 0; i < objectKeys.length; i++) {
-          if (objectKeys[i] == firebase.auth().currentUser.uid) {
-            this.setState({
-              isPending: true
-            });
-          }
+    ref1.once("value", function(snapshot) {
+      snapshot.forEach(function(child) {
+        let data = {};
+        data.id = child.key;
+        if(data.id == firebase.auth().currentUser.uid){
+          this.setState({ isPending:true });
         }
-      }
-    });
+      }.bind(this));
+     
+    }.bind(this));
   }
 
   accountType = () => {
