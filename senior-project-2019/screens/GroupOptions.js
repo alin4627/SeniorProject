@@ -24,7 +24,8 @@ class GroupOptions extends React.Component {
       category: "",
       isAdmin: "",
       privacy: "open",
-      groupUsers: []
+      groupUsers: [],
+      groupPendingUsers: []
     };
   }
 
@@ -114,10 +115,38 @@ class GroupOptions extends React.Component {
     });
   }
 
+  getGroupPendingUsers() {
+    const { navigation } = this.props;
+    const group_title = navigation.getParam("group_title", "Unavailable");
+    const course_title = navigation.getParam("course_title", "Unavailable");
+    const category = navigation.getParam("category", "Unavailable");
+    const ref = firebase
+      .database()
+      .ref(
+        "Courses/" +
+          category +
+          "/" +
+          course_title +
+          "/Groups/" +
+          group_title +
+          "/users/pending"
+      );
+    ref.once("value", snapshot => {
+      if (snapshot.exists()) {
+        let items = snapshot.val();
+        var objectKeys = Object.keys(items);
+        this.setState({
+          groupPendingUsers: objectKeys
+        });
+      }  
+    });
+  }
+
   componentDidMount() {
     this.getAdminStatus();
     this.getGroupPrivacy();
     this.getGroupUsers();
+    this.getGroupPendingUsers();
   }
 
   createRosterCategory() {

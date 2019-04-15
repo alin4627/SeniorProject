@@ -35,7 +35,7 @@ class HomeScreen extends React.Component {
     const ref = firebase
       .database()
       .ref("users/" + firebase.auth().currentUser.uid);
-    ref.on("value", snapshot => {
+    ref.once("value", snapshot => {
       let items = snapshot.val();
       this.setState({ userLevel: items.userLevel }, function () {this.generateState()});
     })
