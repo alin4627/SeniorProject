@@ -47,6 +47,11 @@ class ClassScreen extends React.Component {
         this.setState({
           pendingStudents: objectKeys
         });
+      }
+      else {
+        this.setState({
+          pendingStudents: []
+        });
       }  
     });
   }
@@ -76,7 +81,17 @@ class ClassScreen extends React.Component {
         });
       }
     });
-    this.getPendingUsers();
+    this.willFocusListener = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        this.getPendingUsers();
+        this.render();
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    this.willFocusListener.remove();
   }
 
   createRequestList() {

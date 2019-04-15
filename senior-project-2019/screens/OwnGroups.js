@@ -116,13 +116,10 @@ class OwnGroups extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.category);
     this.fetchData();
   }
 
   createInvite() {
-    console.log(this.props.invites);
-    console.log(this.props.invites.length);
     let content = [];
     if (this.props.invites.length > 0) {
       content.push(

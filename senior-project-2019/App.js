@@ -28,7 +28,7 @@ export default class App extends React.Component {
     this.setState({isAuthenticated: !!user});
     if (user) {
         const ref = firebase.database().ref('users/' + user.uid);
-        ref.on("value", snapshot => {
+        ref.once("value", snapshot => {
         let items = snapshot.val();
         this.setState({
           userLevel: items.userLevel
