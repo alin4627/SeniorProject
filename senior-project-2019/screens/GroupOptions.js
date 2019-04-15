@@ -149,6 +149,35 @@ class GroupOptions extends React.Component {
     this.getGroupPendingUsers();
   }
 
+  createRequestList() {
+    let content = []
+    if (this.state.groupPendingUsers.length > 0)
+    {
+      content.push(
+        <ListItem
+          key="groupPendingUserList"
+          onPress={() =>
+            this.props.navigation.navigate("RosterList", {
+              group_title: this.state.group_title,
+              title: this.state.course_title,
+              category: this.state.category,
+              status: "pending",
+              source: "group"
+            })
+          }
+        >
+        <Left>
+          <Text>View Pending Members</Text>
+        </Left>
+        <Right>
+          <Icon name="arrow-forward" />
+        </Right>
+      </ListItem> 
+      )
+    }
+    return content;
+  }
+
   createRosterCategory() {
     let content = [];
     if (this.state.isAdmin == true) {
@@ -172,7 +201,7 @@ class GroupOptions extends React.Component {
               <Icon name="arrow-forward" />
             </Right>
           </ListItem>
-          <ListItem
+          {/* <ListItem
             onPress={() =>
               this.props.navigation.navigate("RosterList", {
                 group_title: this.state.group_title,
@@ -189,7 +218,8 @@ class GroupOptions extends React.Component {
             <Right>
               <Icon name="arrow-forward" />
             </Right>
-          </ListItem>
+          </ListItem> */}
+          {this.createRequestList()}
         </View>
       );
     } else {
