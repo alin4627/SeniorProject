@@ -325,6 +325,89 @@ class GroupOptions extends React.Component {
     }
   }
 
+  createGroupSettings() {
+    let content = []
+    if(this.state.isAdmin) {
+      content.push(
+        <View key="adminGroupSettings">
+          <ListItem
+              onPress={() =>
+                this.props.navigation.navigate("GroupSettings", {
+                  group_title: this.state.group_title,
+                  course_title: this.state.course_title,
+                  category: this.state.category
+                })
+              }
+            >
+              <Left>
+                <Text>Group Settings</Text>
+              </Left>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+            <ListItem
+              onPress={() =>
+                Alert.alert(
+                  "Confirmation",
+                  "You are about to leave this group",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed!")
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => this.leaveGroup()
+                    }
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
+              <Left>
+                <Text>Leave Group</Text>
+              </Left>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+        </View>
+      )
+    } else {
+      content.push(
+            <ListItem
+              key="normalGroupSettings"
+              onPress={() =>
+                Alert.alert(
+                  "Confirmation",
+                  "You are about to leave this group",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed!")
+                    },
+                    {
+                      text: "OK",
+                      onPress: () => this.leaveGroup()
+                    }
+                  ],
+                  { cancelable: false }
+                )
+              }
+            >
+              <Left>
+                <Text>Leave Group</Text>
+              </Left>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+      )
+    }
+    return content;
+  }
+
   removeGroup() {
     const ref = firebase
       .database()
@@ -409,48 +492,7 @@ class GroupOptions extends React.Component {
               <Icon name="settings" style={{ paddingRight: 10 }} />
               <Text style={styles.categoryHeader}>SETTINGS</Text>
             </ListItem>
-            <ListItem
-              onPress={() =>
-                this.props.navigation.navigate("GroupSettings", {
-                  group_title: this.state.group_title,
-                  course_title: this.state.course_title,
-                  category: this.state.category
-                })
-              }
-            >
-              <Left>
-                <Text>Group Settings</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem
-              onPress={() =>
-                Alert.alert(
-                  "Confirmation",
-                  "You are about to leave this group",
-                  [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed!")
-                    },
-                    {
-                      text: "OK",
-                      onPress: () => this.leaveGroup()
-                    }
-                  ],
-                  { cancelable: false }
-                )
-              }
-            >
-              <Left>
-                <Text>Leave Group</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
+            {this.createGroupSettings()}
           </List>
         </Content>
       </View>
