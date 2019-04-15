@@ -38,7 +38,7 @@ class PrivateChat extends React.Component{
     const { navigation } = this.props;
     const course_title = navigation.getParam("course_title", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
-    const user = navigation.getParam("user", "Unavailable");
+    const User_Chat = navigation.getParam("User_Chat", "Unavailable");
     const ref = firebase
       .database()
       .ref(
@@ -46,8 +46,8 @@ class PrivateChat extends React.Component{
           category +
           "/" +
           course_title +
-          "/user/" +
-          user +
+          "/User_Chat/" +
+          User_Chat +
           "/messages/"
       )
       .orderByChild("createdAt");
@@ -80,7 +80,7 @@ class PrivateChat extends React.Component{
     const { navigation } = this.props;
     const course_title = navigation.getParam("course_title", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
-    const user = navigation.getParam("user", "Unavailable");
+    const User_Chat = navigation.getParam("User_Chat", "Unavailable");
 
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i]);
@@ -91,8 +91,8 @@ class PrivateChat extends React.Component{
             category +
             "/" +
             course_title +
-            "/user/" +
-            user +
+            "/User_Chat/" +
+            User_Chat +
             "/messages/" +
             messages[i]._id
         )
@@ -177,8 +177,8 @@ class PrivateChat extends React.Component{
                       "category",
                       "Unavailable"
                     );
-                    const user = navigation.getParam(
-                      "user",
+                    const User_Chat = navigation.getParam(
+                      "User_Chat",
                       "Unavailable"
                     );
                     const refCheckAdmin = firebase
@@ -199,8 +199,8 @@ class PrivateChat extends React.Component{
                           category +
                           "/" +
                           course_title +
-                          "/user/" +
-                          user +
+                          "/User_Chat/" +
+                          User_Chat +
                           "/users/" +
                           firebase.auth().currentUser.uid
                       );
@@ -220,8 +220,8 @@ class PrivateChat extends React.Component{
                             category +
                             "/" +
                             course_title +
-                            "/user/" +
-                            user +
+                            "/User_Chat/" +
+                            User_Chat +
                             "/messages/" +
                             currentMessage._id
                         )
@@ -245,8 +245,8 @@ class PrivateChat extends React.Component{
                               category +
                               "/" +
                               course_title +
-                              "/user/" +
-                              user +
+                              "/User_Chat/" +
+                              User_Chat +
                               "/messages/" +
                               currentMessage._id
                           )
