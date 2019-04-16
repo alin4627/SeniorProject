@@ -150,14 +150,18 @@ class GroupSettings extends React.Component {
           <Body />
           <Right />
         </Header>
-        <Content padder style={{ backgroundColor: "#F8F8F8" }}>
-            <Button
-                light
-                onPress={this.signOutUser}
-                style={{ padding: "10%", alignSelf: "center" }}
-                >
-              <Text> Leave Group </Text>
-            </Button>
+        <Content
+          padder
+          contentContainerStyle={{ justifyContent: "center", flex: 1 }}
+          style={{ backgroundColor: "#F8F8F8" }}
+        >
+          <Button
+            light
+            onPress={this.signOutUser}
+            style={{ padding: "10%", alignSelf: "center" }}
+          >
+            <Text> Leave Group </Text>
+          </Button>
         </Content>
       </View>
     );

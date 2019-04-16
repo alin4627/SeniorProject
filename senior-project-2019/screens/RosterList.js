@@ -34,7 +34,7 @@ class RosterList extends React.Component {
     };
   }
 
-  addClass(uid, displayName) {
+  addClass(uid, displayName, position) {
     firebase
       .database()
       .ref("users/" + uid + "/classSubscriptions/" + this.state.title)
@@ -81,10 +81,13 @@ class RosterList extends React.Component {
           uid
       );
     ref.remove();
+    const newData = [...this.state.items];
+    newData.splice(position, 1);
+    this.setState({ items: newData });
     this.fetchData();
   }
 
-  removeRequest(uid) {
+  removeRequest(uid, position) {
     const ref = firebase
       .database()
       .ref(
@@ -96,6 +99,9 @@ class RosterList extends React.Component {
           uid
       );
     ref.remove();
+    const newData = [...this.state.items];
+    newData.splice(position, 1);
+    this.setState({ items: newData });
     this.fetchData();
   }
 
@@ -345,6 +351,7 @@ class RosterList extends React.Component {
   }
 
   createList = () => {
+    console.log(this.state.items);
     if (this.state.items.length > 0) {
       let list = [];
       let listitems = [];
@@ -419,7 +426,8 @@ class RosterList extends React.Component {
                                 onPress: () =>
                                   this.addClass(
                                     this.state.items[i][item].userID,
-                                    this.state.items[i][item].userName
+                                    this.state.items[i][item].userName,
+                                    i
                                   )
                               }
                             ],
@@ -449,7 +457,8 @@ class RosterList extends React.Component {
                                 text: "OK",
                                 onPress: () =>
                                   this.removeRequest(
-                                    this.state.items[i][item].userID
+                                    this.state.items[i][item].userID,
+                                    i
                                   )
                               }
                             ],
