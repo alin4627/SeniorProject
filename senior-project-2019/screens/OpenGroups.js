@@ -106,7 +106,11 @@ class OpenGroups extends React.Component {
         userName: firebase.auth().currentUser.displayName,
         userLevel: 1
       });
-    this.props.navigation.goBack();
+    this.props.navigation.navigate("GroupOptionScreen", {
+      course_title: this.state.course_title,
+      group_title: group_title,
+      category: this.state.category
+    });
   }
 
   render() {

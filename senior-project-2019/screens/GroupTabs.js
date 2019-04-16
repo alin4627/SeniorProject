@@ -29,7 +29,7 @@ class GroupTabs extends React.Component {
     const course_id = props.navigation.getParam("course_id", "Unavailable");
     const category = props.navigation.getParam("category", "Unavailable");
     this.state = {
-      userLevel:1,
+      userLevel: 1,
       title: title,
       course_id: course_id,
       category: category,
@@ -110,7 +110,10 @@ class GroupTabs extends React.Component {
             let subbed = false;
             let userList = Object.keys(items[objectKeys[i]].users);
             for (j = 0; j < userList.length; j++) {
-              if (userList[j] == firebase.auth().currentUser.uid || this.state.userLevel == 0) {
+              if (
+                userList[j] == firebase.auth().currentUser.uid ||
+                this.state.userLevel == 0
+              ) {
                 subbed = true;
               }
             }
@@ -234,7 +237,6 @@ class GroupTabs extends React.Component {
   }
 
   componentDidMount() {
-  
     this.willFocusListener = this.props.navigation.addListener(
       "willFocus",
       () => {
@@ -243,10 +245,12 @@ class GroupTabs extends React.Component {
           .ref("users/" + firebase.auth().currentUser.uid);
         ref.once("value", snapshot => {
           let items = snapshot.val();
-          this.setState({ userLevel: items.userLevel }, function () {this.fetchUserGroups();});
-        })
-        this.fetchOpenGroups();
-        this.fetchInvites();
+          this.setState({ userLevel: items.userLevel }, function() {
+            this.fetchUserGroups();
+            this.fetchOpenGroups();
+            this.fetchInvites();
+          });
+        });
       }
     );
   }
