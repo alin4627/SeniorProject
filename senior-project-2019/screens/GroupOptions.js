@@ -138,7 +138,7 @@ class GroupOptions extends React.Component {
         this.setState({
           groupPendingUsers: objectKeys
         });
-      }  
+      }
     });
   }
 
@@ -150,9 +150,8 @@ class GroupOptions extends React.Component {
   }
 
   createRequestList() {
-    let content = []
-    if (this.state.groupPendingUsers.length > 0)
-    {
+    let content = [];
+    if (this.state.groupPendingUsers.length > 0) {
       content.push(
         <ListItem
           key="groupPendingUserList"
@@ -166,14 +165,14 @@ class GroupOptions extends React.Component {
             })
           }
         >
-        <Left>
-          <Text>View Pending Members</Text>
-        </Left>
-        <Right>
-          <Icon name="arrow-forward" />
-        </Right>
-      </ListItem> 
-      )
+          <Left>
+            <Text>View Pending Members</Text>
+          </Left>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+      );
     }
     return content;
   }
@@ -228,9 +227,10 @@ class GroupOptions extends React.Component {
           key="rosterList"
           onPress={() =>
             this.props.navigation.navigate("RosterList", {
-              group_title: this.state.title,
-              course_id: this.state.course_id,
+              group_title: this.state.group_title,
+              title: this.state.course_title,
               category: this.state.category,
+              status: "current",
               source: "group"
             })
           }
@@ -326,84 +326,86 @@ class GroupOptions extends React.Component {
   }
 
   createGroupSettings() {
-    let content = []
-    if(this.state.isAdmin) {
+    console.log(this.state.group_title);
+    let content = [];
+    if (this.state.isAdmin) {
       content.push(
         <View key="adminGroupSettings">
           <ListItem
-              onPress={() =>
-                this.props.navigation.navigate("GroupSettings", {
-                  group_title: this.state.group_title,
-                  course_title: this.state.course_title,
-                  category: this.state.category
-                })
-              }
-            >
-              <Left>
-                <Text>Group Settings</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-            <ListItem
-              onPress={() =>
-                Alert.alert(
-                  "Confirmation",
-                  "You are about to leave this group",
-                  [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed!")
-                    },
-                    {
-                      text: "OK",
-                      onPress: () => this.leaveGroup()
-                    }
-                  ],
-                  { cancelable: false }
-                )
-              }
-            >
-              <Left>
-                <Text>Leave Group</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
+            onPress={() =>
+              this.props.navigation.navigate("GroupSettings", {
+                group_title: this.state.group_title,
+                course_title: this.state.course_title,
+                category: this.state.category,
+                source: "group"
+              })
+            }
+          >
+            <Left>
+              <Text>Group Settings</Text>
+            </Left>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </ListItem>
+          <ListItem
+            onPress={() =>
+              Alert.alert(
+                "Confirmation",
+                "You are about to leave this group",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed!")
+                  },
+                  {
+                    text: "OK",
+                    onPress: () => this.leaveGroup()
+                  }
+                ],
+                { cancelable: false }
+              )
+            }
+          >
+            <Left>
+              <Text>Leave Group</Text>
+            </Left>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </ListItem>
         </View>
-      )
+      );
     } else {
       content.push(
-            <ListItem
-              key="normalGroupSettings"
-              onPress={() =>
-                Alert.alert(
-                  "Confirmation",
-                  "You are about to leave this group",
-                  [
-                    {
-                      text: "Cancel",
-                      onPress: () => console.log("Cancel Pressed!")
-                    },
-                    {
-                      text: "OK",
-                      onPress: () => this.leaveGroup()
-                    }
-                  ],
-                  { cancelable: false }
-                )
-              }
-            >
-              <Left>
-                <Text>Leave Group</Text>
-              </Left>
-              <Right>
-                <Icon name="arrow-forward" />
-              </Right>
-            </ListItem>
-      )
+        <ListItem
+          key="normalGroupSettings"
+          onPress={() =>
+            Alert.alert(
+              "Confirmation",
+              "You are about to leave this group",
+              [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed!")
+                },
+                {
+                  text: "OK",
+                  onPress: () => this.leaveGroup()
+                }
+              ],
+              { cancelable: false }
+            )
+          }
+        >
+          <Left>
+            <Text>Leave Group</Text>
+          </Left>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+      );
     }
     return content;
   }
