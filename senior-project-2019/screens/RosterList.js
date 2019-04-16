@@ -498,13 +498,13 @@ class RosterList extends React.Component {
       if (this.state.status == "pending") {
         content.push(
           <View key={"emptyList"} style={styles.content}>
-            <Text>There are no pending students</Text>
+            <Text>There are no pending students.</Text>
           </View>
         );
       } else {
         content.push(
           <View key={"emptyList"} style={styles.content}>
-            <Text>No one is registered in this course</Text>
+            <Text>No one else is registered.</Text>
           </View>
         );
       }
