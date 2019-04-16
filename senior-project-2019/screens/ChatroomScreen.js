@@ -188,13 +188,17 @@ class ChatroomScreen extends React.Component {
                       .ref("users/" + firebase.auth().currentUser.uid);
                     isAdmin = false;
                     isGroupMod = false;
-                    refCheckAdmin.on("value", snapshot => {
+                    refCheckAdmin.once("value", snapshot => {
+                      
                       let items = snapshot.val();
-                      if (items.userLevel == 0) {
+                      console.log(items.userLevel)
+                      let userLevel = items.userLevel
+                      if (userLevel == 0) {
                         isAdmin = true;
                       } // check if user is a admin on app userLevel == 0
                     });
-                    const refCheckGroupMod = firebase
+                    if(isAdmin != true)
+                    {const refCheckGroupMod = firebase
                       .database()
                       .ref(
                         "Courses/" +
@@ -208,10 +212,11 @@ class ChatroomScreen extends React.Component {
                       );
                     refCheckGroupMod.on("value", snapshot => {
                       let items = snapshot.val();
+                      console.log(items.userLevel)
                       if (items.userLevel == 2) {
                         isGroupMod = true;
                       } // Checks if user is a moderator of the group userLevel == 2
-                    });
+                    });}
 
                     if (isAdmin == true || isGroupMod == true) {
                       //alert('first delete as teacher')
