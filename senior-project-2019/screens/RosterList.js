@@ -529,7 +529,7 @@ class RosterList extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Title style={{ color: "white" }}>Course Roster</Title>
+            <Title style={{ color: "white" }}>Roster List</Title>
           </Body>
           <Right />
         </Header>
