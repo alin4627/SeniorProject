@@ -35,7 +35,7 @@ class SettingsScreen extends React.Component {
     this.state = {
       items: [],
       isPending: false,
-      userLevel:1
+      userLevel: 1
     };
   }
 
@@ -57,22 +57,26 @@ class SettingsScreen extends React.Component {
       });
     });
     const ref1 = firebase.database().ref("TeacherReq/pending/");
-    ref1.once("value", function(snapshot) {
-      snapshot.forEach(function(child) {
-        let data = {};
-        data.id = child.key;
-        if(data.id == firebase.auth().currentUser.uid){
-          this.setState({ isPending:true });
-        }
-      }.bind(this));
-     
-    }.bind(this));
+    ref1.once(
+      "value",
+      function(snapshot) {
+        snapshot.forEach(
+          function(child) {
+            let data = {};
+            data.id = child.key;
+            if (data.id == firebase.auth().currentUser.uid) {
+              this.setState({ isPending: true });
+            }
+          }.bind(this)
+        );
+      }.bind(this)
+    );
   }
 
   accountType = () => {
     let content = [];
     if (this.state.userLevel == 1) {
-      content.push(<Title>Student Account</Title>);
+      content.push(<Title key="student">Student Account</Title>);
       if (this.state.isPending == true) {
         content.push(
           <Button
@@ -127,8 +131,7 @@ class SettingsScreen extends React.Component {
             {this.state.items.map(item => {
               return (
                 <View key={item.id}>
-                  <Title>{item.firstName}</Title>
-                  <Title>{item.lastName}</Title>
+                  <Title>{firebase.auth().currentUser.displayName}</Title>
                 </View>
               );
             })}
