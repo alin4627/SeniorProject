@@ -25,7 +25,7 @@ var BUTTONS = ["Copy Text ", "Delete", "Cancel"];
 var DESTRUCTIVE_INDEX = 1;
 var CANCEL_INDEX = 2;
 
-class ChatroomScreen extends React.Component {
+class PrivateChat extends React.Component{
   static navigationOptions = {
     tabBarVisible: false
   };
@@ -38,7 +38,7 @@ class ChatroomScreen extends React.Component {
     const { navigation } = this.props;
     const course_title = navigation.getParam("course_title", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
-    const group_title = navigation.getParam("group_title", "Unavailable");
+    const User_Chat = navigation.getParam("User_Chat", "Unavailable");
     const ref = firebase
       .database()
       .ref(
@@ -46,8 +46,8 @@ class ChatroomScreen extends React.Component {
           category +
           "/" +
           course_title +
-          "/Groups/" +
-          group_title +
+          "/User_Chat/" +
+          User_Chat +
           "/messages/"
       )
       .orderByChild("createdAt");
@@ -76,12 +76,11 @@ class ChatroomScreen extends React.Component {
       }
     );
   }
-
   onSend(messages = []) {
     const { navigation } = this.props;
     const course_title = navigation.getParam("course_title", "Unavailable");
     const category = navigation.getParam("category", "Unavailable");
-    const group_title = navigation.getParam("group_title", "Unavailable");
+    const User_Chat = navigation.getParam("User_Chat", "Unavailable");
 
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i]);
@@ -92,8 +91,8 @@ class ChatroomScreen extends React.Component {
             category +
             "/" +
             course_title +
-            "/Groups/" +
-            group_title +
+            "/User_Chat/" +
+            User_Chat +
             "/messages/" +
             messages[i]._id
         )
@@ -105,7 +104,6 @@ class ChatroomScreen extends React.Component {
         });
     }
   }
-
   renderMessage(props) {
     const {
       currentMessage: { text: currText }
@@ -145,7 +143,7 @@ class ChatroomScreen extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Title>Chatroom</Title>
+            <Title>Private Chatroom</Title>
           </Body>
           <Right>
             <Button transparent dark>
@@ -179,8 +177,8 @@ class ChatroomScreen extends React.Component {
                       "category",
                       "Unavailable"
                     );
-                    const group_title = navigation.getParam(
-                      "group_title",
+                    const User_Chat = navigation.getParam(
+                      "User_Chat",
                       "Unavailable"
                     );
                     const refCheckAdmin = firebase
@@ -188,35 +186,30 @@ class ChatroomScreen extends React.Component {
                       .ref("users/" + firebase.auth().currentUser.uid);
                     isAdmin = false;
                     isGroupMod = false;
-                    refCheckAdmin.once("value", snapshot => {
-                      
+                    refCheckAdmin.on("value", snapshot => {
                       let items = snapshot.val();
-                      console.log(items.userLevel)
-                      let userLevel = items.userLevel
-                      if (userLevel == 0) {
+                      if (items.userLevel == 0) {
                         isAdmin = true;
                       } // check if user is a admin on app userLevel == 0
                     });
-                    if(isAdmin != true)
-                    {const refCheckGroupMod = firebase
+                    const refCheckGroupMod = firebase
                       .database()
                       .ref(
                         "Courses/" +
                           category +
                           "/" +
                           course_title +
-                          "/Groups/" +
-                          group_title +
+                          "/User_Chat/" +
+                          User_Chat +
                           "/users/" +
                           firebase.auth().currentUser.uid
                       );
                     refCheckGroupMod.on("value", snapshot => {
                       let items = snapshot.val();
-                      console.log(items.userLevel)
                       if (items.userLevel == 2) {
                         isGroupMod = true;
                       } // Checks if user is a moderator of the group userLevel == 2
-                    });}
+                    });
 
                     if (isAdmin == true || isGroupMod == true) {
                       //alert('first delete as teacher')
@@ -227,8 +220,8 @@ class ChatroomScreen extends React.Component {
                             category +
                             "/" +
                             course_title +
-                            "/Groups/" +
-                            group_title +
+                            "/User_Chat/" +
+                            User_Chat +
                             "/messages/" +
                             currentMessage._id
                         )
@@ -252,8 +245,8 @@ class ChatroomScreen extends React.Component {
                               category +
                               "/" +
                               course_title +
-                              "/Groups/" +
-                              group_title +
+                              "/User_Chat/" +
+                              User_Chat +
                               "/messages/" +
                               currentMessage._id
                           )
@@ -285,7 +278,7 @@ class ChatroomScreen extends React.Component {
   }
 }
 
-export default ChatroomScreen;
+export default PrivateChat;
 
 const styles = StyleSheet.create({
   container: {

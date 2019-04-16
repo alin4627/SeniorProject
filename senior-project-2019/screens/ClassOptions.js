@@ -7,7 +7,7 @@ import {
   Button,
   Left,
   Body,
-  Title,
+  Badge,
   Right,
   Content,
   Text,
@@ -22,8 +22,38 @@ class ClassScreen extends React.Component {
       title: "",
       course_id: "",
       category: "",
-      isStudent: ""
+      isStudent: "",
+      pendingStudents: []
     };
+  }
+
+  getPendingUsers() {
+    const { navigation } = this.props;
+    const title = navigation.getParam("title", "Unavailable");
+    const category = navigation.getParam("category", "Unavailable");
+    const ref = firebase
+      .database()
+      .ref(
+        "Courses/" +
+          category +
+          "/" +
+          title +
+          "/users/pending"
+      );
+    ref.once("value", snapshot => {
+      if (snapshot.exists()) {
+        let items = snapshot.val();
+        var objectKeys = Object.keys(items);
+        this.setState({
+          pendingStudents: objectKeys
+        });
+      }
+      else {
+        this.setState({
+          pendingStudents: []
+        });
+      }  
+    });
   }
 
   componentDidMount() {
@@ -51,6 +81,53 @@ class ClassScreen extends React.Component {
         });
       }
     });
+    this.willFocusListener = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        this.getPendingUsers();
+        this.render();
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    this.willFocusListener.remove();
+  }
+
+  createRequestList() {
+    let content = []
+    if (this.state.pendingStudents.length > 0)
+    {
+      content.push(
+          <ListItem
+          key="pendingStudents"
+            onPress={() =>
+              this.props.navigation.navigate("RosterList", {
+                title: this.state.title,
+                course_id: this.state.course_id,
+                category: this.state.category,
+                status: "pending",
+                source: "class"
+              })
+            }
+          >
+            <Left>
+              <View style={styles.listPadding}>
+                <Badge style={styles.badge}>
+                <Text>{this.state.pendingStudents.length}</Text>
+              </Badge>
+              </View>
+              <View style={styles.listPadding}>
+                <Text>View Requested Students</Text>
+              </View>
+            </Left>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </ListItem>        
+      )
+    }
+    return content;
   }
 
   createRosterCategory() {
@@ -76,24 +153,7 @@ class ClassScreen extends React.Component {
               <Icon name="arrow-forward" />
             </Right>
           </ListItem>
-          <ListItem
-            onPress={() =>
-              this.props.navigation.navigate("RosterList", {
-                title: this.state.title,
-                course_id: this.state.course_id,
-                category: this.state.category,
-                status: "pending",
-                source: "class"
-              })
-            }
-          >
-            <Left>
-              <Text>View Requested Students</Text>
-            </Left>
-            <Right>
-              <Icon name="arrow-forward" />
-            </Right>
-          </ListItem>
+          {this.createRequestList()}
         </View>
       );
     } else {
@@ -225,5 +285,12 @@ const styles = StyleSheet.create({
   },
   categoryHeader: {
     fontWeight: "bold"
+  },
+  badge: {
+    backgroundColor: "black"
+  },
+  listPadding: {
+    paddingLeft: 2,
+    paddingRight: 2
   }
 });
