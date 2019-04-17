@@ -102,7 +102,7 @@ class HomeScreen extends React.Component {
         let listitems = [];
         listitems.push(
           <ListItem key="header">
-            <Text style={styles.listText}>Requests to be a Teacher</Text>
+            <Text style={styles.categoryHeader}>Requests to be a Teacher</Text>
           </ListItem>
         );
         for (let i = 0; i < this.state.request.length; i++) {
@@ -281,6 +281,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   categoryHeader: {
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontSize: 20
   }
 });
