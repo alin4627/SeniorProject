@@ -36,18 +36,15 @@ class PrivateChat extends React.Component{
 
   componentDidMount() {
     const { navigation } = this.props;
-    const course_title = navigation.getParam("course_title", "Unavailable");
-    const category = navigation.getParam("category", "Unavailable");
-    const User_Chat = navigation.getParam("User_Chat", "Unavailable");
+    const uid = navigation.getParam("uid", "Unavailable");
+    const users= navigation.getParam("users", "Unavailable");
     const ref = firebase
       .database()
       .ref(
-        "Courses/" +
-          category +
-          "/" +
-          course_title +
+        "users/" +
+          uid +
           "/User_Chat/" +
-          User_Chat +
+          users +
           "/messages/"
       )
       .orderByChild("createdAt");
@@ -78,21 +75,18 @@ class PrivateChat extends React.Component{
   }
   onSend(messages = []) {
     const { navigation } = this.props;
-    const course_title = navigation.getParam("course_title", "Unavailable");
-    const category = navigation.getParam("category", "Unavailable");
-    const User_Chat = navigation.getParam("User_Chat", "Unavailable");
+    const uid = navigation.getParam("uid", "Unavailable");
+    const users = navigation.getParam("users", "Unavailable");
 
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i]);
       firebase
         .database()
         .ref(
-          "Courses/" +
-            category +
-            "/" +
-            course_title +
+          "users/" +
+            uid +
             "/User_Chat/" +
-            User_Chat +
+            users +
             "/messages/" +
             messages[i]._id
         )
@@ -169,16 +163,12 @@ class PrivateChat extends React.Component{
                     break;
                   case 1:
                     const { navigation } = this.props;
-                    const course_title = navigation.getParam(
-                      "course_title",
+                    const uid = navigation.getParam(
+                      "uid",
                       "Unavailable"
                     );
-                    const category = navigation.getParam(
-                      "category",
-                      "Unavailable"
-                    );
-                    const User_Chat = navigation.getParam(
-                      "User_Chat",
+                    const users = navigation.getParam(
+                      "users",
                       "Unavailable"
                     );
                     const refCheckAdmin = firebase
@@ -195,12 +185,10 @@ class PrivateChat extends React.Component{
                     const refCheckGroupMod = firebase
                       .database()
                       .ref(
-                        "Courses/" +
-                          category +
-                          "/" +
-                          course_title +
+                        "users/" +
+                          uid +
                           "/User_Chat/" +
-                          User_Chat +
+                          users +
                           "/users/" +
                           firebase.auth().currentUser.uid
                       );
@@ -216,12 +204,10 @@ class PrivateChat extends React.Component{
                       firebase
                         .database()
                         .ref(
-                          "Courses/" +
-                            category +
-                            "/" +
-                            course_title +
+                          "users/" +
+                            uid +
                             "/User_Chat/" +
-                            User_Chat +
+                            users +
                             "/messages/" +
                             currentMessage._id
                         )
@@ -241,12 +227,10 @@ class PrivateChat extends React.Component{
                         firebase
                           .database()
                           .ref(
-                            "Courses/" +
-                              category +
-                              "/" +
-                              course_title +
+                            "users/" +
+                              uid +
                               "/User_Chat/" +
-                              User_Chat +
+                              users +
                               "/messages/" +
                               currentMessage._id
                           )
