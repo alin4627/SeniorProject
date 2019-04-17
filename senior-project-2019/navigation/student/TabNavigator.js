@@ -25,7 +25,7 @@ import {
   createAppContainer
 } from "react-navigation";
 import HomeScreen from "../../screens/HomeScreen";
-import ChatroomScreen from "../../screens/ChatroomScreen";
+import MessageStack from "../MessageStack";
 import CourseNavigator from "./CourseNavigator";
 import SettingsScreen from "../../screens/SettingsScreen";
 
@@ -87,24 +87,26 @@ const HomeStack = createStackNavigator(
   }
 );
 
-const OtherGroupStack = createStackNavigator(
-  {
-    OtherGroups: OtherGroupsScreen,
-    Chat: ChatroomScreen
-  },
-  {
-    defaultNavigationOptions: {
-      header: null
-    }
-  }
-);
-
 CourseNavigator.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
 
   let routeName = navigation.state.routes[navigation.state.index].routeName;
 
   if (routeName == "ChatroomScreen") {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarVisible
+  };
+};
+
+MessageStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+
+  let routeName = navigation.state.routes[navigation.state.index].routeName;
+
+  if (routeName == "PrivateChat") {
     tabBarVisible = false;
   }
 
@@ -141,7 +143,7 @@ export default createAppContainer(
         }
       },
       Messages: {
-        screen: OtherGroupStack,
+        screen: MessageStack,
         navigationOptions: {
           tabBarLabel: "Messages",
           tabBarIcon: ({ tintColor, activeTintColor }) => (
