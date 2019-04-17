@@ -183,7 +183,7 @@ class HomeScreen extends React.Component {
             </ListItem>
           );
           listitems.push(
-            <ListItem>
+            <ListItem key="reason">
               <Text style={styles.listText}>
                 Expertise: {this.state.request[i].expertise} {"\n"}Reason:
                 {this.state.request[i].Reasons}
@@ -197,12 +197,12 @@ class HomeScreen extends React.Component {
         let list = [];
         let listitems = [];
         listitems.push(
-          <ListItem key="header">
+          <ListItem key="requests">
             <Text style={styles.listText}>Requests to be a Teacher</Text>
           </ListItem>
         );
         listitems.push(
-          <ListItem key="header">
+          <ListItem key="no-requests">
             <Text style={styles.listText}>No Requests</Text>
           </ListItem>
         );
