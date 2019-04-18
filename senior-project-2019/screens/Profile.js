@@ -68,7 +68,10 @@ class Profile extends React.Component {
             <Text style={styles.userNameHeader}>{this.state.userName}</Text>
             <Button style={{ padding: "10%", alignSelf: "center" }}
             onPress={() => 
-              this.props.navigation.navigate("PrivateChat")
+              this.props.navigation.navigate("PrivateChat", {
+                uid: this.state.uid,
+                userName: this.state.userName
+              })
           }
             >
               <Text style={{ color: "white" }}> Message User </Text>

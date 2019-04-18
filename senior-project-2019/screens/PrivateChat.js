@@ -37,14 +37,14 @@ class PrivateChat extends React.Component{
   componentDidMount() {
     const { navigation } = this.props;
     const uid = navigation.getParam("uid", "Unavailable");
-    const users= navigation.getParam("users", "Unavailable");
+    const userName= navigation.getParam("userName", "Unavailable");
     const ref = firebase
       .database()
       .ref(
         "users/" +
           uid +
           "/User_Chat/" +
-          users +
+          userName +
           "/messages/"
       )
       .orderByChild("createdAt");
@@ -76,7 +76,7 @@ class PrivateChat extends React.Component{
   onSend(messages = []) {
     const { navigation } = this.props;
     const uid = navigation.getParam("uid", "Unavailable");
-    const users = navigation.getParam("users", "Unavailable");
+    const userName = navigation.getParam("userName", "Unavailable");
 
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i]);
@@ -86,7 +86,7 @@ class PrivateChat extends React.Component{
           "users/" +
             uid +
             "/User_Chat/" +
-            users +
+            userName +
             "/messages/" +
             messages[i]._id
         )
@@ -167,8 +167,8 @@ class PrivateChat extends React.Component{
                       "uid",
                       "Unavailable"
                     );
-                    const users = navigation.getParam(
-                      "users",
+                    const userName = navigation.getParam(
+                      "userName",
                       "Unavailable"
                     );
                     const refCheckAdmin = firebase
@@ -188,7 +188,7 @@ class PrivateChat extends React.Component{
                         "users/" +
                           uid +
                           "/User_Chat/" +
-                          users +
+                          userName +
                           "/users/" +
                           firebase.auth().currentUser.uid
                       );
@@ -207,7 +207,7 @@ class PrivateChat extends React.Component{
                           "users/" +
                             uid +
                             "/User_Chat/" +
-                            users +
+                            userName +
                             "/messages/" +
                             currentMessage._id
                         )
@@ -230,7 +230,7 @@ class PrivateChat extends React.Component{
                             "users/" +
                               uid +
                               "/User_Chat/" +
-                              users +
+                              userName +
                               "/messages/" +
                               currentMessage._id
                           )
