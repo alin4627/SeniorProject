@@ -41,7 +41,7 @@ class PrivateChat extends React.Component{
     const ref = firebase
       .database()
       .ref(
-        "users/" +
+        "Messages/" +
           uid +
           "/User_Chat/" +
           userName +
@@ -83,7 +83,7 @@ class PrivateChat extends React.Component{
       firebase
         .database()
         .ref(
-          "users/" +
+          "Messages/" +
             uid +
             "/User_Chat/" +
             userName +
@@ -185,7 +185,7 @@ class PrivateChat extends React.Component{
                     const refCheckGroupMod = firebase
                       .database()
                       .ref(
-                        "users/" +
+                        "Messages/" +
                           uid +
                           "/User_Chat/" +
                           userName +
@@ -204,7 +204,7 @@ class PrivateChat extends React.Component{
                       firebase
                         .database()
                         .ref(
-                          "users/" +
+                          "Messages/" +
                             uid +
                             "/User_Chat/" +
                             userName +
@@ -227,7 +227,7 @@ class PrivateChat extends React.Component{
                         firebase
                           .database()
                           .ref(
-                            "users/" +
+                            "Messages/" +
                               uid +
                               "/User_Chat/" +
                               userName +
