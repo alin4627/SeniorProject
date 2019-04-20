@@ -36,9 +36,7 @@ class HomeScreen extends React.Component {
       .ref("users/" + firebase.auth().currentUser.uid);
     ref.once("value", snapshot => {
       let items = snapshot.val();
-      this.setState({ userLevel: items.userLevel }, function() {
-        this.generateState();
-      });
+      this.setState({ userLevel: items.userLevel });
     });
   }
 
@@ -97,6 +95,7 @@ class HomeScreen extends React.Component {
   generateContent = () => {
     if (this.state.userLevel == 0) {
       //user is a admin
+      this.generateState()
       if (this.state.request.length > 0) {
         let list = [];
         let listitems = [];
