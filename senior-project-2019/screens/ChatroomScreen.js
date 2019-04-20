@@ -124,6 +124,109 @@ class ChatroomScreen extends React.Component {
     return <SlackMessage {...props} messageTextStyle={messageTextStyle} />;
   }
 
+  longpress(currentMessage) {
+    const { navigation } = this.props;
+            const course_title = navigation.getParam(
+              "course_title",
+              "Unavailable"
+            );
+            const category = navigation.getParam(
+              "category",
+              "Unavailable"
+            );
+            const group_title = navigation.getParam(
+              "group_title",
+              "Unavailable"
+            );
+            const refCheckAdmin = firebase
+              .database()
+              .ref("users/" + firebase.auth().currentUser.uid);
+            isAdmin = false;
+            isGroupMod = false;
+            refCheckAdmin.once("value", snapshot => {
+              
+              let items = snapshot.val();
+              console.log(items.userLevel)
+              let userLevel = items.userLevel
+              if (userLevel == 0) {
+                isAdmin = true;
+              } // check if user is a admin on app userLevel == 0
+            });
+            if(isAdmin != true)
+            {const refCheckGroupMod = firebase
+              .database()
+              .ref(
+                "Courses/" +
+                  category +
+                  "/" +
+                  course_title +
+                  "/Groups/" +
+                  group_title +
+                  "/users/" +
+                  firebase.auth().currentUser.uid
+              );
+            refCheckGroupMod.on("value", snapshot => {
+              let items = snapshot.val();
+              console.log(items.userLevel)
+              if (items.userLevel == 2) {
+                isGroupMod = true;
+              } // Checks if user is a moderator of the group userLevel == 2
+            });}
+    if (isAdmin == true || isGroupMod == true || currentMessage.user._id == firebase.auth().currentUser.uid) {
+    ActionSheet.show(
+      {
+        options: BUTTONS,
+        cancelButtonIndex: CANCEL_INDEX,
+        destructiveButtonIndex: DESTRUCTIVE_INDEX,
+        title: "ActionSheet"
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0:
+            Clipboard.setString(currentMessage.text);
+            break;
+          case 1:
+              firebase
+                .database()
+                .ref(
+                  "Courses/" +
+                    category +
+                    "/" +
+                    course_title +
+                    "/Groups/" +
+                    group_title +
+                    "/messages/" +
+                    currentMessage._id
+                )
+                .remove();
+              alert(
+                currentMessage.text +
+                  " written by " +
+                  currentMessage.user.name +
+                  " has been deleted"
+              );
+            }
+        }
+      )
+    }
+    else {
+      ActionSheet.show(
+        {
+          options: ["Copy Text ", "Cancel"],
+          cancelButtonIndex: 1,
+          title: "ActionSheet"
+        },
+        buttonIndex => {
+          switch (buttonIndex) {
+            case 0:
+              Clipboard.setString(currentMessage.text);
+              break;
+          }
+        }
+      )
+    }
+  }
+
   render() {
     var user = firebase.auth().currentUser;
     var s = "";
@@ -156,121 +259,7 @@ class ChatroomScreen extends React.Component {
         <GiftedChat
           messages={this.state.messages}
           onSend={messages => this.onSend(messages)}
-          onLongPress={(ctx, currentMessage) =>
-            ActionSheet.show(
-              {
-                options: BUTTONS,
-                cancelButtonIndex: CANCEL_INDEX,
-                destructiveButtonIndex: DESTRUCTIVE_INDEX,
-                title: "Testing ActionSheet"
-              },
-              buttonIndex => {
-                switch (buttonIndex) {
-                  case 0:
-                    Clipboard.setString(currentMessage.text);
-                    break;
-                  case 1:
-                    const { navigation } = this.props;
-                    const course_title = navigation.getParam(
-                      "course_title",
-                      "Unavailable"
-                    );
-                    const category = navigation.getParam(
-                      "category",
-                      "Unavailable"
-                    );
-                    const group_title = navigation.getParam(
-                      "group_title",
-                      "Unavailable"
-                    );
-                    const refCheckAdmin = firebase
-                      .database()
-                      .ref("users/" + firebase.auth().currentUser.uid);
-                    isAdmin = false;
-                    isGroupMod = false;
-                    refCheckAdmin.once("value", snapshot => {
-                      
-                      let items = snapshot.val();
-                      console.log(items.userLevel)
-                      let userLevel = items.userLevel
-                      if (userLevel == 0) {
-                        isAdmin = true;
-                      } // check if user is a admin on app userLevel == 0
-                    });
-                    if(isAdmin != true)
-                    {const refCheckGroupMod = firebase
-                      .database()
-                      .ref(
-                        "Courses/" +
-                          category +
-                          "/" +
-                          course_title +
-                          "/Groups/" +
-                          group_title +
-                          "/users/" +
-                          firebase.auth().currentUser.uid
-                      );
-                    refCheckGroupMod.on("value", snapshot => {
-                      let items = snapshot.val();
-                      console.log(items.userLevel)
-                      if (items.userLevel == 2) {
-                        isGroupMod = true;
-                      } // Checks if user is a moderator of the group userLevel == 2
-                    });}
-
-                    if (isAdmin == true || isGroupMod == true) {
-                      //alert('first delete as teacher')
-                      firebase
-                        .database()
-                        .ref(
-                          "Courses/" +
-                            category +
-                            "/" +
-                            course_title +
-                            "/Groups/" +
-                            group_title +
-                            "/messages/" +
-                            currentMessage._id
-                        )
-                        .remove();
-                      alert(
-                        currentMessage.text +
-                          " written by " +
-                          currentMessage.user.name +
-                          " has been deleted"
-                      );
-                    } else {
-                      if (
-                        currentMessage.user._id ==
-                        firebase.auth().currentUser.uid
-                      ) {
-                        //alert('2 delete as student')
-                        firebase
-                          .database()
-                          .ref(
-                            "Courses/" +
-                              category +
-                              "/" +
-                              course_title +
-                              "/Groups/" +
-                              group_title +
-                              "/messages/" +
-                              currentMessage._id
-                          )
-                          .remove();
-                        alert(
-                          currentMessage.text +
-                            " written by " +
-                            currentMessage.user.name +
-                            " has been deleted"
-                        );
-                      } else {
-                        alert("Cannot delete other Users Messages");
-                      }
-                    }
-                }
-              }
-            )
+          onLongPress={(ctx, currentMessage) => this.longpress(currentMessage)
           }
           user={{
             _id: firebase.auth().currentUser.uid,
