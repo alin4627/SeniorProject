@@ -32,6 +32,39 @@ class MessagesScreen extends React.Component {
     };
   }
 
+  getUserClasses() {
+    let newState = [];
+    const ref = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid + "/classSubscriptions/");
+    ref.once(
+      "value",
+      snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          // console.log(items)
+          var objectKeys = Object.keys(items);
+          for (i = 0; i < objectKeys.length; i++) {
+            let data = {};
+            data[objectKeys[i]] = {
+              id: items[objectKeys[i]].course_id,
+              title: items[objectKeys[i]].course_title,
+              category: items[objectKeys[i]].category
+            };
+            newState.push(data);
+          }
+          this.setState({
+            classes: newState,
+            classStatus: true
+          });
+        }
+      },
+      function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      }
+    );
+  }
+
   fetchUserGroups() {
     let newState = [];
     if (this.state.classes.length > 0) {
@@ -96,41 +129,7 @@ class MessagesScreen extends React.Component {
     );
   }
 
-  getUserClasses() {
-    let newState = [];
-    const ref = firebase
-      .database()
-      .ref("users/" + firebase.auth().currentUser.uid + "/classSubscriptions/");
-    ref.once(
-      "value",
-      snapshot => {
-        if (snapshot.exists()) {
-          let items = snapshot.val();
-          // console.log(items)
-          var objectKeys = Object.keys(items);
-          for (i = 0; i < objectKeys.length; i++) {
-            let data = {};
-            data[objectKeys[i]] = {
-              id: items[objectKeys[i]].course_id,
-              title: items[objectKeys[i]].course_title,
-              category: items[objectKeys[i]].category
-            };
-            newState.push(data);
-          }
-          this.setState({
-            classes: newState,
-            classStatus: true
-          });
-        }
-      },
-      function(errorObject) {
-        console.log("The read failed: " + errorObject.code);
-      }
-    );
-  }
-
   render() {
-    console.log(this.state.classes);
     console.log(this.state.userGroups);
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>

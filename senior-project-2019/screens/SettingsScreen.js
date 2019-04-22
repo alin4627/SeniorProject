@@ -97,7 +97,7 @@ class SettingsScreen extends React.Component {
             onPress={() => this.props.navigation.navigate("BeTeacherReq")}
             style={{ padding: "10%", alignSelf: "center" }}
           >
-            <Text> Request Teacher Priveledges </Text>
+            <Text> Request Teacher Privileges </Text>
           </Button>
         );
       }
