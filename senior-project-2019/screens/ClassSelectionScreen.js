@@ -35,6 +35,8 @@ class ClassesSelectionScreen extends React.Component {
       let items = snapshot.val();
       let newState = [];
       var objectKeys = Object.keys(items);
+      console.log(items);
+      console.log(objectKeys);
       for (i = 0; i < objectKeys.length; i++) {
         let data = {};
         data.id = objectKeys[i];
@@ -94,20 +96,27 @@ class ClassesSelectionScreen extends React.Component {
   };
 
   createAddClass = () => {
-    let content = []
-    const ref = firebase.database().ref('users/' + firebase.auth().currentUser.uid);
+    let content = [];
+    const ref = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid);
     ref.on("value", snapshot => {
       let items = snapshot.val();
       if (items.userLevel == 2) {
         content.push(
-          <Button transparent dark onPress={() => this.props.navigation.navigate("ClassCreate")} key="createClass">
-              <Icon name="add" style={{color: "white" }} />
+          <Button
+            transparent
+            dark
+            onPress={() => this.props.navigation.navigate("ClassCreate")}
+            key="createClass"
+          >
+            <Icon name="add" style={{ color: "white" }} />
           </Button>
-        )
+        );
       }
-    })
+    });
     return content;
-  }
+  };
 
   render() {
     return (
@@ -128,9 +137,7 @@ class ClassesSelectionScreen extends React.Component {
           <Body>
             <Title style={{ color: "white" }}>All Courses</Title>
           </Body>
-          <Right>
-            {this.createAddClass()}
-          </Right>
+          <Right>{this.createAddClass()}</Right>
         </Header>
         <Content style={{ backgroundColor: "#F8F8F8" }}>
           <List>{this.createList()}</List>

@@ -13,6 +13,8 @@ import {
   Body,
   Title,
   Right,
+  Tabs,
+  Tab,
   List,
   ListItem,
   Thumbnail,
@@ -96,8 +98,6 @@ class MessagesScreen extends React.Component {
                     let data = {
                       course_title: courseTitle,
                       group_title: objectKeys[i],
-                      users_length: Object.keys(items[objectKeys[i]].users)
-                        .length,
                       category: courseCategory
                     };
                     if (subbed) {
@@ -129,11 +129,39 @@ class MessagesScreen extends React.Component {
     );
   }
 
+  createList = () => {
+    let list = [];
+    for (let i = 0; i < this.state.userGroups.length; i++) {
+      console.log(this.state.userGroups[i].group_title);
+      list.push(
+        <ListItem
+          key={this.state.userGroups[i].group_title}
+          onPress={() =>
+            this.props.navigation.navigate("ChatroomScreen", {
+              group_title: this.state.userGroups[i].group_title,
+              course_title: this.state.userGroups[i].course_title,
+              category: this.state.userGroups[i].category
+            })
+          }
+        >
+          <Left>
+            <Text>{this.state.userGroups[i].group_title}</Text>
+          </Left>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+      );
+    }
+    return list;
+  };
+
   render() {
-    console.log(this.state.userGroups);
+    // console.log(this.state.userGroups);
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <Header
+          hasTabs
           iosBarStyle={"light-content"}
           style={{ backgroundColor: "#333333" }}
         >
@@ -155,8 +183,25 @@ class MessagesScreen extends React.Component {
             </Button>
           </Right>
         </Header>
-        <Content padder>
-          <List>
+        <Tabs>
+          <Tab
+            tabStyle={{ backgroundColor: "#333333" }}
+            activeTabStyle={{ backgroundColor: "#333333" }}
+            activeTextStyle={{ color: "white" }}
+            heading="Group Chatrooms"
+          >
+            <View>
+              <List>{this.createList()}</List>
+            </View>
+          </Tab>
+          <Tab
+            tabStyle={{ backgroundColor: "#333333" }}
+            activeTabStyle={{ backgroundColor: "#333333" }}
+            activeTextStyle={{ color: "white" }}
+            heading="Direct Messages"
+          />
+        </Tabs>
+        {/* <List>
             <ListItem avatar>
               <Left>
                 <Thumbnail
@@ -177,8 +222,7 @@ class MessagesScreen extends React.Component {
                 <Text note>3:43 pm</Text>
               </Right>
             </ListItem>
-          </List>
-        </Content>
+          </List> */}
       </KeyboardAvoidingView>
     );
   }

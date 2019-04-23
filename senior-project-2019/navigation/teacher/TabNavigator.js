@@ -59,7 +59,7 @@ MessageStack.navigationOptions = ({ navigation }) => {
 
   let routeName = navigation.state.routes[navigation.state.index].routeName;
 
-  if (routeName == "PrivateChat") {
+  if (routeName == "PrivateChat" || routeName == "ChatroomScreen") {
     tabBarVisible = false;
   }
 
