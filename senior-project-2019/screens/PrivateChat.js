@@ -25,7 +25,7 @@ var BUTTONS = ["Copy Text ", "Delete", "Cancel"];
 var DESTRUCTIVE_INDEX = 1;
 var CANCEL_INDEX = 2;
 
-class PrivateChat extends React.Component{
+class PrivateChat extends React.Component {
   static navigationOptions = {
     tabBarVisible: false
   };
@@ -37,16 +37,10 @@ class PrivateChat extends React.Component{
   componentDidMount() {
     const { navigation } = this.props;
     const uid = navigation.getParam("uid", "Unavailable");
-    const userName= navigation.getParam("userName", "Unavailable");
+    const users = navigation.getParam("users", "Unavailable");
     const ref = firebase
       .database()
-      .ref(
-        "Messages/" +
-          uid +
-          "/User_Chat/" +
-          userName +
-          "/messages/"
-      )
+      .ref("users/" + uid + "/User_Chat/" + users + "/messages/")
       .orderByChild("createdAt");
     ref.on(
       "value",
@@ -76,17 +70,17 @@ class PrivateChat extends React.Component{
   onSend(messages = []) {
     const { navigation } = this.props;
     const uid = navigation.getParam("uid", "Unavailable");
-    const userName = navigation.getParam("userName", "Unavailable");
+    const users = navigation.getParam("users", "Unavailable");
 
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i]);
       firebase
         .database()
         .ref(
-          "Messages/" +
+          "users/" +
             uid +
             "/User_Chat/" +
-            userName +
+            users +
             "/messages/" +
             messages[i]._id
         )
@@ -163,14 +157,8 @@ class PrivateChat extends React.Component{
                     break;
                   case 1:
                     const { navigation } = this.props;
-                    const uid = navigation.getParam(
-                      "uid",
-                      "Unavailable"
-                    );
-                    const userName = navigation.getParam(
-                      "userName",
-                      "Unavailable"
-                    );
+                    const uid = navigation.getParam("uid", "Unavailable");
+                    const users = navigation.getParam("users", "Unavailable");
                     const refCheckAdmin = firebase
                       .database()
                       .ref("users/" + firebase.auth().currentUser.uid);
@@ -185,10 +173,10 @@ class PrivateChat extends React.Component{
                     const refCheckGroupMod = firebase
                       .database()
                       .ref(
-                        "Messages/" +
+                        "users/" +
                           uid +
                           "/User_Chat/" +
-                          userName +
+                          users +
                           "/users/" +
                           firebase.auth().currentUser.uid
                       );
@@ -204,10 +192,10 @@ class PrivateChat extends React.Component{
                       firebase
                         .database()
                         .ref(
-                          "Messages/" +
+                          "users/" +
                             uid +
                             "/User_Chat/" +
-                            userName +
+                            users +
                             "/messages/" +
                             currentMessage._id
                         )
@@ -227,10 +215,10 @@ class PrivateChat extends React.Component{
                         firebase
                           .database()
                           .ref(
-                            "Messages/" +
+                            "users/" +
                               uid +
                               "/User_Chat/" +
-                              userName +
+                              users +
                               "/messages/" +
                               currentMessage._id
                           )

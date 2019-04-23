@@ -144,9 +144,12 @@ class MessagesScreen extends React.Component {
             })
           }
         >
-          <Left>
+          <Body>
+            <Text style={styles.courseTitle}>
+              {this.state.userGroups[i].course_title}
+            </Text>
             <Text>{this.state.userGroups[i].group_title}</Text>
-          </Left>
+          </Body>
           <Right>
             <Icon name="arrow-forward" />
           </Right>
@@ -233,5 +236,8 @@ export default MessagesScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  courseTitle: {
+    fontWeight: "bold"
   }
 });
