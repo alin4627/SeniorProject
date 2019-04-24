@@ -32,6 +32,43 @@ class Profile extends React.Component {
     });
   }
 
+  checkUserChat() {
+    let newState = [];
+    const ref = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid + "/userMessages/");
+    ref.once(
+      "value",
+      snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          this.props.navigation.navigate("PrivateChat", {
+            uid: this.state.uid,
+            userName: this.state.userName
+          });
+          // console.log(items)
+          // var objectKeys = Object.keys(items);
+          // for (i = 0; i < objectKeys.length; i++) {
+          //   let data = {};
+          //   data[objectKeys[i]] = {
+          //     id: items[objectKeys[i]].course_id,
+          //     title: items[objectKeys[i]].course_title,
+          //     category: items[objectKeys[i]].category
+          //   };
+          //   newState.push(data);
+          // }
+          // this.setState({
+          //   classes: newState,
+          //   classStatus: true
+          // });
+        }
+      },
+      function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      }
+    );
+  }
+
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -66,17 +103,17 @@ class Profile extends React.Component {
               }}
             />
             <Text style={styles.userNameHeader}>{this.state.userName}</Text>
-            <Button style={{ padding: "10%", alignSelf: "center" }}
-            onPress={() => 
-              this.props.navigation.navigate("PrivateChat", {
-                uid: this.state.uid,
-                userName: this.state.userName
-              })
-          }
+            <Button
+              style={{ padding: "10%", alignSelf: "center" }}
+              onPress={() =>
+                this.props.navigation.navigate("PrivateChat", {
+                  uid: this.state.uid,
+                  userName: this.state.userName
+                })
+              }
             >
               <Text style={{ color: "white" }}> Message User </Text>
-              
-            </Button >
+            </Button>
           </View>
         </Content>
       </KeyboardAvoidingView>
