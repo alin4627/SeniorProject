@@ -22,6 +22,16 @@ class Profile extends React.Component {
     };
   }
 
+  makeid(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+
   componentDidMount() {
     const { navigation } = this.props;
     const uid = navigation.getParam("userID", "Unavailable");
@@ -42,25 +52,27 @@ class Profile extends React.Component {
       snapshot => {
         if (snapshot.exists()) {
           let items = snapshot.val();
-          this.props.navigation.navigate("PrivateChat", {
-            uid: this.state.uid,
-            userName: this.state.userName
-          });
-          // console.log(items)
-          // var objectKeys = Object.keys(items);
-          // for (i = 0; i < objectKeys.length; i++) {
-          //   let data = {};
-          //   data[objectKeys[i]] = {
-          //     id: items[objectKeys[i]].course_id,
-          //     title: items[objectKeys[i]].course_title,
-          //     category: items[objectKeys[i]].category
-          //   };
-          //   newState.push(data);
-          // }
-          // this.setState({
-          //   classes: newState,
-          //   classStatus: true
+          console.log(items)
+          console.log('Found messages')
+          // this.props.navigation.navigate("PrivateChat", {
+          //   uid: this.state.uid,
+          //   userName: this.state.userName
           // });
+        } else {
+          let messagesID = this.makeid(25);
+          console.log(messagesID)
+          firebase
+          .database()
+          .ref("users/" + firebase.auth().currentUser.uid + "/userMessages/" + messagesID)
+          .set({
+            other_user_uid: this.state.uid
+          });
+          firebase
+          .database()
+          .ref("Messages/" + messagesID + "/users/")
+          .set({
+            other_user_uid: this.state.uid
+          });
         }
       },
       function(errorObject) {
@@ -106,10 +118,7 @@ class Profile extends React.Component {
             <Button
               style={{ padding: "10%", alignSelf: "center" }}
               onPress={() =>
-                this.props.navigation.navigate("PrivateChat", {
-                  uid: this.state.uid,
-                  userName: this.state.userName
-                })
+                this.checkUserChat()
               }
             >
               <Text style={{ color: "white" }}> Message User </Text>

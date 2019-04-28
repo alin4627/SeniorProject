@@ -351,7 +351,6 @@ class RosterList extends React.Component {
   }
 
   createList = () => {
-    console.log(this.state.items);
     if (this.state.items.length > 0) {
       let list = [];
       let listitems = [];
