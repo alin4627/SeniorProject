@@ -476,7 +476,11 @@ class GroupOptions extends React.Component {
               <Text style={styles.categoryHeader}>UPLOADS</Text>
             </ListItem>
             <ListItem
-              onPress={() => this.props.navigation.navigate("UploadScreen")}
+              onPress={() => this.props.navigation.navigate("UploadScreen", {
+                group_title: this.state.group_title,
+                course_title: this.state.course_title,
+                category: this.state.category
+              })}
             >
               <Left>
                 <Text>Files/Uploads</Text>

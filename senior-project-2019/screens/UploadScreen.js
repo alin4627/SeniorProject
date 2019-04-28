@@ -15,15 +15,31 @@ import { Constants, ImagePicker, Permissions } from 'expo';
 import uuid from 'uuid';
 import * as firebase from 'firebase';
 
-export default class App extends React.Component {
-  state = {
-    image: null,
-    uploading: false,
-  };
-  
+export default class UploadScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      group_title: "",
+      course_title: "",
+      category: "",
+      image: null,
+      uploading: false,
+    };
+  }
+
   async componentDidMount() {
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
     await Permissions.askAsync(Permissions.CAMERA);
+    const { navigation } = this.props;
+    const group_title = navigation.getParam("group_title", "Unavailable");
+    const course_title = navigation.getParam("course_title", "Unavailable");
+    const category = navigation.getParam("category", "Unavailable");
+    this.setState({
+      group_title: group_title,
+      course_title: course_title,
+      category: category
+    });
+    alert(this.state.category + this.state.course_title +  this.state.group_title)
   }
 
   render() {
@@ -149,7 +165,15 @@ export default class App extends React.Component {
       this.setState({ uploading: true });
 
       if (!pickerResult.cancelled) {
-        uploadUrl = await uploadImageAsync(pickerResult.uri);
+        const ref1 = firebase
+         .storage()
+          .ref("Courses/" +
+            this.state.category +
+            "/" +
+            this.state.course_title +
+            "/Groups/" +
+            this.state.group_title + "/images/")
+        uploadUrl = await uploadImageAsync(pickerResult.uri , ref1);
         this.setState({ image: uploadUrl });
       }
     } catch (e) {
@@ -161,7 +185,7 @@ export default class App extends React.Component {
   };
 }
 
-async function uploadImageAsync(uri) {
+async function uploadImageAsync(uri,ref) {
   // Why are we using XMLHttpRequest? See:
   // https://github.com/expo/expo/issues/2402#issuecomment-443726662
   const blob = await new Promise((resolve, reject) => {
@@ -176,12 +200,10 @@ async function uploadImageAsync(uri) {
     xhr.responseType = 'blob';
     xhr.open('GET', uri, true);
     xhr.send(null);
-  });
-
-  const ref = firebase
-    .storage()
-    .ref('images/')
-    .child(uuid.v4());
+  })
+  console.log(ref)
+  
+  ref.child(uuid.v4());
   const snapshot = await ref.put(blob);
 
   // We're done with the blob, close and release it
