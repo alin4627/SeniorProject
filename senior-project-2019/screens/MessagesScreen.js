@@ -17,6 +17,7 @@ import {
   Tab,
   List,
   ListItem,
+  Spinner,
   Thumbnail,
   Icon,
   Content
@@ -28,7 +29,7 @@ class MessagesScreen extends React.Component {
     super(props);
     this.state = {
       classStatus: false,
-      groupsStatus: false,
+      loadingGroups: true,
       classes: [],
       userGroups: []
     };
@@ -105,7 +106,7 @@ class MessagesScreen extends React.Component {
                     }
                   }
                   this.setState({
-                    userGroups: newState
+                    userGroups: newState,
                   });
                 }
               },
@@ -117,6 +118,9 @@ class MessagesScreen extends React.Component {
         }
       }
     }
+    this.setState({
+      loadingGroups: false
+    });
   }
 
   componentDidMount() {
@@ -159,7 +163,69 @@ class MessagesScreen extends React.Component {
     return list;
   };
 
+  isLoading() {
+    if(this.state.loadingGroups) {
+      return(
+        <View>
+          <Spinner color='blue' />
+        </View>
+      )
+    } else {
+      <View>
+        <List>{this.createList()}</List>
+      </View>
+    }
+  }
+
   render() {
+    if(this.state.loadingGroups) {
+      return(
+        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <Header
+          hasTabs
+          iosBarStyle={"light-content"}
+          style={{ backgroundColor: "#333333" }}
+        >
+          <Left />
+          <Body>
+            <Title style={{ color: "white" }}>Messages</Title>
+          </Body>
+          <Right>
+            <Button
+              transparent
+              dark
+              onPress={() =>
+                this.props.navigation.navigate("RosterList", {
+                  source: "all"
+                })
+              }
+            >
+              <Icon name="add" style={{ color: "white" }} />
+            </Button>
+          </Right>
+        </Header>
+        <Tabs>
+          <Tab
+            tabStyle={{ backgroundColor: "#333333" }}
+            activeTabStyle={{ backgroundColor: "#333333" }}
+            activeTextStyle={{ color: "white" }}
+            heading="Group Chatrooms"
+          >
+            <View>
+              <Spinner color='blue' />
+            </View>
+          </Tab>
+          <Tab
+            tabStyle={{ backgroundColor: "#333333" }}
+            activeTabStyle={{ backgroundColor: "#333333" }}
+            activeTextStyle={{ color: "white" }}
+            heading="Direct Messages"
+          />
+        </Tabs>
+      </KeyboardAvoidingView>
+      )
+    }
+    
     // console.log(this.state.userGroups);
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
