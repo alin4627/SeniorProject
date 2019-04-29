@@ -1,16 +1,27 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  Button,
   Clipboard,
   Image,
   Share,
   StatusBar,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import {
+  Header,
+  List,
+  ListItem,
+  Button,
+  Left,
+  Body,
+  Title,
+  Right,
+  Content,
+  Text,
+  Icon
+} from "native-base";
 import { Constants, ImagePicker, Permissions } from 'expo';
 import uuid from 'uuid';
 import * as firebase from 'firebase';
@@ -39,37 +50,56 @@ export default class UploadScreen extends React.Component {
       course_title: course_title,
       category: category
     });
-    alert(this.state.category + this.state.course_title +  this.state.group_title)
+    //alert(this.state.category + this.state.course_title +  this.state.group_title)
   }
 
   render() {
     let { image } = this.state;
 
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        {image ? null : (
-          <Text
-            style={{
-              fontSize: 20,
-              marginBottom: 20,
-              textAlign: 'center',
-              marginHorizontal: 15,
-            }}>
-            Example: Upload ImagePicker result
-          </Text>
-        )}
+      <View behavior="padding" style={styles.container}>
+        <Header transparent style={{ backgroundColor: "#F8F8F8" }}>
+          <Left>
+            <Button
+              transparent
+              dark
+              onPress={() => this.props.navigation.goBack()}
+            >
+              <Icon name="arrow-back" style={{ padding: 5 }} />
+            </Button>
+          </Left>
+          <Body />
+          <Right />
+        </Header>
+        <Content padder style={{ backgroundColor: "#F8F8F8" }}>
+          <View>
+            {image ? null : (
+              <Text>
+                Upload a Image
+              </Text>
+            )}
+            <Button
+                light
+                onPress={this._pickImage}
+                style={{ padding: "10%" }}
+              >
+                <Text> Pick an image from camera  </Text>
+            </Button>
 
-        <Button
-          onPress={this._pickImage}
-          title="Pick an image from camera roll"
-        />
+            <Button
+                light
+                onPress={this._takePhoto}
+                style={{ padding: "10%"}}
+              >
+                <Text> Take a Photo </Text>
+            </Button>
 
-        <Button onPress={this._takePhoto} title="Take a photo" />
+            {this._maybeRenderImage()}
+            {this._maybeRenderUploadingOverlay()}
 
-        {this._maybeRenderImage()}
-        {this._maybeRenderUploadingOverlay()}
-
-        <StatusBar barStyle="default" />
+            <StatusBar barStyle="default" />
+            </View>
+      </Content>
       </View>
     );
   }
@@ -77,15 +107,7 @@ export default class UploadScreen extends React.Component {
   _maybeRenderUploadingOverlay = () => {
     if (this.state.uploading) {
       return (
-        <View
-          style={[
-            StyleSheet.absoluteFill,
-            {
-              backgroundColor: 'rgba(0,0,0,0.4)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            },
-          ]}>
+        <View>
           <ActivityIndicator color="#fff" animating size="large" />
         </View>
       );
@@ -99,33 +121,19 @@ export default class UploadScreen extends React.Component {
     }
 
     return (
-      <View
-        style={{
-          marginTop: 30,
-          width: 250,
-          borderRadius: 3,
-          elevation: 2,
-        }}>
-        <View
-          style={{
-            borderTopRightRadius: 3,
-            borderTopLeftRadius: 3,
-            shadowColor: 'rgba(0,0,0,1)',
-            shadowOpacity: 0.2,
-            shadowOffset: { width: 4, height: 4 },
-            shadowRadius: 5,
-            overflow: 'hidden',
-          }}>
-          <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
-        </View>
+      
+            <View>
+              <View>
+                <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+              </View>
 
-        <Text
-          onPress={this._copyToClipboard}
-          onLongPress={this._share}
-          style={{ paddingVertical: 10, paddingHorizontal: 10 }}>
-          {image}
-        </Text>
-      </View>
+              <Text
+                onPress={this._copyToClipboard}
+                onLongPress={this._share}
+                style={{ paddingVertical: 10, paddingHorizontal: 10 }}>
+                {image}
+              </Text>
+            </View>
     );
   };
 
@@ -212,7 +220,32 @@ async function uploadImageAsync(uri,ref) {
   return await snapshot.ref.getDownloadURL();
 }
 
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  classHeader: {
+    padding: 5
+  },
+  classLabel: {
+    fontSize: 15,
+    color: "#A8A8A8"
+  },
+  classNameHeader: {
+    fontSize: 30,
+    fontWeight: "bold"
+  },
+  classIDHeader: {
+    fontSize: 25,
+    fontWeight: "bold"
+  },
+  center: {
+    alignItems: "center"
+  },
+  categoryHeader: {
+    fontWeight: "bold"
+  }
+});
 
 /** import * as firebase from "firebase";
 import React from 'react';
