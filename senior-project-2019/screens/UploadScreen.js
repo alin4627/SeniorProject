@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 import {
   Header,
-  List,
-  ListItem,
+  Item,
+  Label,
+  Input,
   Button,
   Left,
   Body,
-  Title,
   Right,
   Content,
   Text,
@@ -35,6 +35,7 @@ export default class UploadScreen extends React.Component {
       category: "",
       image: null,
       uploading: false,
+      picId: ''
     };
   }
 
@@ -78,6 +79,13 @@ export default class UploadScreen extends React.Component {
                 Upload a Image
               </Text>
             )}
+            <Item floatingLabel style={styles.item}>
+                    <Label>Picture Name</Label>
+                    <Input
+                      onChangeText={picId => this.setState({ picId })}
+                      value={this.state.picId}
+                    />
+            </Item>
             <Button
                 light
                 onPress={this._pickImage}
@@ -164,11 +172,15 @@ export default class UploadScreen extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-
     this._handleImagePicked(pickerResult);
   };
+  
 
   _handleImagePicked = async pickerResult => {
+    if(this.state.picId == ""){
+      alert('Please fill in a Name for the picture')
+      return
+    }
     try {
       this.setState({ uploading: true });
 
@@ -180,7 +192,7 @@ export default class UploadScreen extends React.Component {
             "/" +
             this.state.course_title +
             "/Groups/" +
-            this.state.group_title + "/images/")
+            this.state.group_title + "/images/" + this.state.picId)
         uploadUrl = await uploadImageAsync(pickerResult.uri , ref1);
         this.setState({ image: uploadUrl });
       }
@@ -209,7 +221,6 @@ async function uploadImageAsync(uri,ref) {
     xhr.open('GET', uri, true);
     xhr.send(null);
   })
-  console.log(ref)
   
   ref.child(uuid.v4());
   const snapshot = await ref.put(blob);
