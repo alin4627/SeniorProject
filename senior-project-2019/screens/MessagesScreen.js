@@ -79,15 +79,12 @@ class MessagesScreen extends React.Component {
       snapshot => {
         if (snapshot.exists()) {
           let items = snapshot.val();
-          console.log(items);
           var objectKeys = Object.keys(items);
           for (i = 0; i < objectKeys.length; i++) {
-            console.log(items[objectKeys[i]]);
             let data = {
               chat_uid: objectKeys[i],
               other_user: items[objectKeys[i]].other_user_username
             };
-            console.log(data);
             newState.push(data);
           }
           this.setState({
@@ -179,7 +176,6 @@ class MessagesScreen extends React.Component {
   createList = () => {
     let list = [];
     for (let i = 0; i < this.state.userGroups.length; i++) {
-      console.log(this.state.userGroups[i].group_title);
       list.push(
         <ListItem
           key={this.state.userGroups[i].group_title}
@@ -209,7 +205,6 @@ class MessagesScreen extends React.Component {
   createMessageList = () => {
     let list = [];
     for (let i = 0; i < this.state.userMessages.length; i++) {
-      console.log(this.state.userMessages[i].group_title);
       list.push(
         <ListItem
           key={this.state.userMessages[i].chat_uid}
