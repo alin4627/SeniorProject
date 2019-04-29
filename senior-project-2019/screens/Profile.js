@@ -23,14 +23,15 @@ class Profile extends React.Component {
   }
 
   makeid(length) {
-    var result = '';
-    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
- }
+  }
 
   componentDidMount() {
     const { navigation } = this.props;
@@ -39,6 +40,47 @@ class Profile extends React.Component {
     this.setState({
       uid: uid,
       userName: userName
+    });
+  }
+
+  makeChat() {
+    let messagesID = this.makeid(25);
+    console.log(messagesID);
+    firebase
+      .database()
+      .ref(
+        "users/" +
+          firebase.auth().currentUser.uid +
+          "/userMessages/" +
+          messagesID
+      )
+      .set({
+        other_user_uid: this.state.uid,
+        other_user_username: this.state.userName
+      });
+    firebase
+      .database()
+      .ref("users/" + this.state.uid + "/userMessages/" + messagesID)
+      .set({
+        other_user_uid: firebase.auth().currentUser.uid,
+        other_user_username: firebase.auth().currentUser.displayName
+      });
+    firebase
+      .database()
+      .ref(
+        "Messages/" + messagesID + "/users/" + firebase.auth().currentUser.uid
+      )
+      .set({
+        userName: firebase.auth().currentUser.displayName
+      });
+    firebase
+      .database()
+      .ref("Messages/" + messagesID + "/users/" + this.state.uid)
+      .set({
+        userName: this.state.userName
+      });
+    this.props.navigation.navigate("PrivateChat", {
+      chat_uid: messagesID
     });
   }
 
@@ -52,27 +94,26 @@ class Profile extends React.Component {
       snapshot => {
         if (snapshot.exists()) {
           let items = snapshot.val();
-          console.log(items)
-          console.log('Found messages')
-          // this.props.navigation.navigate("PrivateChat", {
-          //   uid: this.state.uid,
-          //   userName: this.state.userName
-          // });
+          let foundChat = false;
+          // console.log(items);
+          console.log("Found messages");
+          var objectKeys = Object.keys(items);
+          // console.log(objectKeys);
+          for (i = 0; i < objectKeys.length; i++) {
+            // console.log(items[objectKeys[i]]);
+            console.log(items[objectKeys[i]].other_user_uid);
+            if (items[objectKeys[i]].other_user_uid == this.state.uid) {
+              foundChat = true;
+              this.props.navigation.navigate("PrivateChat", {
+                chat_uid: objectKeys[i]
+              });
+            }
+          }
+          if (!foundChat) {
+            this.makeChat();
+          }
         } else {
-          let messagesID = this.makeid(25);
-          console.log(messagesID)
-          firebase
-          .database()
-          .ref("users/" + firebase.auth().currentUser.uid + "/userMessages/" + messagesID)
-          .set({
-            other_user_uid: this.state.uid
-          });
-          firebase
-          .database()
-          .ref("Messages/" + messagesID + "/users/")
-          .set({
-            other_user_uid: this.state.uid
-          });
+          this.makeChat();
         }
       },
       function(errorObject) {
@@ -117,9 +158,7 @@ class Profile extends React.Component {
             <Text style={styles.userNameHeader}>{this.state.userName}</Text>
             <Button
               style={{ padding: "10%", alignSelf: "center" }}
-              onPress={() =>
-                this.checkUserChat()
-              }
+              onPress={() => this.checkUserChat()}
             >
               <Text style={{ color: "white" }}> Message User </Text>
             </Button>

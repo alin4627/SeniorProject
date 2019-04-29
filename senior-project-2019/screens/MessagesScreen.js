@@ -31,7 +31,8 @@ class MessagesScreen extends React.Component {
       classStatus: false,
       loadingGroups: true,
       classes: [],
-      userGroups: []
+      userGroups: [],
+      userMessages: []
     };
   }
 
@@ -59,6 +60,35 @@ class MessagesScreen extends React.Component {
           this.setState({
             classes: newState,
             classStatus: true
+          });
+        }
+      },
+      function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      }
+    );
+  }
+
+  checkUserChat() {
+    let newState = [];
+    const ref = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid + "/userMessages/");
+    ref.once(
+      "value",
+      snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          var objectKeys = Object.keys(items);
+          for (i = 0; i < objectKeys.length; i++) {
+            let data = {
+              chat_uid: objectKeys[i],
+              other_user: items[objectKeys[i]].other_user_username
+            };
+            newState.push(data);
+          }
+          this.setState({
+            userMessages: newState
           });
         }
       },
@@ -106,7 +136,7 @@ class MessagesScreen extends React.Component {
                     }
                   }
                   this.setState({
-                    userGroups: newState,
+                    userGroups: newState
                   });
                 }
               },
@@ -124,19 +154,28 @@ class MessagesScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.getUserClasses();
-    setTimeout(
-      function() {
-        this.fetchUserGroups();
-      }.bind(this),
-      1000
+    this.willFocusListener = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        this.getUserClasses();
+        this.checkUserChat();
+        setTimeout(
+          function() {
+            this.fetchUserGroups();
+          }.bind(this),
+          500
+        );
+      }
     );
+  }
+
+  componentWillUnmount() {
+    this.willFocusListener.remove();
   }
 
   createList = () => {
     let list = [];
     for (let i = 0; i < this.state.userGroups.length; i++) {
-      console.log(this.state.userGroups[i].group_title);
       list.push(
         <ListItem
           key={this.state.userGroups[i].group_title}
@@ -163,69 +202,95 @@ class MessagesScreen extends React.Component {
     return list;
   };
 
+  createMessageList = () => {
+    let list = [];
+    for (let i = 0; i < this.state.userMessages.length; i++) {
+      list.push(
+        <ListItem
+          key={this.state.userMessages[i].chat_uid}
+          onPress={() =>
+            this.props.navigation.navigate("PrivateChat", {
+              chat_uid: this.state.userMessages[i].chat_uid
+            })
+          }
+        >
+          <Body>
+            <Text style={styles.courseTitle}>
+              {this.state.userMessages[i].other_user}
+            </Text>
+          </Body>
+          <Right>
+            <Icon name="arrow-forward" />
+          </Right>
+        </ListItem>
+      );
+    }
+    return list;
+  };
+
   isLoading() {
-    if(this.state.loadingGroups) {
-      return(
+    if (this.state.loadingGroups) {
+      return (
         <View>
-          <Spinner color='blue' />
+          <Spinner color="blue" />
         </View>
-      )
+      );
     } else {
       <View>
         <List>{this.createList()}</List>
-      </View>
+      </View>;
     }
   }
 
   render() {
-    if(this.state.loadingGroups) {
-      return(
+    if (this.state.loadingGroups) {
+      return (
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Header
-          hasTabs
-          iosBarStyle={"light-content"}
-          style={{ backgroundColor: "#333333" }}
-        >
-          <Left />
-          <Body>
-            <Title style={{ color: "white" }}>Messages</Title>
-          </Body>
-          <Right>
-            <Button
-              transparent
-              dark
-              onPress={() =>
-                this.props.navigation.navigate("RosterList", {
-                  source: "all"
-                })
-              }
-            >
-              <Icon name="add" style={{ color: "white" }} />
-            </Button>
-          </Right>
-        </Header>
-        <Tabs>
-          <Tab
-            tabStyle={{ backgroundColor: "#333333" }}
-            activeTabStyle={{ backgroundColor: "#333333" }}
-            activeTextStyle={{ color: "white" }}
-            heading="Group Chatrooms"
+          <Header
+            hasTabs
+            iosBarStyle={"light-content"}
+            style={{ backgroundColor: "#333333" }}
           >
-            <View>
-              <Spinner color='blue' />
-            </View>
-          </Tab>
-          <Tab
-            tabStyle={{ backgroundColor: "#333333" }}
-            activeTabStyle={{ backgroundColor: "#333333" }}
-            activeTextStyle={{ color: "white" }}
-            heading="Direct Messages"
-          />
-        </Tabs>
-      </KeyboardAvoidingView>
-      )
+            <Left />
+            <Body>
+              <Title style={{ color: "white" }}>Messages</Title>
+            </Body>
+            <Right>
+              <Button
+                transparent
+                dark
+                onPress={() =>
+                  this.props.navigation.navigate("RosterList", {
+                    source: "all"
+                  })
+                }
+              >
+                <Icon name="add" style={{ color: "white" }} />
+              </Button>
+            </Right>
+          </Header>
+          <Tabs>
+            <Tab
+              tabStyle={{ backgroundColor: "#333333" }}
+              activeTabStyle={{ backgroundColor: "#333333" }}
+              activeTextStyle={{ color: "white" }}
+              heading="Group Chatrooms"
+            >
+              <View>
+                <Spinner color="blue" />
+              </View>
+            </Tab>
+            <Tab
+              tabStyle={{ backgroundColor: "#333333" }}
+              activeTabStyle={{ backgroundColor: "#333333" }}
+              activeTextStyle={{ color: "white" }}
+              heading="Direct Messages"
+            />
+          </Tabs>
+        </KeyboardAvoidingView>
+      );
     }
-    
+
     // console.log(this.state.userGroups);
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -268,7 +333,9 @@ class MessagesScreen extends React.Component {
             activeTabStyle={{ backgroundColor: "#333333" }}
             activeTextStyle={{ color: "white" }}
             heading="Direct Messages"
-          />
+          >
+            <View>{this.createMessageList()}</View>
+          </Tab>
         </Tabs>
         {/* <List>
             <ListItem avatar>

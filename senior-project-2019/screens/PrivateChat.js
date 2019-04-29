@@ -36,11 +36,10 @@ class PrivateChat extends React.Component {
 
   componentDidMount() {
     const { navigation } = this.props;
-    const uid = navigation.getParam("uid", "Unavailable");
-    const users = navigation.getParam("users", "Unavailable");
+    const chat_uid = navigation.getParam("chat_uid", "Unavailable");
     const ref = firebase
       .database()
-      .ref("users/" + uid + "/User_Chat/" + users + "/messages/")
+      .ref("Messages/" + chat_uid + "/user_messages/")
       .orderByChild("createdAt");
     ref.on(
       "value",
@@ -69,21 +68,14 @@ class PrivateChat extends React.Component {
   }
   onSend(messages = []) {
     const { navigation } = this.props;
-    const uid = navigation.getParam("uid", "Unavailable");
+    const chat_uid = navigation.getParam("chat_uid", "Unavailable");
     const users = navigation.getParam("users", "Unavailable");
 
     for (i = 0; i < messages.length; i++) {
       console.log(messages[i]);
       firebase
         .database()
-        .ref(
-          "users/" +
-            uid +
-            "/User_Chat/" +
-            users +
-            "/messages/" +
-            messages[i]._id
-        )
+        .ref("Messages/" + chat_uid + "/user_messages/" + messages[i]._id)
         .set({
           _id: messages[i]._id,
           createdAt: messages[i].createdAt.toISOString(),
