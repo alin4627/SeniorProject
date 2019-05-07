@@ -26,18 +26,36 @@ class HomeScreen extends React.Component {
     this.state = {
       text: "",
       request: [],
-      userLevel: 1
+      userLevel: 1,
+      classes: [],
+      userGroups: []
     };
   }
 
   componentDidMount() {
-    const ref = firebase
-      .database()
-      .ref("users/" + firebase.auth().currentUser.uid);
-    ref.once("value", snapshot => {
-      let items = snapshot.val();
-      this.setState({ userLevel: items.userLevel });
-    });
+    this.willFocusListener = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        this.getUserClasses();
+        const ref = firebase
+          .database()
+          .ref("users/" + firebase.auth().currentUser.uid);
+        ref.once("value", snapshot => {
+          let items = snapshot.val();
+          this.setState({ userLevel: items.userLevel });
+        });
+        setTimeout(
+          function() {
+            this.fetchUserGroups();
+          }.bind(this),
+          200
+        );
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    this.willFocusListener.remove();
   }
 
   generateState() {
@@ -57,6 +75,94 @@ class HomeScreen extends React.Component {
         this.setState({ request: newState });
       }.bind(this)
     );
+  }
+
+  getUserClasses() {
+    let newState = [];
+    const ref = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid + "/classSubscriptions/");
+    ref.once(
+      "value",
+      snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          // console.log(items)
+          var objectKeys = Object.keys(items);
+          for (i = 0; i < objectKeys.length; i++) {
+            let data = {};
+            data[objectKeys[i]] = {
+              id: items[objectKeys[i]].course_id,
+              title: items[objectKeys[i]].course_title,
+              category: items[objectKeys[i]].category
+            };
+            newState.push(data);
+          }
+          this.setState({
+            classes: newState,
+            classStatus: true
+          });
+        }
+      },
+      function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      }
+    );
+  }
+
+  fetchUserGroups() {
+    let newState = [];
+    if (this.state.classes.length > 0) {
+      for (let i = 0; i < this.state.classes.length; i++) {
+        for (let item in this.state.classes[i]) {
+          let courseTitle = this.state.classes[i][item].title;
+          let courseCategory = this.state.classes[i][item].category;
+          if (item.id != "keys") {
+            const ref = firebase
+              .database()
+              .ref("Courses/" + courseCategory + "/" + courseTitle + "/Groups");
+            ref.once(
+              "value",
+              snapshot => {
+                if (snapshot.exists()) {
+                  let items = snapshot.val();
+                  var objectKeys = Object.keys(items);
+                  for (i = 0; i < objectKeys.length; i++) {
+                    let subbed = false;
+                    let userList = Object.keys(items[objectKeys[i]].users);
+                    for (j = 0; j < userList.length; j++) {
+                      if (
+                        userList[j] == firebase.auth().currentUser.uid ||
+                        this.state.userLevel == 0
+                      ) {
+                        subbed = true;
+                      }
+                    }
+                    let data = {
+                      course_title: courseTitle,
+                      group_title: objectKeys[i],
+                      category: courseCategory
+                    };
+                    if (subbed) {
+                      newState.push(data);
+                    }
+                  }
+                  this.setState({
+                    userGroups: newState
+                  });
+                }
+              },
+              function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+              }
+            );
+          }
+        }
+      }
+    }
+    this.setState({
+      loadingGroups: false
+    });
   }
 
   upgradeYes(uid, displayName, expertise, reasons) {
@@ -95,7 +201,7 @@ class HomeScreen extends React.Component {
   generateContent = () => {
     if (this.state.userLevel == 0) {
       //user is a admin
-      this.generateState()
+      this.generateState();
       if (this.state.request.length > 0) {
         let list = [];
         let listitems = [];
@@ -211,6 +317,53 @@ class HomeScreen extends React.Component {
     }
   };
 
+  generateGroups() {
+    let content = [];
+    // console.log(this.state.classes);
+    // console.log(this.state.userGroups);
+    if (this.state.userGroups.length > 0) {
+      let course = this.state.userGroups[0].course_title;
+      content.push(
+        <ListItem itemHeader first key={course}>
+          <Text style={styles.classNameHeader}>{course}</Text>
+        </ListItem>
+      );
+      for (i = 0; i < this.state.userGroups.length; i++) {
+        if (this.state.userGroups[i].course_title == course) {
+          let groupTitle = this.state.userGroups[i].group_title;
+          let groupCategory = this.state.userGroups[i].category;
+          content.push(
+            <ListItem
+              key={this.state.userGroups[i].group_title}
+              onPress={() =>
+                this.props.navigation.navigate("GroupOptionScreen", {
+                  course_title: course,
+                  group_title: groupTitle,
+                  category: groupCategory
+                })
+              }
+            >
+              <Left>
+                <Text>{this.state.userGroups[i].group_title}</Text>
+              </Left>
+              <Right>
+                <Icon name="arrow-forward" />
+              </Right>
+            </ListItem>
+          );
+        } else {
+          course = this.state.userGroups[i].course_title;
+          content.push(
+            <ListItem itemHeader first key={course}>
+              <Text style={styles.classNameHeader}>{course}</Text>
+            </ListItem>
+          );
+        }
+      }
+    }
+    return content;
+  }
+
   render() {
     return (
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -236,12 +389,13 @@ class HomeScreen extends React.Component {
           <View style={styles.classHeader}>
             <View style={styles.classHeader}>
               <Text style={styles.classLabel}>Welcome</Text>
-              <Text style={styles.classNameHeader}>
+              <Text style={styles.nameHeader}>
                 {firebase.auth().currentUser.displayName}
               </Text>
             </View>
           </View>
           {this.generateContent()}
+          {this.generateGroups()}
         </Content>
       </KeyboardAvoidingView>
     );
@@ -268,8 +422,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#A8A8A8"
   },
-  classNameHeader: {
+  nameHeader: {
     fontSize: 30,
+    fontWeight: "bold"
+  },
+  classNameHeader: {
+    fontSize: 20,
     fontWeight: "bold"
   },
   classIDHeader: {
