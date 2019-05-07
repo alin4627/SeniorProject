@@ -274,7 +274,7 @@ export default class UploadScreen extends React.Component {
       
             <View>
               <View>
-                <Image source={{ uri: image }} style={{ width: 250, height: 250 }} />
+                <Image source={{ uri: image }} />
               </View>
 
               <Text
