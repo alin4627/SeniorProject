@@ -31,12 +31,14 @@ class PrivateChat extends React.Component {
   };
   state = {
     messages: [],
-    clicked: "none"
+    clicked: "none",
+    users: []
   };
 
   componentDidMount() {
     const { navigation } = this.props;
     const chat_uid = navigation.getParam("chat_uid", "Unavailable");
+    this.fetchUsers();
     const ref = firebase
       .database()
       .ref("Messages/" + chat_uid + "/user_messages/")
@@ -66,6 +68,29 @@ class PrivateChat extends React.Component {
       }
     );
   }
+
+  fetchUsers() {
+    const chat_uid = this.props.navigation.getParam("chat_uid", "Unavailable");
+    const ref = firebase.database().ref("Messages/" + chat_uid + "/users/");
+    ref.once(
+      "value",
+      snapshot => {
+        if (snapshot.exists()) {
+          let items = snapshot.val();
+          console.log(items);
+          var objectKeys = Object.keys(items);
+          console.log(objectKeys);
+          this.setState({
+            users: objectKeys
+          });
+        }
+      },
+      function(errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      }
+    );
+  }
+
   onSend(messages = []) {
     const { navigation } = this.props;
     const chat_uid = navigation.getParam("chat_uid", "Unavailable");
@@ -82,6 +107,16 @@ class PrivateChat extends React.Component {
           text: messages[i].text,
           user: messages[i].user
         });
+
+      for (j = 0; j < this.state.users.length; j++) {
+        firebase
+          .database()
+          .ref("users/" + this.state.users[j] + "/userMessages/" + chat_uid)
+          .update({
+            createdAt: messages[i].createdAt.toISOString(),
+            last_message: messages[i].text
+          });
+      }
     }
   }
   renderMessage(props) {

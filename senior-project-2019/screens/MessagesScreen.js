@@ -80,10 +80,12 @@ class MessagesScreen extends React.Component {
         if (snapshot.exists()) {
           let items = snapshot.val();
           var objectKeys = Object.keys(items);
+          console.log(objectKeys);
           for (i = 0; i < objectKeys.length; i++) {
             let data = {
               chat_uid: objectKeys[i],
-              other_user: items[objectKeys[i]].other_user_username
+              other_user: items[objectKeys[i]].other_user_username,
+              last_text: items[objectKeys[i]].last_message
             };
             newState.push(data);
           }
@@ -218,6 +220,7 @@ class MessagesScreen extends React.Component {
             <Text style={styles.courseTitle}>
               {this.state.userMessages[i].other_user}
             </Text>
+            <Text>{this.state.userMessages[i].last_text}</Text>
           </Body>
           <Right>
             <Icon name="arrow-forward" />
