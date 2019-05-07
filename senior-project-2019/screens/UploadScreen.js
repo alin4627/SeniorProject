@@ -10,6 +10,8 @@ import {
   View,
 } from 'react-native';
 import {
+  ListItem,
+  List,
   Header,
   Item,
   Label,
@@ -35,7 +37,8 @@ export default class UploadScreen extends React.Component {
       category: "",
       image: null,
       uploading: false,
-      picId: ''
+      picId: '',
+      groupfiles:[],
     };
   }
 
@@ -51,8 +54,69 @@ export default class UploadScreen extends React.Component {
       course_title: course_title,
       category: category
     });
+    const ref = firebase.database().ref("Courses/" +
+    this.state.category +
+    "/" +
+    this.state.course_title +
+    "/Groups/" +
+    this.state.group_title + "/images/")
+    ref.once(
+      "value",
+      function(snapshot) {
+        let newState = [];
+        snapshot.forEach(function(child) {
+          let data = {};
+          data.id = child.key;
+          data.DownloadURL = child.val().DownloadURL;
+          data.createdBy = child.val().createdBy;
+          newState.push(data);
+        });
+        this.setState({ groupfiles: newState });
+      }.bind(this)
+    );
     //alert(this.state.category + this.state.course_title +  this.state.group_title)
   }
+
+  generateGroupFiles = () => {
+    if (this.state.groupfiles.length > 0) {
+      let list = [];
+      let listitems = [];
+      listitems.push(
+        <ListItem key="header">
+          <Text style={styles.categoryHeader}>Group Files</Text>
+        </ListItem>
+      );
+      for (let i = 0; i < this.state.groupfiles.length; i++) {
+        listitems.push(
+          <ListItem key={this.state.groupfiles[i].id}>
+              <Text>{this.state.groupfiles[i].id} {'submitted by'} {this.state.groupfiles[i].createdBy} {"\n"}
+              <Image source={{ uri: this.state.groupfiles[i].DownloadURL }} style={{ width: 250, height: 250 }} />
+              </Text>
+          </ListItem>)
+          
+        }
+        list.push(<List key={"groupFiles"}>{listitems}</List>);
+        return list;
+      }
+     else {
+          let list = [];
+          let listitems = [];
+          listitems.push(
+            <ListItem key="groupFiles">
+              <Text style={styles.listText}>Group Files</Text>
+            </ListItem>
+          );
+          listitems.push(
+            <ListItem key="no-requests">
+              <Text style={styles.listText}>No group files</Text>
+            </ListItem>
+          );
+          list.push(<List key={"Request"}>{listitems}</List>);
+          return list;
+        }
+    }
+    
+  
 
   render() {
     let { image } = this.state;
@@ -73,12 +137,14 @@ export default class UploadScreen extends React.Component {
           <Right />
         </Header>
         <Content padder style={{ backgroundColor: "#F8F8F8" }}>
+        {this.generateGroupFiles()}
           <View>
             {image ? null : (
               <Text>
                 Upload a Image
               </Text>
             )}
+            
             <Item floatingLabel style={styles.item}>
                     <Label>Picture Name</Label>
                     <Input
@@ -91,7 +157,7 @@ export default class UploadScreen extends React.Component {
                 onPress={this._pickImage}
                 style={{ padding: "10%" }}
               >
-                <Text> Pick an image from camera  </Text>
+                <Text> Pick an image from camera roll  </Text>
             </Button>
 
             <Button
@@ -195,6 +261,15 @@ export default class UploadScreen extends React.Component {
             this.state.group_title + "/images/" + this.state.picId)
         uploadUrl = await uploadImageAsync(pickerResult.uri , ref1);
         this.setState({ image: uploadUrl });
+        firebase.database().ref("Courses/" +
+        this.state.category +
+        "/" +
+        this.state.course_title +
+        "/Groups/" +
+        this.state.group_title + "/images/" + this.state.picId).set({
+          createdBy: firebase.auth().currentUser.displayName,
+          DownloadURL:uploadUrl,
+        });;
       }
     } catch (e) {
       console.log(e);
