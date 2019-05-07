@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Clipboard,
   Image,
+  CameraRoll,
   Share,
   StatusBar,
   StyleSheet,
@@ -39,6 +40,7 @@ export default class UploadScreen extends React.Component {
       uploading: false,
       picId: '',
       groupfiles:[],
+      isGroupMod:false,
     };
   }
 
@@ -54,6 +56,7 @@ export default class UploadScreen extends React.Component {
       course_title: course_title,
       category: category
     });
+    
     const ref = firebase.database().ref("Courses/" +
     this.state.category +
     "/" +
@@ -74,11 +77,56 @@ export default class UploadScreen extends React.Component {
         this.setState({ groupfiles: newState });
       }.bind(this)
     );
-    //alert(this.state.category + this.state.course_title +  this.state.group_title)
+   
+  }
+
+  saveImage(DownloadURL){
+    console.log('pressed save')
+    CameraRoll.saveToCameraRoll(DownloadURL);
+    alert('The photo has been added to Camera Roll')
+  }
+
+  deleteImage(imageID){
+    firebase.database().ref("Courses/" +
+    this.state.category +
+    "/" +
+    this.state.course_title +
+    "/Groups/" +
+    this.state.group_title + "/images/" + imageID).remove()
+
+        firebase
+         .storage()
+          .ref("Courses/" +
+            this.state.category +
+            "/" +
+            this.state.course_title +
+            "/Groups/" +
+            this.state.group_title + "/images/" + imageID).delete()
+      
+            alert('The image has been deleted')
   }
 
   generateGroupFiles = () => {
+    isGroupMod = false;
+    const refCheckGroupMod = firebase
+    .database()
+    .ref(
+      "Courses/" +
+        this.state.category +
+        "/" +
+        this.state.course_title +
+        "/Groups/" +
+        this.state.group_title +
+        "/users/" +
+        firebase.auth().currentUser.uid
+    ).child('userLevel');
+    refCheckGroupMod.on("value", function(snapshot) {
+        if (snapshot.val() == 2) { isGroupMod= true}
+    })
+  
+
     if (this.state.groupfiles.length > 0) {
+      
       let list = [];
       let listitems = [];
       listitems.push(
@@ -86,19 +134,47 @@ export default class UploadScreen extends React.Component {
           <Text style={styles.categoryHeader}>Group Files</Text>
         </ListItem>
       );
-      for (let i = 0; i < this.state.groupfiles.length; i++) {
+      if (isGroupMod){
+        for (let i = 0; i < this.state.groupfiles.length; i++) {
         listitems.push(
           <ListItem key={this.state.groupfiles[i].id}>
-              <Text>{this.state.groupfiles[i].id} {'submitted by'} {this.state.groupfiles[i].createdBy} {"\n"}
+          <Left>
+              <Text>{this.state.groupfiles[i].id} {'submitted by'} {this.state.groupfiles[i].createdBy} {"\n"} 
               <Image source={{ uri: this.state.groupfiles[i].DownloadURL }} style={{ width: 250, height: 250 }} />
               </Text>
+          </Left>
+          <Right><Button primary onPress ={() => this.saveImage(this.state.groupfiles[i].DownloadURL)}>
+              <Text>Save</Text>
+            </Button>
+            <Button danger onPress ={() => this.deleteImage(this.state.groupfiles[i].id)}>
+              <Text>Delete</Text>
+            </Button></Right>
           </ListItem>)
           
         }
         list.push(<List key={"groupFiles"}>{listitems}</List>);
         return list;
       }
-     else {
+      else{
+          for (let i = 0; i < this.state.groupfiles.length; i++) {
+          listitems.push(
+            <ListItem key={this.state.groupfiles[i].id}>
+            <Left>
+                <Text>{this.state.groupfiles[i].id} {'submitted by'} {this.state.groupfiles[i].createdBy} {"\n"} 
+                <Image source={{ uri: this.state.groupfiles[i].DownloadURL }} style={{ width: 250, height: 250 }} />
+                </Text>
+            </Left>
+            <Right><Button primary onPress ={() => this.saveImage(this.state.groupfiles[i].DownloadURL)}>
+                <Text>Save</Text>
+              </Button>
+              </Right>
+            </ListItem>)
+          }
+        list.push(<List key={"groupFiles"}>{listitems}</List>);
+        return list;
+      }
+    }
+    else {
           let list = [];
           let listitems = [];
           listitems.push(
