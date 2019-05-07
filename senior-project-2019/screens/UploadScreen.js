@@ -222,7 +222,7 @@ export default class UploadScreen extends React.Component {
             )}
             
             <Item floatingLabel style={styles.item}>
-                    <Label>Picture Name</Label>
+                    <Label>Fill in Picture Name</Label>
                     <Input
                       onChangeText={picId => this.setState({ picId })}
                       value={this.state.picId}
