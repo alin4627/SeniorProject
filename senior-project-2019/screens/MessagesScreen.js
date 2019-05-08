@@ -177,56 +177,64 @@ class MessagesScreen extends React.Component {
 
   createList = () => {
     let list = [];
-    for (let i = 0; i < this.state.userGroups.length; i++) {
-      list.push(
-        <ListItem
-          key={this.state.userGroups[i].group_title}
-          onPress={() =>
-            this.props.navigation.navigate("ChatroomScreen", {
-              group_title: this.state.userGroups[i].group_title,
-              course_title: this.state.userGroups[i].course_title,
-              category: this.state.userGroups[i].category
-            })
-          }
-        >
-          <Body>
-            <Text style={styles.courseTitle}>
-              {this.state.userGroups[i].course_title}
-            </Text>
-            <Text>{this.state.userGroups[i].group_title}</Text>
-          </Body>
-          <Right>
-            <Icon name="arrow-forward" />
-          </Right>
-        </ListItem>
-      );
+    if (this.state.userGroups.length > 0) {
+      for (let i = 0; i < this.state.userGroups.length; i++) {
+        list.push(
+          <ListItem
+            key={this.state.userGroups[i].group_title}
+            onPress={() =>
+              this.props.navigation.navigate("ChatroomScreen", {
+                group_title: this.state.userGroups[i].group_title,
+                course_title: this.state.userGroups[i].course_title,
+                category: this.state.userGroups[i].category
+              })
+            }
+          >
+            <Body>
+              <Text style={styles.courseTitle}>
+                {this.state.userGroups[i].course_title}
+              </Text>
+              <Text>{this.state.userGroups[i].group_title}</Text>
+            </Body>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </ListItem>
+        );
+      }
+    } else {
+      list.push(<Text key="empty_groups">Not in any groups currently.</Text>);
     }
     return list;
   };
 
   createMessageList = () => {
     let list = [];
-    for (let i = 0; i < this.state.userMessages.length; i++) {
-      list.push(
-        <ListItem
-          key={this.state.userMessages[i].chat_uid}
-          onPress={() =>
-            this.props.navigation.navigate("PrivateChat", {
-              chat_uid: this.state.userMessages[i].chat_uid
-            })
-          }
-        >
-          <Body>
-            <Text style={styles.courseTitle}>
-              {this.state.userMessages[i].other_user}
-            </Text>
-            <Text>{this.state.userMessages[i].last_text}</Text>
-          </Body>
-          <Right>
-            <Icon name="arrow-forward" />
-          </Right>
-        </ListItem>
-      );
+    if (this.state.userMessages.length > 0) {
+      for (let i = 0; i < this.state.userMessages.length; i++) {
+        list.push(
+          <ListItem
+            key={this.state.userMessages[i].chat_uid}
+            onPress={() =>
+              this.props.navigation.navigate("PrivateChat", {
+                chat_uid: this.state.userMessages[i].chat_uid
+              })
+            }
+          >
+            <Body>
+              <Text style={styles.courseTitle}>
+                {this.state.userMessages[i].other_user}
+              </Text>
+              <Text>{this.state.userMessages[i].last_text}</Text>
+            </Body>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </ListItem>
+        );
+      }
+    } else {
+      list.push(<Text key="emptymessages">No private messages.</Text>);
     }
     return list;
   };
@@ -340,28 +348,6 @@ class MessagesScreen extends React.Component {
             <View>{this.createMessageList()}</View>
           </Tab>
         </Tabs>
-        {/* <List>
-            <ListItem avatar>
-              <Left>
-                <Thumbnail
-                  small
-                  source={{
-                    uri:
-                      "https://s.thestreet.com/files/tsc/v2008/photos/contrib/uploads/0-fs5ztag0_600x400.jpg"
-                  }}
-                />
-              </Left>
-              <Body>
-                <Text>Student 1</Text>
-                <Text note>
-                  Doing what you like will always keep you happy . .
-                </Text>
-              </Body>
-              <Right>
-                <Text note>3:43 pm</Text>
-              </Right>
-            </ListItem>
-          </List> */}
       </KeyboardAvoidingView>
     );
   }

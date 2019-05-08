@@ -360,6 +360,12 @@ class HomeScreen extends React.Component {
           );
         }
       }
+    } else {
+      content.push(
+        <Text key="emptygroups">
+          You currently are not in any groups! Join a group in your course.
+        </Text>
+      );
     }
     return content;
   }
